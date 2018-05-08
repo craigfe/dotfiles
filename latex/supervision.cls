@@ -1,0 +1,1 @@
+/mnt/c/Program Files/MiKTeX 2.9/tex/latex/amcs/supervision.cls
