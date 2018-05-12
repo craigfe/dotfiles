@@ -1,0 +1,28 @@
+" Syntax highlighting
+syntax on
+
+" Don't try to be compatible with vi
+set nocompatible
+
+" Whitespace
+set tabstop=4
+
+" Rendering
+set ttyfast
+set background=dark
+set mouse=a
+
+" Numbering system
+set number
+set relativenumber
+
+function ToggleRelativeNumbers()
+	if (&relativenumber == 1)
+		set norelativenumber
+	else
+		set relativenumber
+	endif
+endfunction
+
+" Map gl to toggle numbering between absolute and relative
+nnoremap gl :call ToggleRelativeNumbers()<CR>
