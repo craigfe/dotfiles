@@ -1,3 +1,5 @@
+let mapleader=" "
+
 " Syntax highlighting
 syntax on
 
@@ -6,6 +8,13 @@ set nocompatible
 
 " Whitespace
 set tabstop=4
+set shiftwidth=4
+set autoindent
+set noexpandtab
+
+" Searching
+set incsearch " Search incrementally
+set hlsearch  " Search highlights all of the results
 
 " Rendering
 set ttyfast
@@ -26,3 +35,16 @@ endfunction
 
 " Map gl to toggle numbering between absolute and relative
 nnoremap gl :call ToggleRelativeNumbers()<CR>
+
+" tex shortcuts
+function MathAbbrev()
+	iabbrev mms \begin{align*}<CR><CR>\end{align*}<++><Esc>==kS
+	iabbrev mma \begin{align} <CR><CR>\end{align} <++><Esc>==kS
+endfunction
+
+" Call the above functions to set up default commands for individual filetypes
+au FileType tex :call MathAbbrev()
+
+" Enable spelling by default for certain filetypes
+au FileType tex, markdown :Spell
+set spelllang=en_gb
