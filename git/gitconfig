@@ -1,0 +1,27 @@
+[user]
+	email = cf443@cam.ac.uk
+	name = Craig Ferguson
+[color]
+	ui = true
+[alias]
+	# General
+	pl = pull
+	ps = push
+	co = checkout
+	df = diff
+	cl = clone
+	f = fetch
+	mg = merge
+	su = submodule update
+	rs = reset
+	
+	# Status
+	s = status -s
+	st = status
+
+	# Commit
+	c = commit
+	cm = commit -m
+	cam = commit -a -m
+[push]
+	default = simple
