@@ -11,6 +11,7 @@ set tabstop=4
 set shiftwidth=4
 set autoindent
 set noexpandtab
+set breakindent
 
 " Searching
 set incsearch " Search incrementally
