@@ -1,3 +1,5 @@
+shopt -s autocd # Allow cd-ing into a directory by typing the directory name
+
 # Configure the PS1 environment variable (terminal prompt)
 if [ $(id -u) -eq 0 ];
 then # root user
@@ -6,10 +8,18 @@ else # not root user
 	export PS1='\[\033[1;31m\][\[\033[1;36m\]\u\[\033[1;31m\]@\[\033[1;32m\]\h \[\033[1;31m\]: \[\033[1;35m\]\W\[\033[1;31m\]]$ \[\033[0m\]' 
 fi
 
+# Use vim mode
+set -o vi
 export EDITOR='vim'
 
 # Set aliases
 alias c='clear'
 alias cls='clear'
+alias cbi='xsel -ib'
+alias cbo='xsel -ob'
+alias ccat='highlight --out-format=xterm256' # Coloured cat w/ syntax highlighting
+alias crep='grep --color=always' # Coloured grep - highlight the desired sequence
 alias r='ranger'
 alias ls='ls --color=auto'
+alias v='vim'
+alias sv='sudo vim'
