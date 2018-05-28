@@ -1,7 +1,17 @@
-let mapleader=" "
+let mapleader = " "
+
+set runtimepath^=~/.vim/bundle/ctrlp.vim " Ctrl-P fuzzy finder
+
+" Pathogen plugins
+execute pathogen#infect()
+execute pathogen#helptags()
 
 " Syntax highlighting
+filetype plugin on
 syntax on
+set encoding=utf-8
+set splitbelow
+set splitright 
 
 " Don't try to be compatible with vi
 set nocompatible
@@ -37,15 +47,59 @@ endfunction
 " Map gl to toggle numbering between absolute and relative
 nnoremap gl :call ToggleRelativeNumbers()<CR>
 
-" tex shortcuts
-function MathAbbrev()
-	iabbrev mms \begin{align*}<CR><CR>\end{align*}<++><Esc>==kS
-	iabbrev mma \begin{align} <CR><CR>\end{align} <++><Esc>==kS
-endfunction
-
-" Call the above functions to set up default commands for individual filetypes
-au FileType tex :call MathAbbrev()
+" Navigation using guides
+noremap <Space><Tab> <Esc>/<++><Enter>"_c4l
+inoremap <Space><Tab> <Esc>/<++><Enter>"_c4l
+vnoremap <Space><Tab> <Esc>/<++><Enter>"_c4l
+map <Space><Tab> <Esc>/<++><Enter>"_c4l
+inoremap ;gui <++>
 
 " Enable spelling by default for certain filetypes
-au FileType tex, markdown :Spell
 set spelllang=en_gb
+
+map <F6> :setlocal spell! spelllang=en_uk<CR>
+
+" Goyo plugin: makes text more readable when writing prose
+map <F10> :Goyo<CR>
+map <leader>f :Goyo \| set linebreak <CR>
+inoremap <F10> <esc>:Goyo<CR>a
+
+" Alternatives to <ESC>
+inoremap jk <ESC>
+inoremap jK <ESC>
+inoremap Jk <ESC>
+inoremap JK <ESC>
+inoremap kj <ESC>
+inoremap kJ <ESC>
+inoremap Kj <ESC>
+inoremap KJ <ESC>
+
+" Build configurations
+nmap <C-B> :w<CR>:silent !prolog % 2> ~/errors<CR>:redraw!<CR>:rightbelow vsplit ~/errors<CR><C-w>k
+
+" Default filetypes
+au BufRead,BufNewFile *.pl set filetype=prolog " not Perl
+
+" C-T for a new tab
+nnoremap <C-T> :tabnew<cr>
+nnoremap <C-W> :tabclose<cr>
+
+" LaTeX Snippets
+
+autocmd FileType tex inoremap ;em \emph{} <++><Esc>T{i
+autocmd FileType tex inoremap ;bf \textbf{} <++><Esc>T{i
+autocmd FileType tex inoremap ;tt \texttt{}<Space><++><Esc>T{i
+
+autocmd FileType tex inoremap ;m \(\)<Space><++><Esc>T(i
+autocmd FileType tex inoremap ;M \[\]<Enter><Enter><++><Esc>2k$hi 
+autocmd FileType tex inoremap ;ra \rightarrow
+autocmd FileType tex inoremap ;la \leftarrow
+autocmd FileType tex inoremap ;lra \leftrightarrow
+
+autocmd FileType tex inoremap ;up \usepackage{}<Esc>T{i
+autocmd FileType tex inoremap ;en \begin{enumerate}{}<Enter><Tab>\item<++><Enter><Backspace>\end{enumerate}<Enter><Enter><++><Esc>4kf}f}i
+autocmd FileType tex inoremap ;it \begin{itemize}<Enter><Enter>\end{itemize}<Enter><Enter><++><Esc>3kA<Tab>\item<Space>
+
+autocmd FileType tex inoremap ;tab \begin{tabular}<Enter><++><Enter>\end{tabular}<Enter><Enter><++><Esc>4kA{}<Esc>i
+autocmd FileType tex inoremap ;btab \begin{tabular}<Enter>\toprule<Enter><++><Enter>\midrule<Enter><++><Enter>\bottomrule<Enter>\end{tabular}<Enter><Enter><++><Esc>8kA{}<Esc>i
+
