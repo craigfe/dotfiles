@@ -7,7 +7,7 @@ execute pathogen#infect()
 execute pathogen#helptags()
 
 " Syntax highlighting
-filetype plugin on
+filetype plugin indent on
 syntax on
 set encoding=utf-8
 set splitbelow
