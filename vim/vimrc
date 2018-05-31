@@ -36,7 +36,7 @@ set mouse=a
 set number
 set relativenumber
 
-function ToggleRelativeNumbers()
+function! ToggleRelativeNumbers()
 	if (&relativenumber == 1)
 		set norelativenumber
 	else
@@ -75,17 +75,19 @@ inoremap Kj <ESC>
 inoremap KJ <ESC>
 
 " Build configurations
-nmap <C-B> :w<CR>:silent !prolog % 2> ~/errors<CR>:redraw!<CR>:rightbelow vsplit ~/errors<CR><C-w>k
+autocmd FileType tex inoremap <C-B> <Esc>:!xelatex<space><c-r>%<Enter>a
+autocmd FileType tex nnoremap <C-B> :!xelatex<space><c-r>%<Enter>
 
 " Default filetypes
+au BufRead,BufNewFile *.tex set filetype=tex
 au BufRead,BufNewFile *.pl set filetype=prolog " not Perl
+au BufRead,BufNewFile rc.conf set filetype=vim
 
 " C-T for a new tab
 nnoremap <C-T> :tabnew<cr>
 nnoremap <C-W> :tabclose<cr>
 
 " LaTeX Snippets
-
 autocmd FileType tex inoremap ;em \emph{} <++><Esc>T{i
 autocmd FileType tex inoremap ;bf \textbf{} <++><Esc>T{i
 autocmd FileType tex inoremap ;tt \texttt{}<Space><++><Esc>T{i
@@ -96,7 +98,11 @@ autocmd FileType tex inoremap ;ra \rightarrow
 autocmd FileType tex inoremap ;la \leftarrow
 autocmd FileType tex inoremap ;lra \leftrightarrow
 
+autocmd FileType tex inoremap ;sec \section{}<Enter><Enter><++><Esc>2kf}i
+autocmd FileType tex inoremap ;ssec \subsection{}<Enter><Enter><++><Esc>2kf}i
+autocmd FileType tex inoremap ;sssec \subsubsection{}<Enter><Enter><++><Esc>2kf}i
 autocmd FileType tex inoremap ;up \usepackage{}<Esc>T{i
+autocmd FileType tex inoremap ;dc \documentclass{}<Esc>T{i
 autocmd FileType tex inoremap ;en \begin{enumerate}{}<Enter><Tab>\item<++><Enter><Backspace>\end{enumerate}<Enter><Enter><++><Esc>4kf}f}i
 autocmd FileType tex inoremap ;it \begin{itemize}<Enter><Enter>\end{itemize}<Enter><Enter><++><Esc>3kA<Tab>\item<Space>
 
