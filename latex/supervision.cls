@@ -15,7 +15,6 @@
 \RequirePackage{fancyhdr}            % Headers and footers
 \RequirePackage{lastpage}            % Get a pagecount for the footer
 \RequirePackage{etoolbox}
-\RequirePackage{inconsolata}         % Courier New substitute, zi4
 \RequirePackage{mathtools}
 \RequirePackage{xparse}
 \RequirePackage{microtype}           % Slightly better typesetting, for nerds
@@ -52,8 +51,8 @@ showstringspaces=false}
 \title{\vspace{-1.7cm}\textsc{\Title}}
 \date{
   \Date\\
-  \vspace{0.1cm}
-  \noindent\hfil\rule{\textwidth}{0.5pt}\hfil
+  \vspace{0.1cm}%
+  \noindent\hfil\rule{\textwidth}{0.5pt}\hfil%
 }
 \author{\Me\ (\CRSID), \College}
 
