@@ -13,6 +13,7 @@ fi
 # Use vim mode
 set -o vi
 export EDITOR='vim'
+export BROWSER='/opt/google/chrome/google-chrome --enable-plugins --force-device-scale-factor=1.25'
 
 # Set aliases
 alias c='clear'
@@ -25,3 +26,11 @@ alias r='ranger'
 alias ls='ls --color=auto'
 alias v='vim'
 alias sv='sudo vim'
+alias wthr='curl -4 http://wttr.in/'
+
+alias sp='dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause >> /dev/null'
+alias snext='dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Next >> /dev/null'
+alias sprev='dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Previous >> /dev/null'
+alias splay='dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Play >> /dev/null'
+alias spause='dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Pause >> /dev/null'
+
