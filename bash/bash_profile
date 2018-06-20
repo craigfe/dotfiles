@@ -1,6 +1,6 @@
 shopt -s autocd # Allow cd-ing into a directory by typing the directory name
 
-export PATH=$PATH:~/.vim/bundle/vim-live-latex-preview/bin
+export PATH=$PATH:~/.vim/bundle/vim-live-latex-preview/bin:~/.local/bin
 
 # Configure the PS1 environment variable (terminal prompt)
 if [ $(id -u) -eq 0 ];
@@ -12,8 +12,9 @@ fi
 
 # Use vim mode
 set -o vi
-export EDITOR='vim'
-export BROWSER='/opt/google/chrome/google-chrome --enable-plugins --force-device-scale-factor=1.25'
+
+# Colour schemes
+(cat ~/.cache/wal/sequences &) # Import colour scheme from 'wal' asychronously
 
 # Set aliases
 alias c='clear'
