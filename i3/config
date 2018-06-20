@@ -4,6 +4,7 @@
 font pango:mono 12
 set $mod Mod4
 set $term gnome-terminal
+# exec --no-startup-id /usr/lib/gnome-settings-daemon/gsd-xsettings
 
 # Configure i3 gaps
 for_window [class="^.*"] border pixel 3
@@ -126,7 +127,7 @@ bindsym $mod+Shift+l		move right 30
 bindsym $mod+z			gaps outer current plus 5
 bindsym $mod+Shift+z		gaps outer current minus 5
 
-bindsym $mod+x			exec --no-startup-id ~/.config/i3/lock.sh
+bindsym $mod+x			exec --no-startup-id ~/.scripts/lock
 bindsym $mod+Shift+x		exec --no-startup-id prompt "Are you sure you want to shutdown?" "$shutdown"
 
 bindsym $mod+c			exec --no-startup-id camtoggle
@@ -348,8 +349,8 @@ bindsym XF86Search		exec $BROWSER https://google.com
 ##bindsym XF86Finance		exec
 ##bindsym XF86Game		exec
 ##bindsym XF86Shop		exec $BROWSER https://ebay.com
-bindsym XF86MonBrightnessDown	exec xbacklight -dec 15
-bindsym XF86MonBrightnessUp		exec xbacklight -inc 15
+bindsym XF86MonBrightnessDown	exec xbacklight -dec 5
+bindsym XF86MonBrightnessUp		exec xbacklight -inc 5
 bindsym XF86AudioMedia		exec --no-startup-id st -e ncmpcpp
 bindsym XF86Display		exec --no-startup-id arandr
 #bindsym XF86KbdLightOnOff	exec
