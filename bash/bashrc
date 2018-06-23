@@ -14,7 +14,7 @@ fi
 set -o vi
 
 # Colour schemes
-(cat ~/.cache/wal/sequences &) # Import colour scheme from 'wal' asychronously
+# (cat ~/.cache/wal/sequences &) # Import colour scheme from 'wal' asychronously
 
 # Set aliases
 alias c='clear'
