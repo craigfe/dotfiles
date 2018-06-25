@@ -1,3 +1,0 @@
-#!/bin/bash
-
-sudo /usr/lib/gnome-settings-daemon/gsd-backlight-helper --set-brightness $(calc "round($1/100 * $(/usr/lib/gnome-settings-daemon/gsd-backlight-helper --get-max-brightness))")

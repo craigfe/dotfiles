@@ -53,6 +53,7 @@ lock() {
 	passwordIncorrect=d23c3dff
 	background=00000000
 	foreground=ffffffff
+
 	i3lock \
 		-t -i "$1" \
 		--timepos="x+110:h-70" \
