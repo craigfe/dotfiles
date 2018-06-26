@@ -4,4 +4,7 @@ export PATH=$PATH:$HOME/.scripts
 export EDITOR="vim"
 export TEMRINAL="gnome-terminal"
 export BROWSER="chromium --enable-plugins --force-device-scale-factor=1.25"
-export MUSIC="spotify --force-device-scale-factor=1.3"
+export MUSIC="spotify --force-device-scale-factor=1.1"
+
+export MONITOR_1="eDP-1"
+export MONITOR_2="HDMI-1"

@@ -24,6 +24,7 @@ alias cbo='xsel -ob'
 alias ccat='highlight --out-format=xterm256' # Coloured cat w/ syntax highlighting
 alias crep='grep --color=always' # Coloured grep - highlight the desired sequence
 alias r='ranger'
+alias ranger='ranger --choosedir=$HOME/.rangerdir; LASTDIR=`cat $HOME/.rangerdir`; cd "$LASTDIR"'
 alias ls='ls --color=auto'
 alias v='vim'
 alias sv='sudo vim'
@@ -34,4 +35,11 @@ alias snext='dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/
 alias sprev='dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Previous >> /dev/null'
 alias splay='dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Play >> /dev/null'
 alias spause='dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Pause >> /dev/null'
+
+# Set functions
+function swap()         
+{
+    local TMPFILE=tmp.$$
+    mv "$1" $TMPFILE && mv "$2" "$1" && mv $TMPFILE $2
+}
 
