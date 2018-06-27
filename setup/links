@@ -1,0 +1,18 @@
+# The following files are to be linked into this repo,
+#  entries are of the form: <program> <target (in repo)> <name>
+
+bash		bash/bashrc				~/.bashrc
+bash		bash/profile			~/.profile
+compton		compton/compton.conf	~/.config/compton.conf
+git			git/gitconfig			~/. TODO
+i3			i3/config 				~/.config/i3/config
+latex		latex/	
+polybar		polybar/config
+ranger		ranger/rc.conf
+ranger		ranger/scope.sh
+tmux		tmux/tmux.conf		
+vim			vim/vimrc
+vis			vis/config
+X			X/.Xdefaults
+X			X/.xinitrc
+
