@@ -1,53 +1,66 @@
-*foreground: #00cc00
-*foreground_bold: #a8a19f
-*cursor: #a8a19f
-*background:       #1b1918
-!!*background: rgba(0, 0, 0, .7)
+#define base00 #272822
+#define base01 #383830
+#define base02 #49483e
+#define base03 #75715e
+#define base04 #a59f85
+#define base05 #f8f8f2
+#define base06 #f5f4f1
+#define base07 #f9f8f5
+#define base08 #f92672
+#define base09 #fd971f
+#define base0A #f4bf75
+#define base0B #a6e22e
+#define base0C #a1efe4
+#define base0D #66d9ef
+#define base0E #ae81ff
+#define base0F #cc6633
 
-!! black
-*color0: #1b1918
-*color8: #766e6b
-!! red
-*color1: #f22c40
-*color9: #f22c40
-!! green
-*color2: #5ab738
-*color10: #5ab738
-!! yellow
-*color3: #d5911a
-*color11: #d5911a
-!! blue
-*color4: #407ee7
-*color12: #407ee7
-!! magenta
-*color5: #6666ea
-*color13: #6666ea
-!! cyan
-*color6: #00ad9c
-*color14: #00ad9c
-!! white
-*color7: #a8a19f
-*color15: #f1efee
+*foreground:   base05
+#ifdef background_opacity
+*background:   [background_opacity]base00
+#else
+*background:   base00
+#endif
+*cursorColor:  base05
+
+*color0:       base00
+*color1:       base08
+*color2:       base0B
+*color3:       base0A
+*color4:       base0D
+*color5:       base0E
+*color6:       base0C
+*color7:       base05
+
+*color8:       base03
+*color9:       base09
+*color10:      base01
+*color11:      base02
+*color12:      base04
+*color13:      base06
+*color14:      base0F
+*color15:      base07
+
+Xft.dpi: 150
 
 URxvt.intensityStyles:	false
-URxvt.background:       [70]#000000
+URxvt.background:       [60]#000000
 URxvt.depth:		32
-URxvt.font: 		xft:monospace:size=11
+URxvt.font: 		xft:DejaVu Sans Mono:size=11
 URxvt.scrollBar:	false
 URxvt.cursorColor:	white
+URxvt.letterSpace: -1
+
 
 !! Extensions
-URxvt.perl-ext-common:	default,matcher,resize-font,url-select,keyboard-select
+URxvt.perl-ext-common:	default,matcher,resize-font
 URxvt.colorUL:		#4682B4
-!! url-select
-URxvt.keysym.M-u:	perl:url-select:select_next
-URxvt.url-select.launcher: linkhandler
-URxvt.url-select.underline: true
-!! keyboard-select:
-URxvt.keysym.M-Escape: perl:keyboard-select:activate
-!! resize-font
-URxvt.resize-font.smaller:	C-Down
-URxvt.resize-font.bigger:	C-Up
+
+!! Resize-font
+URxvt.keysym.C-minus:	resize-font:smaller
+URxvt.keysym.C-equal: 	resize-font:bigger
+
+
 !! Matcher
 URxvt.url-launcher:	linkhandler
 URxvt.matcher.button:	1
