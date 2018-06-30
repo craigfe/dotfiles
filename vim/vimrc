@@ -1,14 +1,39 @@
+
 let mapleader = " "
 
-set runtimepath^=~/.vim/bundle/ctrlp.vim " Ctrl-P fuzzy finder
+filetype plugin indent on 
+if has('nvim')
+	let s:editor_root=expand("~/.nvim")
+else
+	let s:editor_root=expand("~/.vim")
+endif
 
-" Pathogen plugins
-execute pathogen#infect()
-execute pathogen#helptags()
+" Configure Vundle
+let vundle_installed=1
+let vundle_readme=s:editor_root . '/bundle/vundle/README.md'
+if !filereadable(vundle_readme)
+	echo "Installing Vundle..."
+	echo ""
+
+	silent call mkdir(s:editor_root . '/bundle', "p")
+	silent execute "!git clone https://github.com/gmarik/vundle " . s:editor_root . "/bundle/vundle"
+	let vundle_installed=0
+endif
+let &rtp = $rtp . ',' . s:editor_root . '/bundle/vundle/'
+call vundle#rc(s:editor_root . '/bundle')
+
+Bundle 'chriskempson/base16-vim'
+
+if vundle_installed == 0
+	echo "Installing Bundles..."
+	echo ""
+endif 
+
 
 " Syntax highlighting
-filetype plugin indent on
+set t_Co=256
 syntax on
+colorscheme base16-default-dark
 set encoding=utf-8
 set splitbelow
 set splitright 
@@ -25,7 +50,7 @@ set breakindent
 
 " Searching
 set incsearch " Search incrementally
-set hlsearch  " Search highlights all of the results
+set hlsearch  " Search highlights cll of the results
 
 " Rendering
 set ttyfast
@@ -103,7 +128,7 @@ autocmd FileType tex inoremap ;ssec \subsection{}<Enter><Enter><++><Esc>2kf}i
 autocmd FileType tex inoremap ;sssec \subsubsection{}<Enter><Enter><++><Esc>2kf}i
 autocmd FileType tex inoremap ;up \usepackage{}<Esc>T{i
 autocmd FileType tex inoremap ;dc \documentclass{}<Esc>T{i
-autocmd FileType tex inoremap ;en \begin{enumerate}{}<Enter><Tab>\item<++><Enter><Backspace>\end{enumerate}<Enter><Enter><++><Esc>4kf}f}i
+autocmd FileType tex inoremap ;en \begin{enumerate}[]<Enter><Backspace>\item<Space><++><Enter><Backspace><Backspace>\end{enumerate}<Enter><Enter><++><Esc>4kf]i
 autocmd FileType tex inoremap ;it \begin{itemize}<Enter><Enter>\end{itemize}<Enter><Enter><++><Esc>3kA<Tab>\item<Space>
 
 autocmd FileType tex inoremap ;tab \begin{tabular}<Enter><++><Enter>\end{tabular}<Enter><Enter><++><Esc>4kA{}<Esc>i
