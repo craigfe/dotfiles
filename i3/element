@@ -1,0 +1,15 @@
+#!/usr/bin/env sh
+
+monitor1=HDMI-1
+monitor2=eDP-1
+
+killall -q conky polybar dunst
+
+# CONKY
+while pgrep -x conky >/dev/null; do sleep 1; done
+conky &
+
+# POLYBAR
+while pgrep -x polybar >/dev/null; do sleep 1; done
+MONITOR=$monitor1 polybar top &
+MONITOR=$monitor2 polybar top &
