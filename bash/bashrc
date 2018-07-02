@@ -1,3 +1,5 @@
+#!/bin/bash
+
 shopt -s autocd # Allow cd-ing into a directory by typing the directory name
 
 export PATH=$PATH:~/.vim/bundle/vim-live-latex-preview/bin:~/.local/bin
@@ -16,26 +18,6 @@ set -o vi
 # Colour schemes
 # (cat ~/.cache/wal/sequences &) # Import colour scheme from 'wal' asychronously
 
-# Set aliases
-alias c='clear'
-alias cls='clear'
-alias cbi='xsel -ib'
-alias cbo='xsel -ob'
-alias ccat='highlight --out-format=xterm256' # Coloured cat w/ syntax highlighting
-alias crep='grep --color=always' # Coloured grep - highlight the desired sequence
-alias r='ranger'
-alias ranger='ranger --choosedir=$HOME/.rangerdir; LASTDIR=`cat $HOME/.rangerdir`; cd "$LASTDIR"'
-alias ls='ls --color=auto'
-alias v='vim'
-alias sv='sudo vim'
-alias wthr='curl -4 http://wttr.in/'
-
-alias sp='dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause >> /dev/null'
-alias snext='dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Next >> /dev/null'
-alias sprev='dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Previous >> /dev/null'
-alias splay='dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Play >> /dev/null'
-alias spause='dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Pause >> /dev/null'
-
 # Set functions
 function swap()         
 {
@@ -43,3 +25,6 @@ function swap()
     mv "$1" $TMPFILE && mv "$2" "$1" && mv $TMPFILE $2
 }
 
+if  [ -f ~/.bash_aliases ]; then
+	. ~/.bash_aliases
+fi

@@ -1,7 +1,7 @@
 [[ -f ~/.bashrc ]] && . ~/.bashrc
 
 export PATH=$PATH:$HOME/.scripts
-export EDITOR="vim"
+export EDITOR="nvim"
 export TEMRINAL="gnome-terminal"
 export BROWSER="chromium --enable-plugins --force-device-scale-factor=1.25"
 export MUSIC="spotify --force-device-scale-factor=1.1"
