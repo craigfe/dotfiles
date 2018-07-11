@@ -1,7 +1,4 @@
-
-let mapleader = " "
-
-filetype plugin indent on 
+""
 if has('nvim')
 	let s:editor_root=expand("~/.nvim")
 else
@@ -14,27 +11,31 @@ let vundle_readme=s:editor_root . '/bundle/vundle/README.md'
 if !filereadable(vundle_readme)
 	echo "Installing Vundle..."
 	echo ""
+	
+	if !isdirectory(s:editor_root . '/bundle/')
+		silent call mkdir(s:editor_root . '/bundle', "p")
+	endif
 
-	silent call mkdir(s:editor_root . '/bundle', "p")
 	silent execute "!git clone https://github.com/gmarik/vundle " . s:editor_root . "/bundle/vundle"
 	let vundle_installed=0
 endif
-let &rtp = $rtp . ',' . s:editor_root . '/bundle/vundle/'
+
+let &rtp = &rtp . ',' . s:editor_root . '/bundle/vundle/'
 call vundle#rc(s:editor_root . '/bundle')
 
-Bundle 'chriskempson/base16-vim'
+Plugin 'VundleVim/Vundle.vim'
+Plugin 'ying17zi/vim-live-latex-preview', { 'for': 'tex' }
+Plugin 'LaTeX-Box-Team/LaTeX-Box', { 'for': 'tex' }
+Plugin 'scrooloose/syntastic' 
+Plugin 'ctrlpvim/ctrlp.vim'
 
-if vundle_installed == 0
-	echo "Installing Bundles..."
-	echo ""
-endif 
+call vundle#end()
+filetype plugin indent on 
 
-
-" Syntax highlighting
-set t_Co=256
-syntax on
-colorscheme base16-default-dark
+set t_Co=16
+syntax enable
 set encoding=utf-8
+
 set splitbelow
 set splitright 
 
@@ -48,13 +49,15 @@ set autoindent
 set noexpandtab
 set breakindent
 
+" Remove auto commenting on newlines
+autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
+
 " Searching
 set incsearch " Search incrementally
 set hlsearch  " Search highlights cll of the results
 
 " Rendering
 set ttyfast
-set background=dark
 set mouse=a
 
 " Numbering system
@@ -84,11 +87,6 @@ set spelllang=en_gb
 
 map <F6> :setlocal spell! spelllang=en_uk<CR>
 
-" Goyo plugin: makes text more readable when writing prose
-map <F10> :Goyo<CR>
-map <leader>f :Goyo \| set linebreak <CR>
-inoremap <F10> <esc>:Goyo<CR>a
-
 " Alternatives to <ESC>
 inoremap jk <ESC>
 inoremap jK <ESC>
@@ -98,6 +96,11 @@ inoremap kj <ESC>
 inoremap kJ <ESC>
 inoremap Kj <ESC>
 inoremap KJ <ESC>
+
+" See the current syntax highlighting group
+map <F10> :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<'
+\ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
+\ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
 
 " Build configurations
 autocmd FileType tex inoremap <C-B> <Esc>:!xelatex<space><c-r>%<Enter>a
@@ -111,6 +114,9 @@ au BufRead,BufNewFile rc.conf set filetype=vim
 " C-T for a new tab
 nnoremap <C-T> :tabnew<cr>
 nnoremap <C-W> :tabclose<cr>
+
+" LaTeX Live Preview
+let g:livepreview_previewer = 'mupdf'
 
 " LaTeX Snippets
 autocmd FileType tex inoremap ;em \emph{} <++><Esc>T{i
@@ -133,4 +139,3 @@ autocmd FileType tex inoremap ;it \begin{itemize}<Enter><Enter>\end{itemize}<Ent
 
 autocmd FileType tex inoremap ;tab \begin{tabular}<Enter><++><Enter>\end{tabular}<Enter><Enter><++><Esc>4kA{}<Esc>i
 autocmd FileType tex inoremap ;btab \begin{tabular}<Enter>\toprule<Enter><++><Enter>\midrule<Enter><++><Enter>\bottomrule<Enter>\end{tabular}<Enter><Enter><++><Esc>8kA{}<Esc>i
-
