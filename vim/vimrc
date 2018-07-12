@@ -26,6 +26,9 @@ call vundle#rc(s:editor_root . '/bundle')
 Plugin 'VundleVim/Vundle.vim'
 Plugin 'ying17zi/vim-live-latex-preview', { 'for': 'tex' }
 Plugin 'LaTeX-Box-Team/LaTeX-Box', { 'for': 'tex' }
+Plugin 'tpope/vim-surround'
+Plugin 'scrooloose/nerdcommenter'
+Plugin 'scrooloose/nerdtree'
 Plugin 'scrooloose/syntastic' 
 Plugin 'ctrlpvim/ctrlp.vim'
 
