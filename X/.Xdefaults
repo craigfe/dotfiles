@@ -13,6 +13,7 @@
 #define base0C #a1efe4
 #define base0D #66d9ef
 #define base0E #ae81ff
+#define base0f #ae81ff
 #define base0F #cc6633
 
 *foreground:   base05
@@ -41,16 +42,17 @@
 *color14:      base0F
 *color15:      base07
 
-Xft.dpi: 150
+Xft.dpi: 90
 
 URxvt*internalBorder: 10
 URxvt.intensityStyles:	false
 URxvt.background:       [60]#000000
 URxvt.depth:		32
-URxvt.font: 		xft:DejaVu Sans Mono:size=11
+URxvt.font: 	 	xft:Hack:style=Regular:pixelsize=13
 URxvt.scrollBar:	false
 URxvt.cursorColor:	white
-URxvt.letterSpace: -1
+URxvt.letterSpace:	-1
+URxvt.urlLauncher:	/usr/bin/google-chrome
 
 !! Extensions
 URxvt.perl-ext-common:	default,matcher,resize-font
@@ -65,29 +67,6 @@ URxvt.url-launcher:	linkhandler
 URxvt.matcher.button:	1
 
 rofi.color-enabled:	true
-URxvt*internalBorder: 10
-URxvt.intensityStyles:	false
-URxvt.background:       [60]#000000
-URxvt.depth:		32
-URxvt.font: 		xft:DejaVu Sans Mono:size=11
-URxvt.scrollBar:	false
-URxvt.cursorColor:	white
-URxvt.letterSpace: -1
-
-!! Extensions
-URxvt.perl-ext-common:	default,matcher,resize-font
-URxvt.colorUL:		#4682B4
-
-!! Resize-font
-URxvt.keysym.C-minus:	resize-font:smaller
-URxvt.keysym.C-equal: 	resize-font:bigger
-
-!! Matcher
-URxvt.url-launcher:	linkhandler
-URxvt.matcher.button:	1
-
-rofi.color-enabled:	true
-
 rofi.color-window:	#000, #000, #000
 rofi.color-normal:	#111, #819396, #222, #008ed4, #ffffff
 rofi.color-active:	#002b37, #008ed4, #003643, #008ed4, #66c6ff
