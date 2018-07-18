@@ -1,39 +1,55 @@
-""
-if has('nvim')
-	let s:editor_root=expand("~/.nvim")
-else
-	let s:editor_root=expand("~/.vim")
-endif
-
-" Configure Vundle
-let vundle_installed=1
-let vundle_readme=s:editor_root . '/bundle/vundle/README.md'
-if !filereadable(vundle_readme)
-	echo "Installing Vundle..."
-	echo ""
-	
-	if !isdirectory(s:editor_root . '/bundle/')
-		silent call mkdir(s:editor_root . '/bundle', "p")
+" Initialisation: {
+	if has('nvim')
+		let s:editor_root=expand("~/.nvim")
+	else
+		let s:editor_root=expand("~/.vim")
 	endif
+"
 
-	silent execute "!git clone https://github.com/gmarik/vundle " . s:editor_root . "/bundle/vundle"
-	let vundle_installed=0
-endif
+" VundleStart: {
+	let vundle_installed=1
+	let vundle_readme=s:editor_root . '/bundle/vundle/README.md'
+	if !filereadable(vundle_readme)
+		echo "Installing Vundle..."
+	echo ""
+		
+		if !isdirectory(s:editor_root . '/bundle/')
+			silent call mkdir(s:editor_root . '/bundle', "p")
+		endif
 
-let &rtp = &rtp . ',' . s:editor_root . '/bundle/vundle/'
-call vundle#rc(s:editor_root . '/bundle')
+		silent execute "!git clone https://github.com/gmarik/vundle " . s:editor_root . "/bundle/vundle"
+		let vundle_installed=0
+	endif
+	
+	filetype off " Vundle requires this before setting the runtime paths
+	let &rtp = &rtp . ',' . s:editor_root . '/bundle/vundle/'
+	call vundle#rc(s:editor_root . '/bundle')
+	
+	Plugin 'VundleVim/Vundle.vim'
+" }
 
-Plugin 'VundleVim/Vundle.vim'
-Plugin 'ying17zi/vim-live-latex-preview', { 'for': 'tex' }
-Plugin 'LaTeX-Box-Team/LaTeX-Box', { 'for': 'tex' }
-Plugin 'tpope/vim-surround'
-Plugin 'scrooloose/nerdcommenter'
-Plugin 'scrooloose/nerdtree'
-Plugin 'scrooloose/syntastic' 
-Plugin 'ctrlpvim/ctrlp.vim'
+" Plugins: {
+	" Behavioural: {
+		Plugin 'ying17zi/vim-live-latex-preview', { 'for': 'tex' }
+		Plugin 'LaTeX-Box-Team/LaTeX-Box', { 'for': 'tex' }
+		Plugin 'tpope/vim-surround'
+		Plugin 'scrooloose/nerdcommenter'
+		Plugin 'scrooloose/nerdtree'
+		Plugin 'Xuyuanp/nerdtree-git-plugin'
+		Plugin 'ctrlpvim/ctrlp.vim'
+	" }
 
-call vundle#end()
-filetype plugin indent on 
+	" Cosmetic: {
+		Plugin 'vim-airline/vim-airline'
+		Plugin 'scrooloose/syntastic' 
+		Plugin 'morhetz/gruvbox'
+	" }
+" }
+
+" VundleEnd: {
+	call vundle#end()
+	filetype plugin indent on 
+" }
 
 set t_Co=16
 syntax enable
@@ -100,10 +116,18 @@ inoremap kJ <ESC>
 inoremap Kj <ESC>
 inoremap KJ <ESC>
 
+" Ctrl-P configuration
+let g:ctrlp_show_hidden = 1
+let g:ctrlp_max_files = 0
+
 " See the current syntax highlighting group
 map <F10> :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<'
 \ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
 \ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
+
+set background=dark
+silent! colorscheme gruvbox
+hi Normal ctermbg=none " Disable the background color
 
 " Build configurations
 autocmd FileType tex inoremap <C-B> <Esc>:!xelatex<space><c-r>%<Enter>a
@@ -117,6 +141,10 @@ au BufRead,BufNewFile rc.conf set filetype=vim
 " C-T for a new tab
 nnoremap <C-T> :tabnew<cr>
 nnoremap <C-W> :tabclose<cr>
+
+" If a folder is specified on input, open NERDTree
+autocmd StdinReadPre * let s:std_in=1
+autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | endif
 
 " LaTeX Live Preview
 let g:livepreview_previewer = 'mupdf'
