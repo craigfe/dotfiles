@@ -1,10 +1,12 @@
 " Initialisation: {
+	set encoding=utf-8
+	scriptencoding utf-8
+
 	if has('nvim')
 		let s:editor_root=expand("~/.nvim")
 	else
 		let s:editor_root=expand("~/.vim")
 	endif
-"
 
 " VundleStart: {
 	let vundle_installed=1
@@ -30,13 +32,16 @@
 
 " Plugins: {
 	" Behavioural: {
-		Plugin 'ying17zi/vim-live-latex-preview', { 'for': 'tex' }
-		Plugin 'LaTeX-Box-Team/LaTeX-Box', { 'for': 'tex' }
-		Plugin 'tpope/vim-surround'
+		Plugin 'ying17zi/vim-live-latex-preview', { 'for': 'tex' } " Live LaTeX compilation 
+		Plugin 'LaTeX-Box-Team/LaTeX-Box', { 'for': 'tex' } " Various LaTeX improvements
+		Plugin 'tpope/vim-surround' " Change surrounding quotes, brackets and tags easily
+		Plugin 'tpope/vim-fugitive' " Git wrapper
+		Plugin 'tpope/vim-repeat' " Extend the vim . operator to be available to plugins
 		Plugin 'scrooloose/nerdcommenter'
-		Plugin 'scrooloose/nerdtree'
-		Plugin 'Xuyuanp/nerdtree-git-plugin'
-		Plugin 'ctrlpvim/ctrlp.vim'
+		Plugin 'scrooloose/nerdtree' " Tree directory viewer
+		Plugin 'Xuyuanp/nerdtree-git-plugin' " Git support for NERDTree
+		Plugin 'sjl/gundo.vim' " Non-linear undo tree
+		Plugin 'ctrlpvim/ctrlp.vim' " Fuzzy file finder
 	" }
 
 	" Cosmetic: {
@@ -51,122 +56,173 @@
 	filetype plugin indent on 
 " }
 
-set t_Co=16
-syntax enable
-set encoding=utf-8
+" General: {
+	set nocompatible " Don't try to be compatible with vi
+	set autoread " Reload file if it is changed externally
+	set noswapfile " Enough memory not to need a swap file
+
+	" Persistant undo
+	set undodir=~/.vim_undo
+	set undofile
+" }
+
+" Formatting: {
+	set tabstop=2
+	set shiftwidth=2
+	set autoindent
+	set noexpandtab
+	set breakindent
+	set lazyredraw " Redraw the screen only on certain commands
+" }
+
+" Interface: {
+	set ffs=unix,dos,mac " Priotitise UNIX file type
+	set scrolloff=5 " Scroll the screen when 5 lines from the bottom
+
+	set ttyfast
+	set mouse=a
+	set noshowmode " Disable standard -- INSERT -- messaging, since status bar shows this
+	
+	" Numbering: { 
+		set number " Show line numbers on the left side 
+		set relativenumber " Show numbers relative to the current line
+
+		function! ToggleRelativeNumbers()
+			if (&relativenumber == 1)
+				set norelativenumber
+			else
+				set relativenumber
+			endif
+		endfunction
+	" }
+
+	" Folding: {
+		set foldmethod=indent " 'zc' folds at the current indent; 'zo' opens a fold
+		set foldopen+=jump " Open folds if we jump into them
+		
+		" Unfold on open
+		au BufRead * normal zR
+		
+	" }
+
+	" If a folder is specified on input, open NERDTree
+	autocmd StdinReadPre * let s:std_in=1
+	autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | endif
+" }
+
+" Text: {
+	set t_Co=16
+	syntax enable
+	set background=dark " Use the dark theme
+	silent! colorscheme gruvbox
+	hi Normal ctermbg=none " Disable the background color
+
+	" Autocompletion: {
+		set omnifunc=syntaxcomplete#Complete
+	" }
+
+	" Spelling: {
+		set spelllang=en_gb
+		map <F6> :setlocal spell! spelllang=en_uk<CR>
+	" }
+
+	set list lcs=trail:·,tab:»\  " Show tabs and trailing spaces as visible characters
+" }
+
+" Searching: {
+	set incsearch " Search incrementally
+	set hlsearch  " Search highlights all of the results
+	set magic " Enable regular expressions
+
+	if executable('ag') " The Silver Searcher (typically faster than 'ack')
+		let g:ackprg = 'ag --vimgrep' " enables compatability with vim
+	endif
+" }
 
 set splitbelow
-set splitright 
-
-" Don't try to be compatible with vi
-set nocompatible
-
-" Whitespace
-set tabstop=4
-set shiftwidth=4
-set autoindent
-set noexpandtab
-set breakindent
+set splitright
 
 " Remove auto commenting on newlines
 autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 
-" Searching
-set incsearch " Search incrementally
-set hlsearch  " Search highlights cll of the results
+" Mappings: {
 
-" Rendering
-set ttyfast
-set mouse=a
+	" To toggle numbering between absolute and relative
+	nnoremap gl :call ToggleRelativeNumbers()<CR>
 
-" Numbering system
-set number
-set relativenumber
+	noremap <silent> <leader>d :silent! NERDTreeToggle<cr> " Toggle NERDTree window
+	noremap <silent> <leader>g :silent! GundoToggle<cr> " Toggle GUndo tree window
 
-function! ToggleRelativeNumbers()
-	if (&relativenumber == 1)
-		set norelativenumber
-	else
-		set relativenumber
-	endif
-endfunction
+	 " Alternatives to <ESC>
+	inoremap jk <ESC>
+	inoremap jK <ESC>
+	inoremap Jk <ESC>
+	inoremap JK <ESC>
+	inoremap kj <ESC>
+	inoremap kJ <ESC>
+	inoremap Kj <ESC>
+	inoremap KJ <ESC>
 
-" Map gl to toggle numbering between absolute and relative
-nnoremap gl :call ToggleRelativeNumbers()<CR>
+	nnoremap <C-T> :tabnew<cr> " Open a new tab
+	nnoremap <C-W> :tabclose<cr> " Close the current tab
+	
+	" See the current syntax highlighting group
+	map <F10> :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<'
+	\ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
+	\ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
 
-" Navigation using guides
-noremap <Space><Tab> <Esc>/<++><Enter>"_c4l
-inoremap <Space><Tab> <Esc>/<++><Enter>"_c4l
-vnoremap <Space><Tab> <Esc>/<++><Enter>"_c4l
-map <Space><Tab> <Esc>/<++><Enter>"_c4l
-inoremap ;gui <++>
+	" Navigation using guides
+	noremap <Space><Tab> <Esc>/<Enter>"_c4l
+	inoremap <Space><Tab> <Esc>/<++><Enter>"_c4l
+	vnoremap <Space><Tab> <Esc>/<++><Enter>"_c4l
+	map <Space><Tab> <Esc>/<++><Enter>"_c4l
+	inoremap ;gui <++>
 
-" Enable spelling by default for certain filetypes
-set spelllang=en_gb
-
-map <F6> :setlocal spell! spelllang=en_uk<CR>
-
-" Alternatives to <ESC>
-inoremap jk <ESC>
-inoremap jK <ESC>
-inoremap Jk <ESC>
-inoremap JK <ESC>
-inoremap kj <ESC>
-inoremap kJ <ESC>
-inoremap Kj <ESC>
-inoremap KJ <ESC>
+	vnoremap <Tab> >
+	vnoremap <S-Tab> <
+" }
 
 " Ctrl-P configuration
 let g:ctrlp_show_hidden = 1
 let g:ctrlp_max_files = 0
 
-" See the current syntax highlighting group
-map <F10> :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<'
-\ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
-\ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
-
-set background=dark
-silent! colorscheme gruvbox
-hi Normal ctermbg=none " Disable the background color
 
 " Build configurations
 autocmd FileType tex inoremap <C-B> <Esc>:!xelatex<space><c-r>%<Enter>a
 autocmd FileType tex nnoremap <C-B> :!xelatex<space><c-r>%<Enter>
 
-" Default filetypes
-au BufRead,BufNewFile *.tex set filetype=tex
-au BufRead,BufNewFile *.pl set filetype=prolog " not Perl
-au BufRead,BufNewFile rc.conf set filetype=vim
+" Filetypes: {
+	au BufRead,BufNewFile *.tex set filetype=tex
+	au BufRead,BufNewFile *.pl set filetype=prolog " not Perl
+	au BufRead,BufNewFile rc.conf set filetype=vim
+" }
 
-" C-T for a new tab
-nnoremap <C-T> :tabnew<cr>
-nnoremap <C-W> :tabclose<cr>
-
-" If a folder is specified on input, open NERDTree
-autocmd StdinReadPre * let s:std_in=1
-autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | endif
 
 " LaTeX Live Preview
 let g:livepreview_previewer = 'mupdf'
 
-" LaTeX Snippets
-autocmd FileType tex inoremap ;em \emph{} <++><Esc>T{i
-autocmd FileType tex inoremap ;bf \textbf{} <++><Esc>T{i
-autocmd FileType tex inoremap ;tt \texttt{}<Space><++><Esc>T{i
+" Snippets: {
+	" LaTeX: { 
+		autocmd FileType tex inoremap ;em \emph{} <++><Esc>T{i
+		autocmd FileType tex inoremap ;bf \textbf{} <++><Esc>T{i
+		autocmd FileType tex inoremap ;tt \texttt{}<Space><++><Esc>T{i
 
-autocmd FileType tex inoremap ;m \(\)<Space><++><Esc>T(i
-autocmd FileType tex inoremap ;M \[\]<Enter><Enter><++><Esc>2k$hi 
-autocmd FileType tex inoremap ;ra \rightarrow
-autocmd FileType tex inoremap ;la \leftarrow
-autocmd FileType tex inoremap ;lra \leftrightarrow
+		autocmd FileType tex inoremap ;m \(\)<Space><++><Esc>T(i
+		autocmd FileType tex inoremap ;M \[\]<Enter><Enter><++><Esc>2k$hi 
+		autocmd FileType tex inoremap ;ra \rightarrow
+		autocmd FileType tex inoremap ;la \leftarrow
+		autocmd FileType tex inoremap ;lra \leftrightarrow
 
-autocmd FileType tex inoremap ;sec \section{}<Enter><Enter><++><Esc>2kf}i
-autocmd FileType tex inoremap ;ssec \subsection{}<Enter><Enter><++><Esc>2kf}i
-autocmd FileType tex inoremap ;sssec \subsubsection{}<Enter><Enter><++><Esc>2kf}i
-autocmd FileType tex inoremap ;up \usepackage{}<Esc>T{i
-autocmd FileType tex inoremap ;dc \documentclass{}<Esc>T{i
-autocmd FileType tex inoremap ;en \begin{enumerate}[]<Enter><Backspace>\item<Space><++><Enter><Backspace><Backspace>\end{enumerate}<Enter><Enter><++><Esc>4kf]i
-autocmd FileType tex inoremap ;it \begin{itemize}<Enter><Enter>\end{itemize}<Enter><Enter><++><Esc>3kA<Tab>\item<Space>
+		autocmd FileType tex inoremap ;sec \section{}<Enter><Enter><++><Esc>2kf}i
+		autocmd FileType tex inoremap ;ssec \subsection{}<Enter><Enter><++><Esc>2kf}i
+		autocmd FileType tex inoremap ;sssec \subsubsection{}<Enter><Enter><++><Esc>2kf}i
+		autocmd FileType tex inoremap ;up \usepackage{}<Esc>T{i
+		autocmd FileType tex inoremap ;dc \documentclass{}<Esc>T{i
+		autocmd FileType tex inoremap ;en \begin{enumerate}[]<Enter><Backspace>\item<Space><++><Enter><Backspace><Backspace>\end{enumerate}<Enter><Enter><++><Esc>4kf]i
+		autocmd FileType tex inoremap ;it \begin{itemize}<Enter><Enter>\end{itemize}<Enter><Enter><++><Esc>3kA<Tab>\item<Space>
 
-autocmd FileType tex inoremap ;tab \begin{tabular}<Enter><++><Enter>\end{tabular}<Enter><Enter><++><Esc>4kA{}<Esc>i
-autocmd FileType tex inoremap ;btab \begin{tabular}<Enter>\toprule<Enter><++><Enter>\midrule<Enter><++><Enter>\bottomrule<Enter>\end{tabular}<Enter><Enter><++><Esc>8kA{}<Esc>i
+		autocmd FileType tex inoremap ;tab \begin{tabular}<Enter><++><Enter>\end{tabular}<Enter><Enter><++><Esc>4kA{}<Esc>i
+		autocmd FileType tex inoremap ;btab \begin{tabular}<Enter>\toprule<Enter><++><Enter>\midrule<Enter><++><Enter>\bottomrule<Enter>\end{tabular}<Enter><Enter><++><Esc>8kA{}<Esc>i
+	" }
+" }
+
