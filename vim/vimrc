@@ -153,7 +153,7 @@ autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 	noremap <silent> <leader>d :silent! NERDTreeToggle<cr> " Toggle NERDTree window
 	noremap <silent> <leader>g :silent! GundoToggle<cr> " Toggle GUndo tree window
 
-	 " Alternatives to <ESC>
+	" Alternatives to <ESC>
 	inoremap jk <ESC>
 	inoremap jK <ESC>
 	inoremap Jk <ESC>
@@ -163,9 +163,18 @@ autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 	inoremap Kj <ESC>
 	inoremap KJ <ESC>
 
-	nnoremap <C-T> :tabnew<cr> " Open a new tab
-	nnoremap <C-W> :tabclose<cr> " Close the current tab
-	
+	" Navigation across splits w/o <C-W>
+	nnoremap <C-J> <C-W><C-J>
+	nnoremap <C-K> <C-W><C-K>
+	nnoremap <C-L> <C-W><C-L>
+	nnoremap <C-H> <C-W><C-H>
+
+	" Change split sizes w/o <C-W>
+	nnoremap <ESC>[65;5uH <C-W><
+	nnoremap <ESC>[65;5uJ <C-W>+
+	nnoremap <ESC>[65;5uK <C-W>-
+	nnoremap <ESC>[65;5uL <C-W>>
+
 	" See the current syntax highlighting group
 	map <F10> :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<'
 	\ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
