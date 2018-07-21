@@ -10,8 +10,8 @@ alias crep='grep --color=always' # Coloured grep - highlight the desired sequenc
 alias r='ranger'
 alias ranger='ranger --choosedir=$HOME/.rangerdir; LASTDIR=`cat $HOME/.rangerdir`; cd "$LASTDIR"'
 alias ls='ls --color=auto'
-alias v='vim'
-alias sv='sudo vim'
+alias v='nvim'
+alias sv='sudo nvim'
 alias wthr='curl -4 http://wttr.in/'
 
 alias sp='dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause >> /dev/null'
