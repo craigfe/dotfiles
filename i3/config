@@ -3,7 +3,7 @@
 # #---Basic Definitions---# #
 font pango:mono 12
 set $mod Mod4
-set $term urxvt
+set $term urxvt -e /bin/zsh
 # exec --no-startup-id /usr/lib/gnome-settings-daemon/gsd-xsettings
 
 # -----------------------------------------------------------------------------
@@ -19,9 +19,7 @@ gaps outer 8
 
 exec_always --no-startup-id feh --bg-scale ~/.config/wall.png
 exec --no-startup-id dunst
-exec --no-startup-id mpd # Music player
-exec --no-startup-id transmission-daemon # Torrenting
-exec --no-startup-id compton --xrender-sync-fence
+exec --no-startup-id compton
 
 exec_always --no-startup-id ~/.config/i3/element
 
