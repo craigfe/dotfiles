@@ -7,9 +7,9 @@ export PATH=$PATH:~/.vim/bundle/vim-live-latex-preview/bin:~/.local/bin
 # Configure the PS1 environment variable (terminal prompt)
 if [ $(id -u) -eq 0 ];
 then # root user
-	export PS1='\[\033[1;31m\][\[\033[1;36m\]\u\[\033[1;31m\]@\[\033[1;32m\]\h \[\033[1;31m\]: \[\033[1;35m\]\W\[\033[1;31m\]]# \[\033[0m\]' 
+	export PS1='\[\033[1;31m\][\[\033[1;36m\]\u\[\033[1;31m\]@\[\033[1;32m\]\h \[\033[1;31m\]: \[\033[1;35m\]\W\[\033[1;31m\]]# \[\033[0m\]'
 else # not root user
-	export PS1='\[\033[1;31m\][\[\033[1;36m\]\u\[\033[1;31m\]@\[\033[1;32m\]\h \[\033[1;31m\]: \[\033[1;35m\]\W\[\033[1;31m\]]$ \[\033[0m\]' 
+	export PS1='\[\033[1;31m\][\[\033[1;36m\]\u\[\033[1;31m\]@\[\033[1;32m\]\h \[\033[1;31m\]: \[\033[1;35m\]\W\[\033[1;31m\]]$ \[\033[0m\]'
 fi
 
 # Use vim mode
@@ -19,12 +19,15 @@ set -o vi
 # (cat ~/.cache/wal/sequences &) # Import colour scheme from 'wal' asychronously
 
 # Set functions
-function swap()         
+function swap()
 {
     local TMPFILE=tmp.$$
     mv "$1" $TMPFILE && mv "$2" "$1" && mv $TMPFILE $2
 }
 
-if  [ -f ~/.bash_aliases ]; then
-	. ~/.bash_aliases
+if  [ -f ~/.aliases ]; then
+	. ~/.aliases
 fi
+
+export SDKMAN_DIR=$HOME'/.sdkman'
+[[ -s $HOME'/.sdkman/bin/sdkman-init.sh' ]] && source $HOME"/.sdkman/bin/sdkman-init.sh"
