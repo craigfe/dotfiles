@@ -1,3 +1,5 @@
+# vim: ft=dosini
+
 [colors]
 	accent = #90F9FF
 	bckgrd = #121212
@@ -57,7 +59,8 @@
 	tray-position = right
 	tray-padding = 4
 
-	modules-left = i3 TOP DRY NET HOT SYC WCH
+	modules-left = i3 
+; TOP DRY NET HOT SYC WCH
 	modules-right = redshift backlight volume cpu memory battery date
 
 [bar/center]
