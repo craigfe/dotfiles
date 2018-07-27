@@ -22,7 +22,7 @@
 	throttle-output-for = 10
 	throttle-input-for = 30
 	screenchange-reload = true
-	bar_gap= 10
+	bar_gap= 0
 	bar_width = 100%
 	bar_height = 35
 

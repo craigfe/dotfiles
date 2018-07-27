@@ -48,6 +48,7 @@
 		Plugin 'vim-airline/vim-airline'
 		Plugin 'scrooloose/syntastic' 
 		Plugin 'morhetz/gruvbox'
+		Plugin 'mboughaba/i3config.vim'
 	" }
 " }
 

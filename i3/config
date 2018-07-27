@@ -1,4 +1,4 @@
-# vim: filetype=i3
+# vim: filetype=i3config
 
 # #---Basic Definitions---# #
 font pango:mono 12
@@ -10,8 +10,8 @@ set $term urxvt -e /bin/zsh
 #     GAPS
 # -----------------------------------------------------------------------------
 
-gaps inner 4
-gaps outer 8
+gaps inner 6
+gaps outer 3
 
 # -----------------------------------------------------------------------------
 #     EXTERNAL SCRIPTS
