@@ -1,10 +1,13 @@
 # vim: filetype=i3config
 
-# #---Basic Definitions---# #
+# -----------------------------------------------------------------------------
+#     BASIC DEFINITIONS
+# -----------------------------------------------------------------------------
+
 font pango:mono 12
 set $mod Mod4
 set $term urxvt -e /bin/zsh
-# exec --no-startup-id /usr/lib/gnome-settings-daemon/gsd-xsettings
+smart_borders on
 
 # -----------------------------------------------------------------------------
 #     GAPS
@@ -12,6 +15,7 @@ set $term urxvt -e /bin/zsh
 
 gaps inner 6
 gaps outer 3
+smart_gaps on
 
 # -----------------------------------------------------------------------------
 #     EXTERNAL SCRIPTS
