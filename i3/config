@@ -233,17 +233,17 @@ bindsym $mod+Delete			exec $stoprec
 #     CONFIGURE SCRATCHPADS
 # -----------------------------------------------------------------------------
 
-for_window [class="Spotify"] scratchpad show, resize set 2300 1300, move absolute position center
+for_window [class="Spotify"] scratchpad show, resize set 2300 1300, move position center
 for_window [class="Spotify"] move window to scratchpad
 for_window [class="Spotify"] floating enable
 
 for_window [instance="calculator"] floating enable
-for_window [instance="calculator"] resize set 1200 800, move absolute position center
+for_window [instance="calculator"] resize set 1200 800, move position center
 for_window [instance="calculator"] move window to scratchpad
 for_window [instance="calculator"] border pixel 0
 
 for_window [instance="terminal"] floating enable
-for_window [instance="terminal"] resize set 1400 1000, move absolute position center
+for_window [instance="terminal"] resize set 1400 1000, move position center
 for_window [instance="terminal"] move scratchpad
 for_window [instance="terminal"] border pixel 0
 
