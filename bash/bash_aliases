@@ -2,14 +2,15 @@
 
 alias c='clear'
 alias cls='clear'
-alias cbi='xsel -ib'
-alias cbo='xsel -ob'
+alias cbi='xsel -ib' # Clipboard in (copy) using xsel
+alias cbo='xsel -ob' # Clipboard out (paste) using xsel
 alias ccat='highlight --out-format=xterm256' # Coloured cat w/ syntax highlighting
-alias cmatrix='cmatrix -bC red'
-alias crep='grep --color=always' # Coloured grep - highlight the desired sequence
+alias cmatrix='cmatrix -bC red' # Nerdy matrix
+alias grep='grep --color=always' # Always highlight the desired sequence
 alias r='ranger'
 alias ranger='ranger --choosedir=$HOME/.rangerdir; LASTDIR=`cat $HOME/.rangerdir`; cd "$LASTDIR"'
 alias ls='ls --color=auto'
+alias lsa='ls --color=auto -labh'
 alias v='nvim'
 alias sv='sudo nvim'
 alias wthr='curl -4 http://wttr.in/'
