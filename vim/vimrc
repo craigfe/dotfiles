@@ -13,11 +13,11 @@
 	let vundle_readme=s:editor_root . '/bundle/vundle/README.md'
 	if !filereadable(vundle_readme)
 		echo "Installing Vundle..."
-	echo ""
+		echo ""
 
-	if !isdirectory(s:editor_root . '/bundle/')
-		silent call mkdir(s:editor_root . '/bundle', "p")
-	endif
+		if !isdirectory(s:editor_root . '/bundle/')
+			silent call mkdir(s:editor_root . '/bundle', "p")
+		endif
 
 		silent execute "!git clone https://github.com/gmarik/vundle " . s:editor_root . "/bundle/vundle"
 		let vundle_installed=0
@@ -102,7 +102,8 @@
 	" Folding: {
 		set foldmethod=indent " 'zc' folds at the current indent; 'zo' opens a fold
 		set foldopen+=jump " Open folds if we jump into them
-		
+		set foldlevel=99
+
 		" Unfold on open
 		au BufRead * normal zR
 		
