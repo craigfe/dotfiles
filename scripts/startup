@@ -1,0 +1,3 @@
+#!/bin/bash
+
+xrdb ~/.Xresources # Load X configuration from Xresources
