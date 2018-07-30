@@ -14,10 +14,10 @@
 	if !filereadable(vundle_readme)
 		echo "Installing Vundle..."
 	echo ""
-		
-		if !isdirectory(s:editor_root . '/bundle/')
-			silent call mkdir(s:editor_root . '/bundle', "p")
-		endif
+
+	if !isdirectory(s:editor_root . '/bundle/')
+		silent call mkdir(s:editor_root . '/bundle', "p")
+	endif
 
 		silent execute "!git clone https://github.com/gmarik/vundle " . s:editor_root . "/bundle/vundle"
 		let vundle_installed=0
@@ -42,13 +42,15 @@
 		Plugin 'Xuyuanp/nerdtree-git-plugin' " Git support for NERDTree
 		Plugin 'sjl/gundo.vim' " Non-linear undo tree
 		Plugin 'ctrlpvim/ctrlp.vim' " Fuzzy file finder
+		Plugin 'takac/vim-hardtime' " Disables character-wise navigation on HardMode
 	" }
 
 	" Cosmetic: {
 		Plugin 'vim-airline/vim-airline'
 		Plugin 'scrooloose/syntastic' 
 		Plugin 'morhetz/gruvbox'
-		Plugin 'mboughaba/i3config.vim'
+		Plugin 'mboughaba/i3config.vim' " i3config syntax highlighting
+		Plugin 'leafgarland/typescript-vim' " Typescript syntax highlighting
 	" }
 " }
 
@@ -68,8 +70,8 @@
 " }
 
 " Formatting: {
-	set tabstop=2
-	set shiftwidth=2
+	set tabstop=4
+	set shiftwidth=4
 	set autoindent
 	set noexpandtab
 	set breakindent
@@ -148,6 +150,11 @@ autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 
 " Mappings: {
 
+	nnoremap ; :
+	nnoremap : ;
+	vnoremap ; :
+	vnoremap : ;
+
 	" To toggle numbering between absolute and relative
 	nnoremap gl :call ToggleRelativeNumbers()<CR>
 
@@ -169,6 +176,12 @@ autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 	nnoremap <C-K> <C-W><C-K>
 	nnoremap <C-L> <C-W><C-L>
 	nnoremap <C-H> <C-W><C-H>
+
+	" Access the system (+) register with obvious keybindings
+	"vnoremap <C-c>y 
+
+	" Wordwise yank from line above
+	inoremap <expr> <c-y> matchstr(getline(line('.')-1), '\%' . virtcol('.') . 'v\%(\k\+\\|.\)')
 
 	" Change split sizes w/o <C-W>
 	nnoremap <ESC>[65;5uH <C-W><
@@ -235,4 +248,3 @@ let g:livepreview_previewer = 'mupdf'
 		autocmd FileType tex inoremap ;btab \begin{tabular}<Enter>\toprule<Enter><++><Enter>\midrule<Enter><++><Enter>\bottomrule<Enter>\end{tabular}<Enter><Enter><++><Esc>8kA{}<Esc>i
 	" }
 " }
-
