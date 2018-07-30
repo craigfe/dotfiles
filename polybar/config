@@ -61,7 +61,7 @@
 
 	modules-left = i3 
 ; TOP DRY NET HOT SYC WCH
-	modules-right = redshift backlight volume cpu memory battery date
+	modules-right = redshift backlight wlan volume cpu memory battery date
 
 [bar/center]
 	monitor = ${env:MONITOR}
@@ -82,8 +82,6 @@
 	modules-left = search
 	click-left = bash ~/.i3/rofii/menu/search
 	;wm-restack = i3
-
-
 
 [bar/workspaces]
 	monitor = ${env:MONITOR}
@@ -237,11 +235,11 @@
 
 [module/wlan]
 	type = internal/network
-	interface = wlp2s0
+	interface = wlp3s0
 	interval = 3.0
 	format-connected = <label-connected>
 	format-connected-prefix = " "
-	label-connected = %local_ip%
+	label-connected = %essid%
 	label-disconnected = "%{A1:connman-gtk &:}%{A}"
 	label-disconnected-foreground = #5b
 	ramp-signal-0 = 
