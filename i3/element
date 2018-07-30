@@ -3,7 +3,7 @@
 monitor1=HDMI-1
 monitor2=eDP-1
 
-killall -q conky polybar dunst
+killall -q conky polybar dunst dropdown_calculator dropdown_terminal
 
 # CONKY
 while pgrep -x conky >/dev/null; do sleep 1; done
@@ -13,3 +13,11 @@ conky &
 while pgrep -x polybar >/dev/null; do sleep 1; done
 MONITOR=$monitor1 polybar top &
 MONITOR=$monitor2 polybar top &
+
+# CALCULATOR
+while pgrep -x dropdown_calculator >/dev/null; do sleep 1; done
+urxvt -name calculator -e dropdown_calculator &
+
+# TERMINAL
+while pgrep -x dropdown_terminal >/dev/null; do sleep 1; done
+urxvt --font xft:Hack:style=Regular:pixelsize=17 -name terminal -e dropdown_terminal &
