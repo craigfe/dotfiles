@@ -1,0 +1,9 @@
+cff	~/.shortcuts/folders.tsv
+cfc	~/.shortcuts/config-files.tsv
+cfb	~/.bashrc
+cfz	~/.zshrc
+cfv	~/.vimrc
+cfr	~/.config/ranger/rc.conf
+cfi	~/.config/i3/config
+cfp	~/.config/polybar/config
+cfd	~/.Xdefaults

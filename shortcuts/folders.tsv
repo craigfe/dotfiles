@@ -1,0 +1,6 @@
+h	~/
+d	~/repos/dotfiles
+s	~/.scripts
+cf	~/.config
+
+w	~/projects/sumdog_web
