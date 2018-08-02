@@ -7,6 +7,8 @@ alias cbo='xsel -ob' # Clipboard out (paste) using xsel
 alias ccat='highlight --out-format=xterm256' # Coloured cat w/ syntax highlighting
 alias cmatrix='cmatrix -bC red' # Nerdy matrix
 alias d='docker'
+alias dc='docker-compose'
+alias dcr='docker-compose restart'
 alias grep='grep --color=always' # Always highlight the desired sequence
 alias r='ranger'
 alias ranger='ranger --choosedir=$HOME/.rangerdir; LASTDIR=`cat $HOME/.rangerdir`; cd "$LASTDIR"'
