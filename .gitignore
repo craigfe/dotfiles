@@ -1,2 +1,6 @@
 *.swp
 shortcuts/out
+
+ranger/bookmarks
+ranger/history
+ranger/tagged

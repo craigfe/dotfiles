@@ -1,18 +1,20 @@
-# The following files are to be linked into this repo,
-#  entries are of the form: <program> <target (in repo)> <name>
+# The following files are to be linked into this repo
+#  entries are of the form: <target (relative to repo)> <name>
 
-bash,bash/bashrc,~/.bashrc
-bash,bash/profile,~/.profile
-compton,compton/compton.conf,~/.config/compton.conf
-git,git/gitconfig,~/. TODO
-i3,i3/config,~/.config/i3/config
-latex,latex/
-polybar,polybar/config
-ranger,ranger/rc.conf
-ranger,ranger/scope.sh
-tmux,tmux/tmux.conf
-vim,vim/vimrc
-vis,vis/config
-X,X/.Xdefaults
-X,X/.xinitrc
+bash/bashrc	~/.bashrc
+bash/profile	~/.profile
+compton/compton.conf	~/.config/compton.conf
+git/gitconfig	~/.gitconfig
+i3/	~/.config/i3/
+latex/	~/texmf/tex/latex/
+polybar/config	~/.config/polybar
+ranger/	~/.config/ranger
+scripts/	~/.scripts/
+shortcuts/	~/.shortcuts/
+ssh/config	~/.ssh/config
+tmux/tmux.conf	~/.tmux.conf
+vim/vimrc	~/.vimrc
+vis/config	~/.config/vis/config
+X/Xresources	~/.Xresources
+X/xinitrc	~/.xinitrc
 
