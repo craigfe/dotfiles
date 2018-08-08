@@ -30,7 +30,7 @@
 	cm = commit -m
 	cam = commit -a -m
 [core]
-	editor = vim
+	editor = nvim
 [pull]
 	rebase = true
 [push]
