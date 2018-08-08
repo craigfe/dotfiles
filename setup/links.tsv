@@ -1,6 +1,5 @@
 # The following files are to be linked into this repo
 #  entries are of the form: <target (relative to repo)> <name>
-
 bash/bashrc	~/.bashrc
 bash/profile	~/.profile
 compton/compton.conf	~/.config/compton.conf
