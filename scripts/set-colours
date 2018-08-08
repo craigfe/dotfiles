@@ -1,0 +1,6 @@
+#!/bin/bash
+
+dotfiles="$HOME/repos/config/"
+polybar_config=$dotfiles"polybar/config"
+
+sed -i --follow-symlinks "/accent = /c\	accent = #90F9FF" $polybar_config
