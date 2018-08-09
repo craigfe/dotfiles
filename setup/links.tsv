@@ -6,7 +6,7 @@ compton/compton.conf	~/.config/compton.conf
 git/gitconfig	~/.gitconfig
 i3/	~/.config/i3/
 latex/	~/texmf/tex/latex/
-polybar/config	~/.config/polybar
+polybar/	~/.config/polybar/
 ranger/	~/.config/ranger
 scripts/	~/.scripts/
 shortcuts/	~/.shortcuts/

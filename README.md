@@ -17,5 +17,5 @@ This repository currently contains configuration for the following programs:
  - `Xserver`: Windowing syem on bitmap displays.
  - `zsh`: Shell with fancier features than `bash`.
 
- There are also a number of setup scripts in the `/setup` directory. [].
-
+## Usage
+You can configure your computer to use the dotfiles in this repository by creating symbolic links in appropriate places in your home directory. Th

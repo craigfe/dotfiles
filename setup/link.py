@@ -68,9 +68,13 @@ def decomment(csvfile):
 
 def paths_equal(path1, path2):
     " Compare two files, links and/or directories for equality recursively "
-    if os.path.samefile(path1, path2):
-        return True
+  
+    if not os.path.exists(path1) or not os.path.exists(path2):
+        return False
 
+    elif os.path.samefile(path1, path2):
+        return True
+    
     elif os.path.isfile(path1) and os.path.isfile(path2):
         return filecmp.cmp(path1, path2)
 
