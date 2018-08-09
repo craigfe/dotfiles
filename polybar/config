@@ -318,6 +318,6 @@
 
 [module/redshift]
 	type = custom/script
-	exec = ~/.scripts/redshift-temp
-	interval = 5
+	exec = ~/.scripts/polybar_redshift
+	interval = 1;
 	label-foreground = ${colors.primary}

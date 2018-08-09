@@ -1,0 +1,10 @@
+#!/bin/bash
+
+if (( pgrep -x redshift )); then 
+	# Kill redshift
+	while pgrep -x redshift >/dev/null; do sleep 1; done
+else
+	# Start redshift
+	redshift &
+fi
+
