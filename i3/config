@@ -202,7 +202,7 @@ bindsym $mod+F6		exec --no-startup-id $shell -e transmission-remote-cli
 bindsym $mod+F9		exec --no-startup-id dmenumount
 bindsym $mod+F10	exec --no-startup-id dmenuumount
 ##bindsym $mod+F11
-##bindsym $mod+F12
+bindsym $mod+F12		exec --no-startup-id ~/.scripts/redshift_toggle
 
 bindsym $mod+Left		focus left
 bindsym $mod+Down		focus down
