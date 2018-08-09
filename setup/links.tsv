@@ -3,11 +3,13 @@
 bash/bashrc	~/.bashrc
 bash/profile	~/.profile
 compton/compton.conf	~/.config/compton.conf
+dunst/	~/.config/dunst/
 git/gitconfig	~/.gitconfig
 i3/	~/.config/i3/
 latex/	~/texmf/tex/latex/
 polybar/	~/.config/polybar/
-ranger/	~/.config/ranger
+ranger/	~/.config/ranger/
+rofi/	~/.config/rofi/
 scripts/	~/.scripts/
 shortcuts/	~/.shortcuts/
 ssh/config	~/.ssh/config
