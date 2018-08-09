@@ -320,3 +320,4 @@
 	type = custom/script
 	exec = ~/.scripts/redshift-temp
 	interval = 5
+	label-foreground = ${colors.primary}
