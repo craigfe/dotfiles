@@ -106,8 +106,8 @@ bindsym $mod+p			exec --no-startup-id lmc toggle
 
 # bindsym $mod+a			
 bindsym $mod+Shift+a	exec $shell -e ncpamixer
-bindsym $mod+s			gaps inner current plus 5
-bindsym $mod+Shift+s	gaps inner current minus 5
+bindsym $mod+s			[class="Slack"] scratchpad show
+bindsym $mod+Shift+s	exec --no-startup-id slack
 bindsym $mod+d			exec --no-startup-id ~/.config/rofi/menu/system
 bindsym $mod+Shift+d	gaps inner current set 0; gaps outer current set 0
 bindsym $mod+f			fullscreen toggle
@@ -122,8 +122,8 @@ bindsym $mod+Shift+k	move up 30
 bindsym $mod+l			focus right
 bindsym $mod+Shift+l	move right 30
 
-bindsym $mod+z			gaps outer current plus 5
-bindsym $mod+Shift+z	gaps outer current minus 5
+bindsym $mod+z			gaps inner current plus 5
+bindsym $mod+Shift+z	gaps inner current minus 5
 bindsym $mod+x			exec --no-startup-id ~/.scripts/lock
 bindsym $mod+Shift+x	exec --no-startup-id prompt "Are you sure you want to shutdown?" "$shutdown"
 bindsym $mod+c			[instance="calculator"] scratchpad show
@@ -246,6 +246,11 @@ for_window [instance="terminal"] floating enable
 for_window [instance="terminal"] resize set 1400 1000, move position center
 for_window [instance="terminal"] move scratchpad
 for_window [instance="terminal"] border pixel 0
+
+for_window [class="Slack"] scratchpad show, resize set 1840 1000, move position center
+for_window [class="Slack"] move window to scratchpad
+for_window [class="Slack"] floating enable
+for_window [class="Slack"] border pixel 1
 
 bindsym $mod+Ctrl+Right resize shrink width 1 px or 1 ppt
 bindsym $mod+Ctrl+Up resize grow height 1 px or 1 ppt
