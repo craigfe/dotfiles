@@ -61,7 +61,7 @@
 
 	modules-left = i3 
 ; TOP DRY NET HOT SYC WCH
-	modules-right = redshift backlight wlan volume cpu memory battery date
+	modules-right = inbox redshift backlight wlan volume cpu memory battery date
 
 [bar/center]
 	monitor = ${env:MONITOR}
@@ -320,4 +320,11 @@
 	type = custom/script
 	exec = ~/.scripts/polybar_redshift
 	interval = 1;
+	label-foreground = ${colors.primary}
+
+[module/inbox]
+	type = custom/script
+	exec = ~/.scripts/polybar_inbox
+	interval = 120
+	click-left = "urxvt -e mutt &"
 	label-foreground = ${colors.primary}
