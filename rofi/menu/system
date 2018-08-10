@@ -1,0 +1,42 @@
+#!/bin/bash
+
+ROFI_OPTIONS=(-theme $HOME/.config/rofi/rofi_full -m 0 -fullscreen)
+
+action=$(echo -e "RELOAD\nCOLOUR\nLOCK\nLOGOUT\nREBOOT\nPOWEROFF" | \
+	awk '{print $(NF-1)}' | \
+	rofi "${ROFI_OPTIONS[@]}" -dmenu -i -p "SYSTEM: ")
+
+case $action in
+
+	RELOAD)
+		xrdb -load ~/.Xdefaults;
+		i3-msg reload
+		i3-msg restart
+	;;
+
+	COLOUR)
+		exec ~/.config/rofi/menu/colour;
+	;;
+
+	LOCK)
+		exec lock
+	;;
+
+	LOGOUT)
+		prompt "i3-msg exit" LOGOUT
+	;;
+
+	REBOOT)
+		prompt "reboot" REBOOT
+	;;
+
+	POWEROFF)
+		prompt "poweroff" POWEROFF
+	;;
+
+	*)
+		echo $action
+	;;
+
+esac
+
