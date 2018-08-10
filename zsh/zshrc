@@ -27,6 +27,9 @@ plugins=(
 source $ZSH/oh-my-zsh.sh
 source $HOME/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
 source $HOME/.aliases
+if [[ -f $HOME/.shortcuts/out/shell ]]; then
+	source $HOME/.shortcuts/out/shell
+fi
 
 # User configuration
 
