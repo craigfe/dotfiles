@@ -1,0 +1,16 @@
+#!/bin/bash
+
+dotfiles="$HOME/repos/config/"
+
+polybar_config="${dotfiles}/polybar/config"
+rofi_theme="${dotfiles}/rofi/rofi_full"
+i3_config="${dotfiles}/i3/config"
+
+blue="#90F9FF"
+pink="#F69CDA"
+
+colour=$blue
+
+sed -i --follow-symlinks "/accent = /c\	accent = ${colour}" $polybar_config
+sed -i --follow-symlinks "/accent: /c\ accent: ${colour};" $rofi_theme
+sed -i --follow-symlinks "/set \$accent /c\ set \$accent \"${colour}\"" $i3_config
