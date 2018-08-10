@@ -10,6 +10,9 @@ set $term urxvt
 set $shell urxvt -e /bin/zsh
 smart_borders on
 
+# This line is automatically set by the 'set_colours' script
+set $accent "#90F9FF"
+
 # -----------------------------------------------------------------------------
 #     GAPS
 # -----------------------------------------------------------------------------
@@ -22,29 +25,19 @@ smart_gaps on
 #     EXTERNAL SCRIPTS
 # -----------------------------------------------------------------------------
 
+# Start on i3 launch
 exec_always --no-startup-id feh --bg-scale ~/.config/wall.png
-exec --no-startup-id dunst
-exec --no-startup-id compton
-
 exec_always --no-startup-id ~/.config/i3/element
 
+# Start on i3 launch + restart
+exec --no-startup-id dunst
+exec --no-startup-id compton
 exec --no-startup-id redshift
 exec --no-startup-id ~/.scripts/remaps
 exec --no-startup-id ~/.scripts/battery-indicator
 exec --no-startup-id unclutter
 exec --no-startup-id nm-applet
 
-#OPENRC
-#set $shutdown sudo openrc-shutdown -p
-#set $reboot sudo openrc-shutdown -r
-#set $netrefresh --no-startup-id sudo rc-service NetworkManager restart
-
-#RUNIT
-#set $shutdown sudo shutdown -h now
-#set $reboot sudo reboot
-#set $netrefresh --no-startup-id sudo sv restart NetworkManager
-
-#SYSTEMD
 set $shutdown sudo shutdown -h now
 set $reboot sudo reboot
 set $netrefresh --no-startup-id sudo systemctl restart NetworkManager
@@ -56,7 +49,7 @@ set $hibernate sudo systemctl suspend
 # -----------------------------------------------------------------------------
 
 # class                 border  backgr. text    indicator child_border
-client.focused          #90f9ff #90f9ff #90f9ff #90f9ff
+client.focused         $accent $accent $accent $accent
 
 # client.focused	#0099ff #0099ff #000000 #0099ff
 # client.unfocused	#666666 #666666b #000000 #66666
@@ -80,7 +73,7 @@ bindsym $mod+Escape			workspace prev
 bindsym $mod+Shift+Escape 	exec --no-startup-id prompt "Are you sure you want to leave i3?" "i3-msg exit"
 
 # bindsym $mod+BackSpace
-bindsym $mod+Shift+BackSpace	exec --no-startup-id prompt "Are you sure you want to reboot?" "$reboot"
+bindsym $mod+BackSpace	exec --no-startup-id ~/.config/rofi/menu/system
 
 bindsym $mod+Shift+Delete	exec --no-startup-id lmc truemute ; exec $truepause ; workspace lmao ; exec $shell -e htop ; exec $shell -e ranger
 
@@ -88,7 +81,7 @@ bindsym $mod+Shift+Delete	exec --no-startup-id lmc truemute ; exec $truepause ; 
 bindsym $mod+q			kill
 bindsym $mod+Shift+q	kill
 bindsym $mod+w			exec --no-startup-id $BROWSER
-bindsym $mod+Shift+w	exec --no-startup-id $BROWSER
+bindsym $mod+Shift+w	exec --no-startup-id $BROWSER_PRIVATE
 bindsym $mod+e			exec $shell -e neomutt
 bindsym $mod+r 			exec $shell -e ranger
 bindsym $mod+Shift+r	exec $shell -e sudo ranger /
@@ -108,7 +101,7 @@ bindsym $mod+p			exec --no-startup-id lmc toggle
 bindsym $mod+Shift+a	exec $shell -e ncpamixer
 bindsym $mod+s			[class="Slack"] scratchpad show
 bindsym $mod+Shift+s	exec --no-startup-id slack
-bindsym $mod+d			exec --no-startup-id ~/.config/rofi/menu/system
+bindsym $mod+d			exec --no-startup-id ~/.config/rofi/menu/run
 bindsym $mod+Shift+d	gaps inner current set 0; gaps outer current set 0
 bindsym $mod+f			fullscreen toggle
 bindsym $mod+g			workspace prev
@@ -133,6 +126,8 @@ bindsym $mod+Shift+b	floating toggle; sticky toggle; exec --no-startup-id bottom
 bindsym $mod+n			exec $shell -e newsboat
 bindsym $mod+m 			[class="Spotify"] scratchpad show
 bindsym $mod+Shift+m	exec --no-startup-id $MUSIC
+bindsym $mod+comma		exec --no-startup-id google-chrome --app=https://www.messenger.com
+bindsym $mod+Shift+comma	exec --no-startup-id google-chrome --app=https://www.messenger.com
 
 # #---Workspace Bindings---# #
 bindsym $mod+Home			workspace $ws1
