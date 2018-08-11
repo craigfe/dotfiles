@@ -1,7 +1,0 @@
-#!/usr/bin/env sh
-
-# POLYBAR
-killall -q polybar
-while pgrep -x polybar >/dev/null; do sleep 1; done
-
-MONITOR=$MONITOR_1 polybar -c ~/.config/polybar top &
