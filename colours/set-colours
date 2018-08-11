@@ -12,5 +12,5 @@ pink="#F69CDA"
 colour=$blue
 
 sed -i --follow-symlinks "/accent = /c\	accent = ${colour}" $polybar_config
-sed -i --follow-symlinks "/accent: /c\ accent: ${colour};" $rofi_theme
-sed -i --follow-symlinks "/set \$accent /c\ set \$accent \"${colour}\"" $i3_config
+sed -i --follow-symlinks "/accent: /caccent: ${colour};" $rofi_theme
+sed -i --follow-symlinks "/set \$accent /cset \$accent \"${colour}\"" $i3_config
