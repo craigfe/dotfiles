@@ -87,7 +87,7 @@ bindsym $mod+r 			exec $shell -e ranger
 bindsym $mod+Shift+r	exec $shell -e sudo ranger /
 bindsym $mod+t			split toggle
 bindsym $mod+Shift+t	gaps inner current set 15; gaps outer current set 15
-bindsym $mod+y			exec $shell -e calcurse
+bindsym $mod+y			exec --no-startup-id $BROWSER --app=https://youtube.com
 bindsym $mod+Shift+y	exec --no-startup-id "bash ~/.scripts/i3resize left"
 bindsym $mod+u			[instance="terminal"] scratchpad show
 bindsym $mod+Shift+u	exec --no-startup-id "bash ~/.scripts/i3resize down"
