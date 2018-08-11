@@ -1,4 +1,0 @@
-#!/bin/bash
-
-# If R is installed, use that; otherwise use Python.
-([[ -e /usr/bin/R ]] && R -q) || python

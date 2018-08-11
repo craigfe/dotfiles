@@ -1,0 +1,7 @@
+#!/bin/bash
+
+# If R is installed, use that; otherwise use Python.
+exec -a dropdown_calculator \
+	urxvt -name calculator \
+	-e /bin/zsh \
+	-c "([[ -e /usr/bin/R ]] && R -q) || python"
