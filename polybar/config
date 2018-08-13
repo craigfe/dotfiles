@@ -318,13 +318,13 @@
 
 [module/redshift]
 	type = custom/script
-	exec = ~/.scripts/polybar_redshift
+	exec = ~/.config/polybar/modules/redshift
 	interval = 1;
 	label-foreground = ${colors.primary}
 
 [module/inbox]
 	type = custom/script
-	exec = ~/.scripts/polybar_inbox
+	exec = ~/.config/polybar/modules/inbox
 	interval = 120
 	click-left = "urxvt -e mutt &"
 	label-foreground = ${colors.primary}

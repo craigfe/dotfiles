@@ -1,10 +1,15 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+import os
 import imaplib
 
-obj = imaplib.IMAP4_SSL('imap.hermes.cam.ac.uk', 993)
-obj.login('cf443', open('/home/craigfe/.password_email').read().rstrip('\n'))
-obj.select()
+try:
+    obj = imaplib.IMAP4_SSL('imap.hermes.cam.ac.uk', 993)
+    obj.login('cf443', open(os.path.expanduser('~/.password_email')).read().rstrip('\n'))
+    obj.select()
 
-print('  ' + str(len(obj.search(None, 'unseen')[1][0].split())))
+    print('  ' + str(len(obj.search(None, 'unseen')[1][0].split())))
+
+except IOError:
+    print('  %{F#bd2c40} No password file')
