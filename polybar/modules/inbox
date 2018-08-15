@@ -1,15 +1,45 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
 import os
 import imaplib
+import socket
 
-try:
-    obj = imaplib.IMAP4_SSL('imap.hermes.cam.ac.uk', 993)
-    obj.login('cf443', open(os.path.expanduser('~/.password_email')).read().rstrip('\n'))
-    obj.select()
+from pretty_bad_protocol import gnupg
 
-    print('  ' + str(len(obj.search(None, 'unseen')[1][0].split())))
+def output_error(message):
+    print('  %{F#bd2c40} ' + message)
 
-except IOError:
-    print('  %{F#bd2c40} No password file')
+def server_connect():
+    return imaplib.IMAP4_SSL('imap.hermes.cam.ac.uk', 993)
+
+def main():
+    gpg = gnupg.GPG(
+        binary='/usr/bin/gpg2',
+        homedir=os.path.expanduser('~/.gnupg'),
+        keyring='pubring.gpg',
+        secring='secring.gpg')
+
+    try:
+        obj = server_connect()
+    except socket.gaierror:
+        output_error('Cannot connect to server')
+        return 1
+
+    try:
+        with open(os.path.expanduser('~/.credentials/password_email.gpg'), 'rb') as f:
+            secret = str(gpg.decrypt_file(f)).rstrip('\n')
+
+            obj.login('cf443', secret)
+            obj.select()
+
+            print('  ' + str(len(obj.search(None, 'unseen')[1][0].split())))
+
+    except IOError:
+        output_error('No password file')
+        return 2
+
+    return 0
+
+if __name__ == "__main__":
+    main()
