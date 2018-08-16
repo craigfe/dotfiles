@@ -4,3 +4,6 @@ shortcuts/out
 ranger/bookmarks
 ranger/history
 ranger/tagged
+
+__pycache__
+.pytest_cache
