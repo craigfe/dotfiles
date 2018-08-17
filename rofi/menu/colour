@@ -1,6 +1,6 @@
 #!/bin/bash
 
-ROFI_OPTIONS=(-theme $HOME/.config/rofi/rofi_full -m 0 -fullscreen)
+ROFI_OPTIONS=(-theme $HOME/.config/rofi/rofi_full.css -m 0 -fullscreen)
 DOTFILES=$HOME/repos/dotfiles
 COLOURS=$DOTFILES/colours/colours.tsv
 
