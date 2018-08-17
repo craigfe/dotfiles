@@ -1,15 +1,33 @@
 #!/bin/bash
+set -euo pipefail -o noclobber # Bash sanity checking
 
-dotfiles="$HOME/repos/config/"
+# The usage string
+print_usage () {
+cat << EOF
+usage: set-colour <colour>    set colours to given value
+   or: set-colour -           read colour from stdin
+EOF
+}
 
+if [ $# -eq 0 ]; then
+	print_usage
+	exit 1
+fi
+
+
+case $1 in
+	-)
+		colour=$(tee)
+	;;
+	*)
+		colour=$1
+	;;
+esac;
+
+dotfiles="$HOME/repos/dotfiles"
 polybar_config="${dotfiles}/polybar/config"
-rofi_theme="${dotfiles}/rofi/rofi_full"
+rofi_theme="${dotfiles}/rofi/rofi_full.css"
 i3_config="${dotfiles}/i3/config"
-
-blue="#90F9FF"
-pink="#F69CDA"
-
-colour=$blue
 
 sed -i --follow-symlinks "/accent = /c\	accent = ${colour}" $polybar_config
 sed -i --follow-symlinks "/accent: /caccent: ${colour};" $rofi_theme
