@@ -1,9 +1,9 @@
 #!/bin/bash
 
 if [ -f ~/.config/wall.png ]; then
-	feh --bg-center ~/.config/wall.png
+	feh --bg-scale ~/.config/wall.png
 
 elif [ -f ~/.config/wall.jpg ]; then
-	feh --bg-center ~/.config/wall.jpg
+	feh --bg-scale ~/.config/wall.jpg
 
 fi
