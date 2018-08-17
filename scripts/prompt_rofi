@@ -1,0 +1,8 @@
+#!/bin/bash
+# A rofi confirm prompt script
+# Gives a rofi prompt labelled with $1 to perform command $2
+# For example: './prompt_rofi "Do you want to shutdown?" "shutdown -h now"
+
+ROFI_OPTIONS=(-theme $HOME/.config/rofi/rofi_full -m 0 -fullscreen)
+
+[ $(echo -e "No\nYes" | rofi "${ROFI_OPTIONS[@]}" -dmenu -i -p "Are you sure you want to run $2? ") == "Yes" ] && $2
