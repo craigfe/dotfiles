@@ -9,13 +9,13 @@ action=$(echo -e "RELOAD\nCOLOUR\nLOCK\nLOGOUT\nREBOOT\nPOWEROFF" | \
 case $action in
 
 	RELOAD)
-		xrdb -load ~/.Xdefaults;
+		xrdb -load ~/.Xdefaults
 		i3-msg reload
 		i3-msg restart
 	;;
 
 	COLOUR)
-		exec ~/.config/rofi/menu/colour;
+		exec ~/.config/rofi/menu/colour
 	;;
 
 	LOCK)
@@ -23,15 +23,15 @@ case $action in
 	;;
 
 	LOGOUT)
-		prompt "i3-msg exit" LOGOUT
+		prompt_rofi LOGOUT "i3-msg exit"
 	;;
 
 	REBOOT)
-		prompt "reboot" REBOOT
+		prompt_rofi REBOOT "reboot"
 	;;
 
 	POWEROFF)
-		prompt "poweroff" POWEROFF
+		prompt_rofi POWEROFF "poweroff"
 	;;
 
 	*)
