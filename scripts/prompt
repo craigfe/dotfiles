@@ -1,6 +1,6 @@
-#!/bin/sh
+#!/bin/bash
 # A dmenu confirm prompt script
 # Gives a dmenu prompt labelled with $1 to perform command $1
 # For example: './prompt "Do you want to shutdown?" "shutdown -h now"
 
-[ $(echo "No\nYes" | dmenu -i -p "$1") == "Yes" ] && $2
+[ $(echo -e "No\nYes" | dmenu -i -p "$1") == "Yes" ] && $2
