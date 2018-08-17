@@ -12,5 +12,3 @@ export MUSIC="spotify --force-device-scale-factor=1.1"
 export MONITOR_1="eDP-1"
 export MONITOR_2="HDMI-1"
 
-xmodmap ~/.Xmodmap
-
