@@ -319,7 +319,7 @@
 [module/redshift]
 	type = custom/script
 	exec = ~/.config/polybar/modules/redshift
-	interval = 1;
+	interval = 50;
 	label-foreground = ${colors.primary}
 
 [module/inbox]
