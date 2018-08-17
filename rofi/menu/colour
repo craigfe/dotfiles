@@ -40,4 +40,4 @@ if ! [[ $colour =~ ^#[0-9A-Fa-f]{6}$ ]]; then
 	exit 3
 fi
 
-"$DOTFILES/colours/set-colours" $colour
+"$DOTFILES/colours/set_colours" $colour
