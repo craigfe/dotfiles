@@ -1,7 +1,5 @@
 #!/bin/bash
 
-monitor1=HDMI-1
-monitor2=eDP-1
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
 
 killall -q conky polybar dunst redshift
@@ -17,8 +15,9 @@ redshift &
 
 # POLYBAR
 while pgrep -x polybar >/dev/null; do sleep 1; done
-MONITOR=$monitor1 polybar top &
-MONITOR=$monitor2 polybar top &
+for m in $(polybar --list-monitors | cut -d":" -f1); do
+	MONITOR=$m polybar --reload top &
+done
 
 # CALCULATOR
 while pgrep -f dropdown_calculator >/dev/null; do sleep 1; done
