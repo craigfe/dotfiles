@@ -2,16 +2,8 @@
 
 if [ "$(pgrep -x redshift)" ]; then
 	temp=$(redshift -p 2>/dev/null | grep -oP 'temp\D+\K[0-9]+')
-
-	if [ -z "$temp" ]; then
-        echo " %{F#65737E} ${temp} K"
-    elif [ "$temp" -ge 5000 ]; then
-        echo " %{F#8FA1B3} ${temp} K"
-    elif [ "$temp" -ge 4000 ]; then
-        echo " %{F#EBCB8B} ${temp} K"
-    else
-        echo " %{F#D08770} ${temp} K"
-    fi
+	temp_colour=$($HOME/.scripts/kelvin_colour.py $temp)
+	echo " %{F${temp_colour}} ${temp} K"
 else
 	echo "%{F#bd2c40} "
 fi
