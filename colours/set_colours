@@ -14,17 +14,21 @@ if [ $# -eq 0 ]; then
 	exit 1
 fi
 
+RELOAD=false
 
 case $1 in
 	-)
 		colour=$(tee)
+	;;
+	-r|--reload)
+		RELOAD=true
 	;;
 	*)
 		colour=$1
 	;;
 esac;
 
-dotfiles="$HOME/repos/dotfiles"
+dotfiles="$HOME/repos/config"
 polybar_config="${dotfiles}/polybar/config"
 rofi_theme="${dotfiles}/rofi/rofi_full.css"
 i3_config="${dotfiles}/i3/config"
@@ -32,3 +36,7 @@ i3_config="${dotfiles}/i3/config"
 sed -i --follow-symlinks "/accent = /c\	accent = ${colour}" $polybar_config
 sed -i --follow-symlinks "/accent: /caccent: ${colour};" $rofi_theme
 sed -i --follow-symlinks "/set \$accent /cset \$accent \"${colour}\"" $i3_config
+
+if [ $RELOAD ]; then
+	i3-msg restart
+fi
