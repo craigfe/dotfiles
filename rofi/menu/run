@@ -2,6 +2,6 @@
 
 dmenu_path | \
 	awk '{print $(NF-1)}' | \
-	rofi -theme $HOME/.config/rofi/rofi_full -m 0 -fullscreen -dmenu -i -p "RUN: " | \
+	rofi -theme $HOME/.config/rofi/rofi_full.css -m 0 -fullscreen -dmenu -i -p "RUN: " | \
 	${SHELL:="/bin/sh"} &
 
