@@ -1,0 +1,43 @@
+#!/bin/bash
+
+ROFI_OPTIONS=(-theme $HOME/.config/rofi/rofi_full -m 0 -fullscreen)
+DOTFILES=$HOME/repos/dotfiles
+COLOURS=$DOTFILES/colours/colours.tsv
+
+# Get colour selection from the user
+name=$(cat $COLOURS | \
+	awk -F $"\t" '{ print $1 }' | \
+	(cat && echo -e 'clipboard') | \
+	rofi "${ROFI_OPTIONS[@]}" -dmenu -i -p "COLOUR: ")
+
+if [ -z $name ]; then
+	>&2 echo "No colour name provided"
+	exit 1
+fi
+
+# If the supplied string begins with #, use that
+if [ ${name:0:1} == "#" ]; then
+	echo "Colour passed directly"
+	colour=$name
+
+# If the user selects clipboard, read from the system clipboard
+elif [ "$name" == "clipboard" ]; then
+	colour=$(xsel -ob)
+
+# Otherwise, attempt to lookup the selected name from the TSV file
+else
+	colour=$(awk -F $"\t" -v name="$name" '$1 == name { print $2; exit }' $COLOURS)
+
+	if [ -z $colour ]; then
+		>&2 echo "Could not find the specified colour (name)"
+		exit 2
+	fi
+fi
+
+# Check that the colour is correctly formatted
+if ! [[ $colour =~ ^#[0-9A-Fa-f]{6}$ ]]; then
+	>&2 echo "The given colour (${colour}) is not correctly formatted"
+	exit 3
+fi
+
+"$DOTFILES/colours/set-colours" $colour
