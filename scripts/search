@@ -1,6 +1,6 @@
 #!/bin/bash
 
-ROFI_OPTIONS=(-theme $HOME/.config/rofi/rofi_bar.css -m 0 -width 1500)
+ROFI_OPTIONS=(-theme $HOME/.config/rofi/styles/bar.css -m 0 -width 1500)
 
 another=$(echo "runapp
 locate

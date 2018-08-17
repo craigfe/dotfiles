@@ -1,6 +1,6 @@
 #!/bin/bash
 
-ROFI_OPTIONS=(-theme $HOME/.config/rofi/rofi_full.css -m 0 -fullscreen)
+ROFI_OPTIONS=(-theme $HOME/.config/rofi/styles/full.css -m 0 -fullscreen)
 
 action=$(echo -e "RELOAD\nCOLOUR\nLOCK\nLOGOUT\nREBOOT\nPOWEROFF" | \
 	awk '{print $(NF-1)}' | \
