@@ -32,7 +32,9 @@ dotfiles="$HOME/repos/config"
 polybar_config="${dotfiles}/polybar/config"
 rofi_theme="${dotfiles}/rofi/rofi_full.css"
 i3_config="${dotfiles}/i3/config"
+vis_theme="${dotfiles}/vis/colors/accent"
 
+echo ${colour} >| $vis_theme
 sed -i --follow-symlinks "/accent = /c\	accent = ${colour}" $polybar_config
 sed -i --follow-symlinks "/accent: /caccent: ${colour};" $rofi_theme
 sed -i --follow-symlinks "/set \$accent /cset \$accent \"${colour}\"" $i3_config
