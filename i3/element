@@ -1,28 +1,41 @@
 #!/bin/bash
 
+force=false
+case $1 in
+	-f|--force)
+		$force=true
+	;;
+esac
+
+
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
 
-killall -q conky polybar dunst redshift
-pkill -f dropdown_calculator
-pkill -f dropdown_terminal
+if [ $force ]; then
+	killall -q conky polybar dunst redshift
+	pkill -f dropdown_calculator
+	pkill -f dropdown_terminal
+fi
+
 
 # CONKY
 # while pgrep -x conky >/dev/null; do sleep 1; done
 # conky &
 
 # REDSHIFT
-redshift &
+if ! pgrep -x polybar >/dev/null; then
+	redshift &
+fi
 
 # POLYBAR
-while pgrep -x polybar >/dev/null; do sleep 1; done
+while $force && pgrep -x polybar >/dev/null; do sleep 1; done
 for m in $(polybar --list-monitors | cut -d":" -f1); do
 	MONITOR=$m polybar --reload top &
 done
 
 # CALCULATOR
-while pgrep -f dropdown_calculator >/dev/null; do sleep 1; done
+while $force && pgrep -f dropdown_calculator >/dev/null; do sleep 1; done
 "$DIR/dropdown/calculator" &
 
 # TERMINAL
-while pgrep -f dropdown_terminal >/dev/null; do sleep 1; done
+while $force && pgrep -f dropdown_terminal >/dev/null; do sleep 1; done
 "$DIR/dropdown/terminal" &
