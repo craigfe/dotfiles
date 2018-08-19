@@ -16,6 +16,7 @@ This repository currently contains configuration for the following programs:
 | `polybar` | Status bar to replace i3status with something more aesthetic. |
 | `ranger` | Terminal file explorer. |
 | `redshift` | Adjusts the colour temperature of the screen according to the surroundings. |
+| `rofi` | Custom prompts and program launcher using my own themes (replacement for `dmenu`). |
 | `ssh` | Remote 'secure' shell sessions. |
 | `tmux` | Terminal multiplexer. |
 | `vim` | The nerd's text editor. |
