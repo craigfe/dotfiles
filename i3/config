@@ -82,8 +82,8 @@ bindsym $mod+q			kill
 bindsym $mod+Shift+q	kill
 bindsym $mod+w			exec --no-startup-id $BROWSER
 bindsym $mod+Shift+w	exec --no-startup-id $BROWSER_PRIVATE
-bindsym $mod+e			exec $shell -e neomutt
-bindsym $mod+r 			exec $shell -e ranger
+bindsym $mod+e			exec $term -e neomutt
+bindsym $mod+r 			exec $term -e ranger
 bindsym $mod+Shift+r	exec $shell -e sudo ranger /
 bindsym $mod+t			split toggle
 bindsym $mod+Shift+t	gaps inner current set 15; gaps outer current set 15
