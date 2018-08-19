@@ -1,6 +1,5 @@
 * {
-    accent: #E1F859;
-    foreground: rgba(255,0,0, 0.75);
+    foreground: rgba(255, 0, 0, 0.75);
     background: rgba(0, 0, 0, 0.75);
     transparent: rgba(0, 0, 0, 0);
     normal-background: @transparent;
@@ -25,7 +24,7 @@
     separatorcolor: @foreground;
     background-color: @transparent;
     spacing: 10;
-    font: "Bahnschrift 64";
+    font: "Bahnschrift 70";
 }
 
 #window {
@@ -36,88 +35,35 @@
 
 #mainbox {
     border: 0;
-    padding: 40%;
+    padding: 40% 20%;
 }
 
 #message {
-    border: 2px 0px 0px;
-    border-color: @separatorcolor;
-    padding: 10 1% 10;
 }
 
 #textbox {
+    border-color: @separatorcolor;
+	border: 10px;
     text-color: @foreground;
     horizontal-align: 1;
 }
 
 #listview {
     fixed-height: 0;
-    border: 2px 0px 0px;
-    border-color: @separatorcolor;
-    spacing: 10px;
-    padding: 10 1% 10;
 }
 
 #element {
-    border: 0;
+	border: 10px;
+    border-color: @separatorcolor;
     padding: 10 10 10;
 }
 
-#element.normal.normal {
-    background-color: @normal-background;
-    text-color: @normal-foreground;
-}
-
-#element.normal.urgent {
-    background-color: @urgent-background;
-    text-color: @urgent-foreground;
-}
-
-#element.normal.active {
-    background-color: @active-background;
-    text-color: @active-foreground;
-}
-
-#element.selected.normal {
-    background-color: @selected-normal-background;
-    text-color: @selected-normal-foreground;
-}
-
-#element.selected.urgent {
-    background-color: @selected-urgent-background;
-    text-color: @selected-urgent-foreground;
-}
-
-#element.selected.active {
-    background-color: @selected-active-background;
-    text-color: @selected-active-foreground;
-}
-
-#element.alternate.normal {
-    background-color: @alternate-normal-background;
-    text-color: @alternate-normal-foreground;
-}
-
-#element.alternate.urgent {
-    background-color: @alternate-urgent-background;
-    text-color: @alternate-urgent-foreground;
-}
-
-#element.alternate.active {
-    background-color: @alternate-active-background;
-    text-color: @alternate-active-foreground;
-}
 
 #scrollbar {
     width: 4px;
     border: 0;
     handle-width: 8px;
     padding: 0;
-}
-
-#sidebar {
-    border: 2px 0px 0px;
-    border-color: @separatorcolor;
 }
 
 #button.selected {
@@ -128,7 +74,9 @@
 #inputbar {
     spacing: 0;
     text-color: @normal-foreground;
-    padding: 1px;
+    padding: 40px;
+    border: 2px;
+    border-color: @separatorcolor;
 }
 
 #case-indicator {
