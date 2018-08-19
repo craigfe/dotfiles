@@ -126,57 +126,6 @@
 	label-visible-background = ${colors.background-alt}
 	label-visible-padding = ${self.label-focused-padding}
 	
-	
-	
-[module/DRY]
-	type = custom/script
-	exec = echo "DRY"
-	interval = 60
-	label = "DRY"
-	format = <label>
-	format-foreground = ${colors.primary}
-	click-left = bash ~/.scripts/termop dry DRY 1920 1080 10 55
-[module/TOP]
-	type = custom/script
-	exec = echo "TOP"
-	interval = 60
-	label = "TOP"
-	format = <label>
-	format-foreground = ${colors.primary}
-	click-left = bash ~/.scripts/termop htop TOP 1920 1080 10 55
-[module/NET]
-	type = custom/script
-	exec = echo "NET"
-	interval = 60
-	label = "NET"
-	format = <label>
-	format-foreground = ${colors.primary}
-	click-left = bash ~/.scripts/termop bmon NET 1920 1080 10 55
-[module/SYC]
-	type = custom/script
-	exec = echo "SYC"
-	interval = 60
-	label = "SYC"
-	format = <label>
-	format-foreground = ${colors.primary}
-	click-left = bash ~/.scripts/termop '~/.scripts/syncto /home/bresilla/Dots /home/bresilla' SYC 1920 1080 10 55
-[module/HOT]
-	type = custom/script
-	exec = echo "HOT"
-	interval = 60
-	label = "HOT"
-	format = <label>
-	format-foreground = ${colors.primary}
-	click-left = bash ~/.scripts/termop 'sudo hotspot wlp2s0 wlp2s0 algorithm dyhere024' HOT 1920 1080 10 55
-[module/WCH]
-	type = custom/script
-	exec = echo "WCH"
-	interval = 60
-	label = "WCH"
-	format = <label>
-	format-foreground = ${colors.primary}
-	click-left = bash ~/.scripts/termop 'watch -n 10 rsync -avz /media/bresilla/indrive1/Code/Raspi/ /home/bresilla/Remote/Code/' WCH 1920 1080 10 55
-
 [module/search]
 	type = custom/script
 	exec = echo "             search:              "
