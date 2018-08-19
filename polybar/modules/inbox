@@ -30,6 +30,10 @@ def main():
         with open(os.path.expanduser('~/.credentials/password_email.gpg'), 'rb') as f:
             secret = str(gpg.decrypt_file(f)).rstrip('\n')
 
+            if len(secret) == 0:
+                output_error('Decryption failed')
+                return 2
+
             obj.login('cf443', secret)
             obj.select()
 
@@ -37,7 +41,7 @@ def main():
 
     except IOError:
         output_error('No password file')
-        return 2
+        return 3
 
     return 0
 
