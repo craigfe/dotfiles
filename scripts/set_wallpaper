@@ -13,7 +13,6 @@ def parse_arguments(argv):
     parser.add_argument("path", help='path to the image to use')
     parser.add_argument("--theme", action="store_true", help="reload the theme using the colour palette")
 
-    print(sys.argv[1:])
     return parser.parse_args(sys.argv[1:])
 
 def eprint(*args, **kwargs):
@@ -30,7 +29,6 @@ def get_dominant_colour(path = get_destination()):
     return rgb_to_hex(Haishoku.getPalette(path)[1][1])
 
 def set_theme():
-    print("Setting theme")
     script = os.path.expanduser("~/repos/config/colours/set_colours")
     return subprocess.call([script, '-r', get_dominant_colour()])
 
