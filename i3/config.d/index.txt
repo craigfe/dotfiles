@@ -1,0 +1,6 @@
+import main.conf;
+import colours.sh;
+import workspaces.conf;
+import scratchpads.sh;
+import keybindings.conf;
+import multimedia.conf;

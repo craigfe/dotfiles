@@ -1,11 +1,15 @@
 *.swp
 shortcuts/out
 
+i3/config
+
+ranger/shortcuts.conf
 ranger/bookmarks
 ranger/history
 ranger/tagged
 
-
+.cache*
 __pycache__
 .pytest_cache
 venv/
+*.log
