@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=DotfilesScript
+Comment=The initialisation file for my dotfiles, to be run on login.
+Exec=~/.gnomerc
+Terminal=false
+Type=Application
+X-Gnome-Autostart-enabled=true
+
