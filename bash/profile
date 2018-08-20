@@ -4,7 +4,7 @@
 
 export PATH=$PATH:$HOME/.scripts
 export EDITOR="nvim"
-export TEMRINAL="gnome-terminal"
+export TERMINAL="urxvt"
 export BROWSER="chromium --enable-plugins --force-device-scale-factor=1.25"
 export BROWSER_PRIVATE="chromium --enable-plugins --force-device-scale-factor=1.25 --incognito"
 export MUSIC="spotify --force-device-scale-factor=1.1"
