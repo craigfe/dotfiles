@@ -42,13 +42,13 @@
 *color14:      base0F
 *color15:      base07
 
-Xft.dpi: 90
+Xft.dpi: 110
 
 URxvt*internalBorder: 10
 URxvt.intensityStyles:	false
-URxvt.background:       [60]#000000
+URxvt.background:       [80]#000000
 URxvt.depth:		32
-URxvt.font: 	 	xft:Hack:style=Regular:pixelsize=13
+URxvt.font: 	 	xft:Hack:style=Regular:pixelsize=17
 URxvt.scrollBar:	false
 URxvt.cursorColor:	white
 URxvt.letterSpace:	-1
