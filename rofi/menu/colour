@@ -7,7 +7,7 @@ COLOURS=$DOTFILES/colours/colours.tsv
 # Get colour selection from the user
 name=$(cat $COLOURS | \
 	awk -F $"\t" '{ print $1 }' | \
-	(cat && echo -e 'clipboard') | \
+	(cat && echo -e 'clipboard\nwallpaper') | \
 	rofi "${ROFI_OPTIONS[@]}" -dmenu -i -p "COLOUR: ")
 
 if [ -z $name ]; then
@@ -20,9 +20,13 @@ if [ ${name:0:1} == "#" ]; then
 	echo "Colour passed directly"
 	colour=$name
 
-# If the user selects clipboard, read from the system clipboard
+# clipboard: read from the system clipboard
 elif [ "$name" == "clipboard" ]; then
 	colour=$(xsel -ob)
+
+# wallpaper: determine the highlight colour from the wallpaper
+elif [ "$name" == "wallpaper" ]; then
+	colour=$($DOTFILES/colours/palette)
 
 # Otherwise, attempt to lookup the selected name from the TSV file
 else

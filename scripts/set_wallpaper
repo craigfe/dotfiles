@@ -1,14 +1,36 @@
-#!/bin/bash
+#!/usr/bin/env python3
 
-if [ -z $1 ]; then
-	>&2 echo "No filepath supplied"
-	exit 1
-fi
+import os
+import shutil
+import subprocess
+import sys
 
-if [ -f ~/.config/wall.png ]; then
-	feh --bg-scale ~/.config/wall.png
+def eprint(*args, **kwargs):
+    """Print a series of strings to stderr."""
+    print(*args, file=sys.stderr, **kwargs)
 
-elif [ -f ~/.config/wall.jpg ]; then
-	feh --bg-scale ~/.config/wall.jpg
+def main(argv):
+    if len(argv) != 2:
+        eprint("Usage: set_wallpaper <file>")
+        return 1
 
-fi
+    fullpath = os.path.abspath(argv[1])
+    filepath, ext = os.path.splitext(fullpath)
+
+    if not os.path.isfile(fullpath):
+        eprint("Argument must be a file")
+        return 2
+
+    if not (ext == ".jpg" or ext == ".png"):
+        eprint("The supplied file must have a recognised extension (.jpg, .png)")
+        return 3
+
+    dest = os.path.expanduser("~/.config/wall")
+    shutil.copy(fullpath,dest)
+
+    rc = subprocess.call(['feh', '--no-fehbg', '--bg-scale', dest])
+    return 0 if rc == 0 else 4
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv))
+
