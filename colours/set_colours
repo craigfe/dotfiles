@@ -4,8 +4,8 @@ set -euo pipefail -o noclobber # Bash sanity checking
 # The usage string
 print_usage () {
 cat << EOF
-usage: set-colour <colour>    set colours to given value
-   or: set-colour -           read colour from stdin
+usage: set_colours [options] <colour>    set colours to given value
+   or: set_colours [options] -           read colour from stdin
 EOF
 }
 
@@ -16,12 +16,20 @@ fi
 
 RELOAD=false
 
+while [[ $# -gt 1 ]]
+do
+	case "$1" in
+		-r|--reload)
+			RELOAD=true
+			shift
+		;;
+	esac
+done
+
 case $1 in
 	-)
 		colour=$(tee)
-	;;
-	-r|--reload)
-		RELOAD=true
+		shift
 	;;
 	*)
 		colour=$1
@@ -41,5 +49,5 @@ sed -i --follow-symlinks "/accent=/caccent=\'${colour}\'" $i3_config
 echo ${colour} >| $vis_theme
 
 if [ $RELOAD ]; then
-	i3-msg restart
+	"${dotfiles}/i3/restart"
 fi

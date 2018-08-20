@@ -1,20 +1,42 @@
 #!/usr/bin/env python3
 
+from haishoku.haishoku import Haishoku
+
+import argparse
 import os
 import shutil
 import subprocess
 import sys
 
+def parse_arguments(argv):
+    parser = argparse.ArgumentParser(prog=argv[0], description="Set the desktop wallpaper.")
+    parser.add_argument("path", help='path to the image to use')
+    parser.add_argument("--theme", action="store_true", help="reload the theme using the colour palette")
+
+    print(sys.argv[1:])
+    return parser.parse_args(sys.argv[1:])
+
 def eprint(*args, **kwargs):
     """Print a series of strings to stderr."""
     print(*args, file=sys.stderr, **kwargs)
 
-def main(argv):
-    if len(argv) != 2:
-        eprint("Usage: set_wallpaper <file>")
-        return 1
+def get_destination():
+    return os.path.expanduser("~/.config/wall")
 
-    fullpath = os.path.abspath(argv[1])
+def rgb_to_hex(rgb):
+    return '#%02x%02x%02x' % rgb
+
+def get_dominant_colour(path = get_destination()):
+    return rgb_to_hex(Haishoku.getPalette(path)[1][1])
+
+def set_theme():
+    print("Setting theme")
+    script = os.path.expanduser("~/repos/config/colours/set_colours")
+    return subprocess.call([script, '-r', get_dominant_colour()])
+
+def main(argv):
+    args = parse_arguments(argv)
+    fullpath = os.path.abspath(args.path)
     filepath, ext = os.path.splitext(fullpath)
 
     if not os.path.isfile(fullpath):
@@ -25,11 +47,20 @@ def main(argv):
         eprint("The supplied file must have a recognised extension (.jpg, .png)")
         return 3
 
-    dest = os.path.expanduser("~/.config/wall")
+    dest = get_destination()
     shutil.copy(fullpath,dest)
 
     rc = subprocess.call(['feh', '--no-fehbg', '--bg-scale', dest])
-    return 0 if rc == 0 else 4
+
+    if rc != 0:
+        return 4
+
+    if args.theme:
+        rc = set_theme()
+        if rc != 0:
+            return 5
+
+    return 0
 
 if __name__ == "__main__":
     sys.exit(main(sys.argv))
