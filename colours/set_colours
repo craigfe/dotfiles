@@ -36,17 +36,19 @@ case $1 in
 	;;
 esac;
 
-dotfiles="$HOME/repos/config"
+dotfiles="$HOME/repos/dotfiles"
+
+# Create the output directory if it does not exist
+mkdir -p "${dotfiles}/colours/out"
 
 polybar_config="${dotfiles}/polybar/config"
 rofi_theme="${dotfiles}/rofi/styles/full.css"
-i3_config="${dotfiles}/i3/config.d/colours.sh"
 vis_theme="${dotfiles}/vis/colors/accent"
+main="${dotfiles}/colours/out/theme"
 
 sed -i --follow-symlinks "/accent = /c\	accent = ${colour}" $polybar_config
 sed -i --follow-symlinks "/accent: /caccent: ${colour};" $rofi_theme
-sed -i --follow-symlinks "/accent=/caccent=\'${colour}\'" $i3_config
-echo ${colour} >| $vis_theme
+echo ${colour} | tee $vis_theme $main
 
 if [ $RELOAD ]; then
 	"${dotfiles}/i3/restart"

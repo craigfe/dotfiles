@@ -1,4 +1,5 @@
-*.swp
+colours/out
+
 shortcuts/out
 
 i3/config
@@ -8,6 +9,9 @@ ranger/bookmarks
 ranger/history
 ranger/tagged
 
+vis/colors/accent
+
+*.swp
 .cache*
 __pycache__
 .pytest_cache
