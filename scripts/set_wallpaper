@@ -29,7 +29,8 @@ def get_dominant_colour(path = get_destination()):
     return rgb_to_hex(Haishoku.getPalette(path)[1][1])
 
 def set_theme():
-    script = os.path.expanduser("~/repos/config/colours/set_colours")
+    dirname = os.path.dirname(__file__)
+    script = os.path.join(dirname, "../colours/set_colours")
     return subprocess.call([script, '-r', get_dominant_colour()])
 
 def main(argv):

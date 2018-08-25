@@ -1,6 +1,8 @@
 #!/bin/bash
 
-accent=$(cat ~/repos/dotfiles/colours/out/theme)
+# Get the directory ../../
+dotfiles="$(dirname "$(dirname "$(dirname "$(realpath $0)"))")")"
+accent=$(cat "$dotfiles/colours/out/theme")
 
 # Default to white if theme has not yet been set
 [[ -z $accent ]] && accent="#ffffff"

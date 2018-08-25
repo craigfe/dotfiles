@@ -36,7 +36,8 @@ case $1 in
 	;;
 esac;
 
-dotfiles="$HOME/repos/dotfiles"
+# Get the directory ../
+dotfiles=$(dirname "$(dirname "$(realpath $0)"))")
 
 # Create the output directory if it does not exist
 mkdir -p "${dotfiles}/colours/out"
