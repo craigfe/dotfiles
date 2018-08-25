@@ -9,6 +9,8 @@ ranger/bookmarks
 ranger/history
 ranger/tagged
 
+settings/user.conf
+
 vis/colors/accent
 
 *.swp

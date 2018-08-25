@@ -27,12 +27,12 @@ include_file () {
 	case $ext in
 		# If the file is a 'conf' file, include it directly	
 		"conf")
-			cat "$includes/$1" >> $output
+			cat "$includes/$1" | $HOME/.scripts/settings stream >> $output
 		;;
 
 		# If the file is a shell script, execute it
 		"sh")
-			"$includes/$1" >> $output
+			"$includes/$1" | $HOME/.scripts/settings stream >> $output
 		;;
 
 		*)

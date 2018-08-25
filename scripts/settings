@@ -1,0 +1,90 @@
+#!/usr/bin/env python3
+
+import argparse
+import configparser
+import os
+import re
+import sys
+
+class Config:
+    def __init__(self, settings):
+        self.settings = settings
+
+    def stream_process(self, line):
+        return re.sub("\$\{DOTFILES:(.*?)\}", self.lookup, line)
+
+    def lookup(self, match):
+        keys = match.group(1).split('.')
+        value = match.string # Default to the supplied string
+
+        if len(keys) != 2:
+            eprint("Malformed argument: " + match.group(1))
+
+        elif not keys[0] in self.settings:
+            eprint("Missing section: " + keys[0])
+
+        elif not keys[1] in self.settings[keys[0]]:
+            eprint("Missing key: " + keys[1])
+
+        else:
+            value = self.settings[keys[0]][keys[1]]
+
+        if value == {}:
+            eprint("Could not find value: " + match.group(1))
+
+        return value
+
+def eprint(*args, **kwargs):
+    """Print a series of strings to stderr."""
+    print(*args, file=sys.stderr, **kwargs)
+
+def parse_arguments(argv):
+    parser = argparse.ArgumentParser(prog=argv[0], description="Read or set the dotfile settings.")
+    subparsers = parser.add_subparsers(dest='subcommand')
+
+    parser_get = subparsers.add_parser('get', help='Read a setting value')
+    parser_set = subparsers.add_parser('set', help='Set a setting value')
+
+    parser_stream = subparsers.add_parser('stream', help='Find and replace settings placeholders with values')
+    parser_stream.add_argument('infile', help='Input file (defaults to stdin)', nargs='?', type=argparse.FileType('r'), default=sys.stdin)
+    parser_stream.add_argument('outfile', help='Ouptut file (defaults to stdout)', nargs='?', type=argparse.FileType('w'), default=sys.stdout)
+
+    return parser.parse_args(argv[1:])
+
+def read_config():
+    config = configparser.ConfigParser()
+    config.read(os.path.expanduser("~/repos/dotfiles/settings/default.conf"))
+    config.read(os.path.expanduser("~/repos/dotfiles/settings/user.conf"))
+
+    return config
+
+def stream(args):
+    config = Config(read_config())
+
+    for line in args.infile:
+        args.outfile.write(config.stream_process(line))
+
+    return 0
+
+def main(argv):
+    args = parse_arguments(argv)
+
+    if args.subcommand == 'get':
+        eprint("Get not yet implemented")
+        return 1
+
+    elif args.subcommand == 'set':
+        eprint("Set not yet implemented")
+        return 2
+
+    elif args.subcommand == 'stream':
+        return stream(args)
+
+    else:
+        eprint("Subcommand " + args.subcommand + " not recognised")
+        return 3
+
+    return 0
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv))

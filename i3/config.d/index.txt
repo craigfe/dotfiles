@@ -1,5 +1,5 @@
 import main.conf;
-import colours.sh;
+import colours.conf;
 import workspaces.conf;
 import scratchpads.sh;
 import keybindings.conf;
