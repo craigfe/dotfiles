@@ -5,6 +5,8 @@ export output="$HOME/.config/i3/config"
 export includes="$HOME/.config/i3/config.d"
 index="$HOME/.config/i3/config.d/index.txt"
 
+export DOTFILES="$(dirname "$(dirname "$(realpath $0)"))")"
+
 # Replace the current config file
 [[ -f "$output" ]] && rm "$output"
 touch "$output"
@@ -27,12 +29,12 @@ include_file () {
 	case $ext in
 		# If the file is a 'conf' file, include it directly	
 		"conf")
-			cat "$includes/$1" | $HOME/.scripts/settings stream >> $output
+			cat "$includes/$1" | "$DOTFILES/settings/settings" stream >> $output
 		;;
 
 		# If the file is a shell script, execute it
 		"sh")
-			"$includes/$1" | $HOME/.scripts/settings stream >> $output
+			"$includes/$1" | "$DOTFILES/settings/settings" stream >> $output
 		;;
 
 		*)

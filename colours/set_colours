@@ -37,19 +37,17 @@ case $1 in
 esac;
 
 # Get the directory ../
-dotfiles=$(dirname "$(dirname "$(realpath $0)"))")
+dotfiles="$(dirname "$(dirname "$(realpath $0)"))")"
 
 # Create the output directory if it does not exist
 mkdir -p "${dotfiles}/colours/out"
 
 user_settings="${dotfiles}/settings/user.conf"
-polybar_config="${dotfiles}/polybar/config"
 rofi_theme="${dotfiles}/rofi/styles/full.css"
 vis_theme="${dotfiles}/vis/colors/accent"
 main="${dotfiles}/colours/out/theme"
 
 sed -i --follow-symlinks "/accent = /c\	accent = ${colour}" $user_settings
-sed -i --follow-symlinks "/accent = /c\	accent = ${colour}" $polybar_config
 sed -i --follow-symlinks "/accent: /caccent: ${colour};" $rofi_theme
 echo ${colour} | tee $vis_theme $main
 

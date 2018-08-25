@@ -1,7 +1,7 @@
 # vim: ft=dosini
 
 [colors]
-	accent = #90F9FF
+	accent = ${DOTFILES:theme.accent}
 	bckgrd = #121212
 	select = #222222
 
@@ -30,7 +30,7 @@
 	monitor = ${env:MONITOR}
 	monitor-strict = true
 	fixed-center = true
-	dpi = 110
+	dpi = ${DOTFILES:polybar.dpi}
 	bottom = false
 	width = ${settings.bar_width}
 	height = ${settings.bar_height}

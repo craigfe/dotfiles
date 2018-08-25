@@ -4,6 +4,8 @@ shortcuts/out
 
 i3/config
 
+polybar/out
+
 ranger/shortcuts.conf
 ranger/bookmarks
 ranger/history
