@@ -1,5 +1,7 @@
 # Dotfiles
 
+![desktop-1](.assets/desktop01.png) 
+
 Configuration files for various programs.
 
 This repository currently contains configuration for the following programs:
