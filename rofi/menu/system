@@ -1,10 +1,8 @@
 #!/bin/bash
 
-ROFI_OPTIONS=(-theme $HOME/.config/rofi/styles/full.css -m 0 -fullscreen)
-
 action=$(echo -e "RELOAD\nCOLOUR\nLOCK\nSUSPEND\nLOGOUT\nREBOOT\nPOWEROFF" | \
 	awk '{print $(NF-1)}' | \
-	rofi "${ROFI_OPTIONS[@]}" -dmenu -i -p "SYSTEM: ")
+	rofi -theme "$HOME/.config/rofi/styles/full.css" -dmenu -i -p "SYSTEM: ")
 
 case $action in
 

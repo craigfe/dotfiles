@@ -1,7 +1,4 @@
 #!/bin/bash
 
-dmenu_path | \
-	awk '{print $(NF-1)}' | \
-	rofi -theme $HOME/.config/rofi/styles/full.css -m 0 -fullscreen -dmenu -i -p "RUN: " | \
-	${SHELL:="/bin/sh"} &
+rofi -show drun -theme $HOME/.config/rofi/styles/sidebar.css -display-drun "RUN: "
 

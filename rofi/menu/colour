@@ -1,6 +1,5 @@
 #!/bin/bash
 
-ROFI_OPTIONS=(-theme $HOME/.config/rofi/styles/full.css -m 0 -fullscreen)
 DOTFILES="$(dirname "$(dirname "$(dirname "$(realpath $0)"))")")"
 COLOURS=$DOTFILES/colours/colours.tsv
 
@@ -8,7 +7,7 @@ COLOURS=$DOTFILES/colours/colours.tsv
 name=$(cat $COLOURS | \
 	awk -F $"\t" '{ print $1 }' | \
 	(cat && echo -e 'clipboard\nwallpaper') | \
-	rofi "${ROFI_OPTIONS[@]}" -dmenu -i -p "COLOUR: ")
+	rofi -theme $HOME/.config/rofi/styles/full.css -dmenu -i -p "COLOUR: ")
 
 if [ -z $name ]; then
 	>&2 echo "No colour name provided"
