@@ -2,10 +2,15 @@
 # -*- coding: utf-8 -*-
 
 import os
+import sys
 import imaplib
 import socket
 
-from pretty_bad_protocol import gnupg
+try:
+    from pretty_bad_protocol import gnupg
+except ModuleNotFoundError:
+    print('  %{F#bd2c40} gnupg not found')
+    sys.exit(1)
 
 def output_error(message):
     print('  %{F#bd2c40} ' + message)
