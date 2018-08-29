@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# i3-msg workspace "S"
+i3-msg "exec --no-startup-id  urxvt -name screenshot-neofetch --hold -e neofetch"
+pids[0]=$!
+i3-msg "exec --no-startup-id  urxvt -name screenshot-cmatrix -e cmatrix"
+pids[1]=$!
+sleep 3
+
+i3-msg '[instance="screenshot-neofetch"] move right'
+i3-msg '[instance="screenshot-cmatrix"] move right, move down'
+# i3-msg '[instance="screenshot-neofetch"] move to workspace "S"'
+# i3-msg '[instance="screenshot-cmatrix"] move to workspace "S"'
+
+sleep 3
+for pid in ${pids[*]}; do
+	kill $pid
+done
+
