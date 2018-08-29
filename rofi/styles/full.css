@@ -1,28 +1,30 @@
 * {
-    accent: #90F9FF;
-    foreground: @accent;
+accent: #90F9FF;
     background: rgba(0, 0, 0, 0.50);
     transparent: rgba(0, 0, 0, 0);
+
+	bg-color: #10101088;
+
     normal-background: @transparent;
-    normal-foreground: @foreground;
+    normal-foreground: @accent;
     urgent-background: @transparent;
-    urgent-foreground: @foreground;
+    urgent-foreground: @accent;
     active-background: @transparent;
-    active-foreground: @foreground;
-    selected-normal-background: @foreground;
+    active-foreground: @accent;
+    selected-normal-background: @accent;
     selected-normal-foreground: @background;
-    selected-urgent-background: @foreground;
+    selected-urgent-background: @accent;
     selected-urgent-foreground: @background;
-    selected-active-background: @foreground;
+    selected-active-background: @accent;
     selected-active-foreground: @background;
     alternate-normal-background: @transparent;
-    alternate-normal-foreground: @foreground;
+    alternate-normal-foreground: @accent;
     alternate-active-background: @transparent;
     alternate-active-foreground: @active-foreground;
     alternate-urgent-background: @transparent;
     alternate-urgent-foreground: @urgent-foreground;
     border-color: @background;
-    separatorcolor: @foreground;
+    separatorcolor: @accent;
     background-color: @transparent;
     spacing: 10;
 }
@@ -45,12 +47,12 @@
 }
 
 #textbox {
-    text-color: @foreground;
+    text-color: @accent;
+	margin: 100px;
 }
 
 #listview {
     fixed-height: 0;
-    border: 2px 0px 0px;
     border-color: @separatorcolor;
     spacing: 10px;
     padding: 10 1% 10;
@@ -58,6 +60,7 @@
 
 #element {
     border: 0;
+	font: "Alte DIN 1451 Mittelschrift 13";
     padding: 10 10 10;
 }
 
@@ -126,7 +129,11 @@
 #inputbar {
     spacing: 0;
     text-color: @normal-foreground;
-    padding: 1px;
+    padding: 10px;
+	margin: 20px;
+	border: 2px;
+	background-color: @bg-color;
+	border-color: @accent;
 }
 
 #case-indicator {
@@ -137,10 +144,15 @@
 #entry {
     spacing: 0;
     text-color: @normal-foreground;
+	font: "Open Sans 13";
+	text-color: white;
+	margin: 5px 0px 0px 5px;
 }
 
 #prompt, button {
     spacing: 0;
     text-color: @normal-foreground;
+	font: "Alte DIN 1451 Mittelschrift gepraegt 20";
+	color: @accent;
 }
 
