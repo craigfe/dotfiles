@@ -23,7 +23,7 @@ fi
 # conky &
 
 # REDSHIFT
-if ! pgrep -x polybar >/dev/null; then
+if ! pgrep -x redshift >/dev/null; then
 	redshift &
 fi
 
