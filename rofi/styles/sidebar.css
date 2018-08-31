@@ -3,7 +3,7 @@
   text-color:        White;
   background-color:  rgba(0,0,0,0);
 
-  accent: red; 
+  accent: ${DOTFILES:theme.accent};
   fc-color: #39393A;
   bg-color: #101010;
   fc-color-trans: #39393AC5; 

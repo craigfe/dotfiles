@@ -45,8 +45,6 @@ mkdir -p "${dotfiles}/colours/out"
 user_settings="${dotfiles}/settings/user.conf"
 [[ ! -e $user_settings ]] && touch $user_settings
 
-rofi_theme="${dotfiles}/rofi/styles/full.css"
-
 vis_theme="${dotfiles}/vis/colors/accent"
 mkdir -p "${dotfiles}/vis/colors"
 [[ ! -e $vis_theme ]] && touch $vis_theme
@@ -54,7 +52,6 @@ mkdir -p "${dotfiles}/vis/colors"
 main="${dotfiles}/colours/out/theme"
 
 sed -i --follow-symlinks "/accent = /c\	accent = ${colour}" $user_settings
-sed -i --follow-symlinks "/accent: /caccent: ${colour};" $rofi_theme
 echo ${colour} | tee $vis_theme $main
 
 if [ $RELOAD ]; then

@@ -1,5 +1,5 @@
 * {
-    accent: #F69CDA;
+    accent: ${DOTFILES:theme.accent};
     bckgrd: #121212;
     select: #222222;
     foreground: @accent;
