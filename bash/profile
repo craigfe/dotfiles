@@ -8,7 +8,7 @@ export TERMINAL="urxvt"
 export BROWSER="chromium --enable-plugins --force-device-scale-factor=1.25"
 export BROWSER_PRIVATE="chromium --enable-plugins --force-device-scale-factor=1.25 --incognito"
 export MUSIC="spotify --force-device-scale-factor=1.1"
-
+export SUDO_ASKPASS=~/repos/dotfiles/rofi/menu/password
 export MONITOR_1="eDP-1"
 export MONITOR_2="HDMI-1"
 

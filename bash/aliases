@@ -17,6 +17,7 @@ alias ranger='ranger --choosedir=$HOME/.rangerdir; LASTDIR=`cat $HOME/.rangerdir
 alias ls='ls --color=auto'
 alias lsa='ls --color=auto -labh'
 alias v='nvim'
+alias sudo='sudo -A'
 alias sv='sudo nvim'
 alias wthr='curl -4 http://wttr.in/'
 
