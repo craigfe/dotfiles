@@ -52,7 +52,7 @@ function zle-keymap-select zle-line-init zle-line-finish {
 
 	# Change the cursor shape to correspond to vi mode
 	case $KEYMAP in
-		vicmd)      print -n "\e[1 q";; # block cursor
+		vicmd)      print -n "\e[2 q";; # block cursor
 		viins|main) print -n "\e[6 q";; # line cursor
 	esac
 
