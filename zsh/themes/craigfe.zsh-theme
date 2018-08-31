@@ -1,5 +1,9 @@
 #!/bin/zsh
 
+export KEYTIMEOUT=8
+bindkey -M viins 'jk' vi-cmd-mode
+bindkey -M viins 'kj' vi-cmd-mode
+
 ZSH_THEME_GIT_PROMPT_PREFIX="%{$reset_color%}%{$fg[green]%}["
 ZSH_THEME_GIT_PROMPT_SUFFIX="]%{$reset_color%}"
 ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[red]%}*%{$reset_color%}"
@@ -59,6 +63,5 @@ zle -N zle-line-init
 zle -N zle-line-finish
 zle -N zle-keymap-select
 
-export KEYTIMEOUT=1
 PROMPT='$(vi_mode_prompt_info)${ret_status}λ%b '
 RPROMPT=' ' # Prevent vi-mode indicator from showing up
