@@ -36,7 +36,6 @@ precmd () {
 }
 
 # Return status
-
 function vi_mode_prompt_info() {
 	local INSERT_COLOUR="%(?:%{$fg_bold[green]%}:%{$fg_bold[red]%})"
 	local NORMAL_COLOUR="%{$fg_bold[magenta]%}"
@@ -44,6 +43,21 @@ function vi_mode_prompt_info() {
 	echo "${${${KEYMAP/#%/$INSERT_COLOUR}/vicmd/$NORMAL_COLOUR}/main/${INSERT_COLOUR}}"
 #	echo "${${KEYMAP/vicmdmain/$RETURN_COLOUR}/(main|viins)/}"
 }
+
+function zle-keymap-select zle-line-init zle-line-finish {
+
+	# Change the cursor shape to correspond to vi mode
+	case $KEYMAP in
+		vicmd)      print -n "\e[1 q";; # block cursor
+		viins|main) print -n "\e[6 q";; # line cursor
+	esac
+
+	zle reset-prompt
+}
+
+zle -N zle-line-init
+zle -N zle-line-finish
+zle -N zle-keymap-select
 
 export KEYTIMEOUT=1
 PROMPT='$(vi_mode_prompt_info)${ret_status}λ%b '
