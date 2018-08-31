@@ -6,7 +6,7 @@ ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[red]%}*%{$reset_color%}"
 ZSH_THEME_GIT_PROMPT_CLEAN=""
 
 # Customized git status, oh-my-zsh currently does not allow render dirty status before branch
-git_custom_status() {
+function git_custom_status {
   local cb=$(git_current_branch)
   if [ -n "$cb" ]; then
     echo "$(parse_git_dirty)$ZSH_THEME_GIT_PROMPT_PREFIX$(git_current_branch)$ZSH_THEME_GIT_PROMPT_SUFFIX"
@@ -14,13 +14,13 @@ git_custom_status() {
 }
 
 # Calculate the length of a string post colour parsing
-parsed_length () {
+function parsed_length {
 	local zero='%([BSUbfksu]|([FB]|){*})'
   echo ${#${(S%%)1//$~zero/}}
 }
 
 # The precmd function is invoked before the zsh promt is printed
-precmd () {
+function precmd {
 	local LEFT=$'%B%{$fg[red]%}[ %{$fg[cyan]%}%B%n%{$fg[red]%}%B@%{$fg[green]%}%m%{$reset_color%}%B%{$fg[red]%} ] %{$fg[magenta]%}%B%~%{$reset_color%}'
 	local RIGHT=$(git_custom_status)' '
 
