@@ -21,15 +21,14 @@ DISABLE_UNTRACKED_FILES_DIRTY="true"
 
 plugins=(
 	git
+	vi-mode
 	ssh-agent
 )
 
 source $ZSH/oh-my-zsh.sh
 source $HOME/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
 source $HOME/.aliases
-if [[ -f $HOME/.shortcuts/out/shell ]]; then
-	source $HOME/.shortcuts/out/shell
-fi
+[ -f $HOME/.shortcuts/out/shell ] && source $HOME/.shortcuts/out/shell
 
 # User configuration
 

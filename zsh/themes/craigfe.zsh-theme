@@ -1,8 +1,5 @@
 #!/bin/zsh
 
-# Return status
-local ret_status="%(?:%{$fg_bold[green]%}:%{$fg_bold[red]%})"
-
 ZSH_THEME_GIT_PROMPT_PREFIX="%{$reset_color%}%{$fg[green]%}["
 ZSH_THEME_GIT_PROMPT_SUFFIX="]%{$reset_color%}"
 ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[red]%}*%{$reset_color%}"
@@ -38,4 +35,16 @@ precmd () {
 	fi
 }
 
-PROMPT='${ret_status}λ%b '
+# Return status
+
+function vi_mode_prompt_info() {
+	local INSERT_COLOUR="%(?:%{$fg_bold[green]%}:%{$fg_bold[red]%})"
+	local NORMAL_COLOUR="%{$fg_bold[magenta]%}"
+
+	echo "${${${KEYMAP/#%/$INSERT_COLOUR}/vicmd/$NORMAL_COLOUR}/main/${INSERT_COLOUR}}"
+#	echo "${${KEYMAP/vicmdmain/$RETURN_COLOUR}/(main|viins)/}"
+}
+
+export KEYTIMEOUT=1
+PROMPT='$(vi_mode_prompt_info)${ret_status}λ%b '
+RPROMPT=' ' # Prevent vi-mode indicator from showing up
