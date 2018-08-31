@@ -3,6 +3,18 @@
 # Gives a rofi prompt labelled with $1 to perform command $2
 # For example: './prompt_rofi "Do you want to shutdown?" "shutdown -h now"
 
-ROFI_OPTIONS=(-theme $HOME/.config/rofi/styles/full.css -m 0 -fullscreen)
+DOTFILES="$(dirname "$(dirname "$(realpath $0)"))")"
+COLOURS=$DOTFILES/colours/colours.tsv
+THEME_INPUT="$HOME/.config/rofi/styles/full.css"
 
-[ $(echo -e "No\nYes" | rofi "${ROFI_OPTIONS[@]}" -dmenu -i -p "Are you sure you want to run $2? ") == "Yes" ] && $2
+# Generate the theme file using a named pipe
+THEME_OUTPUT="$HOME/.config/rofi/styles/.pipe-theme"
+[ ! -p $THEME_OUTPUT ] && mkfifo "$HOME/.config/rofi/styles/.pipe-theme"
+$DOTFILES/settings/settings stream "$THEME_INPUT" "$THEME_OUTPUT" &
+
+response=$(echo -e "No\nYes" | rofi -theme "$THEME_OUTPUT" -dmenu -i -p "Are you sure you want to run $2? ")
+
+# Flush the pipe
+dd if=$THEME_OUTPUT iflag=nonblock of=/dev/null
+
+[ "$response" == "Yes" ] && $2
