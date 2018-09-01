@@ -48,7 +48,13 @@
 	" Cosmetic: {
 		Plugin 'vim-airline/vim-airline'
 		Plugin 'scrooloose/syntastic' 
+
+		" Color themes
+		Plugin 'crusoexia/vim-monokai'
+		Plugin 'ayu-theme/ayu-vim'
 		Plugin 'morhetz/gruvbox'
+
+		" File type highlighting
 		Plugin 'mboughaba/i3config.vim' " i3config syntax highlighting
 		Plugin 'leafgarland/typescript-vim' " Typescript syntax highlighting
 	" }
