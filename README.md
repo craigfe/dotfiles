@@ -1,6 +1,8 @@
 # Dotfiles
 
 ![desktop-1](.assets/desktop01.png) 
+![desktop-2](.assets/desktop02.png) 
+![desktop-3](.assets/desktop03.png) 
 
 Configuration files for various programs.
 
