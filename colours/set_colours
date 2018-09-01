@@ -55,5 +55,6 @@ sed -i --follow-symlinks "/accent = /c\	accent = ${colour}" $user_settings
 echo ${colour} | tee $vis_theme $main
 
 if [ $RELOAD ]; then
+	pkill -USR1 vis
 	"${dotfiles}/i3/restart"
 fi
