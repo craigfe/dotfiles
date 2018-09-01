@@ -13,8 +13,7 @@ bindkey -v # Use Vi mode
 # Uncomment the following line to enable command auto-correction.
 # ENABLE_CORRECTION="true"
 
-# Uncomment the following line to display red dots whilst waiting for completion.
-COMPLETION_WAITING_DOTS="true"
+COMPLETION_WAITING_DOTS="false"
 
 # Don't mark untracked files as dirty
 DISABLE_UNTRACKED_FILES_DIRTY="true"
