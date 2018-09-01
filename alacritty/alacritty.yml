@@ -111,7 +111,7 @@ custom_cursor_colors: false
 colors:
   # Default colors
   primary:
-    background: '0x000000'
+    background: '0x212733'
     foreground: '0xeaeaea'
 
     # (Optional) Bright and Dim foreground colors
@@ -188,7 +188,7 @@ visual_bell:
   duration: 0
 
 # Background opacity
-background_opacity: 0.8
+background_opacity: 0.95
 
 # Mouse bindings
 #
