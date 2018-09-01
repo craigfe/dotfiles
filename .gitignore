@@ -13,7 +13,7 @@ ranger/tagged
 
 settings/user.conf
 
-vis/colors/accent
+vis/colors
 
 *.swp
 .cache*
