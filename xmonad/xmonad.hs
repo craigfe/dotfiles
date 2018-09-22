@@ -39,11 +39,11 @@ import qualified DBus.Client as DC
 -- Application Names
 -- ------------------------------------------------------------------------
 
-myTerminal = "urxvt"
+myTerminal = "alacritty"
 myScreensaver = "/usr/bin/gnome-screensaver-command --lock"
 mySelectScreenshot = "select-screenshot"
 myScreenshot = "screenshot"
-myLauncher = "/home/craigferguson/repos/dotfiles/rofi/menu/run"
+myLauncher = "/home/craigfe/repos/config/rofi/menu/run"
 myLock = "i3lock -c 000000"
 mySystemMenu = "/home/craigferguson/repos/dotfiles/rofi/menu/system"
 mySink = "alsa_output.pci-0000_00_1f.3.analog-stereo"
@@ -285,8 +285,7 @@ toggleHDMI = do
 myStartupHook = do
             spawn "source ~/.fehbg"
             -- spawn "compton --backend glx -f"
-            -- spawn "$HOME/.config/polybar/start"
---             -- spawn "compton --backend glx --vsync opengl -fcCz -l -17 -t -17" --shadow-red 0.35 --shadow-green 0.92 --shadow-blue 0.93" --f
+            -- spawn "$HOME/.config/polybar/start" -- spawn "compton --backend glx --vsync opengl -fcCz -l -17 -t -17" --shadow-red 0.35 --shadow-green 0.92 --shadow-blue 0.93" --f
 --             <+> setDefaultCursor xC_left_ptr
 --             -- <+> spawn "xsetroot -solid '#F5F6F7'"
 --             -- <+> spawn "xinput --set-prop 13 290 1"
