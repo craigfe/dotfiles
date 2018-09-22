@@ -121,11 +121,13 @@
 " }
 
 " Text: {
-	set t_Co=16
+	" set t_Co=16
 	syntax enable
-	set background=dark " Use the dark theme
-	silent! colorscheme gruvbox
-	hi Normal ctermbg=none " Disable the background color
+	let ayucolor="mirage"
+	set termguicolors
+	colorscheme ayu
+
+	" hi Normal ctermbg=none " Disable the background color
 
 	" Autocompletion: {
 		set omnifunc=syntaxcomplete#Complete
