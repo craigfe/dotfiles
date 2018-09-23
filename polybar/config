@@ -50,18 +50,19 @@
 	spacing = 2
 	module-margin-left = 4
 	module-margin-right = 4
-	font-0 = Alte DIN 1451 Mittelschrift:size=14;2
+	font-0 = Alte DIN 1451 Mittelschrift:size=12;2
 	font-1 = FontAwesome:pixelsize=12;3
 	font-2 = Font Awesome 5 Free:pixelsize=12;3
 	font-3 = Font Awesome 5 Free Solid:pixelsize=12;3
-	font-4 = Font Awesome 5 Brands:pixelsize=12;3
+	font-4 = Alte DIN 1451 Mittelschrift gepraegt:size=11;2
 	font-5 = unifont:size=12;3
 	tray-position = right
 	tray-padding = 4
-
-	modules-left = i3 
+	
+	modules-left = i3 xmonad
 ; TOP DRY NET HOT SYC WCH
-	modules-right = inbox redshift backlight wlan volume cpu memory battery date
+;;	modules-right = inbox redshift backlight wlan volume cpu memory battery date
+	modules-right = redshift backlight wlan volume cpu memory battery date
 
 [bar/center]
 	monitor = ${env:MONITOR}
@@ -98,6 +99,20 @@
 	font-0 = din1451alt:size=10;1
 	font-5 = unifont:size=14;1
 	modules-center = i3
+
+[module/xmonad]
+   type = custom/script
+   exec = xmonad-log
+   tail = true
+   label = "  %{T5}%output%%{T5}"
+
+[module/xwindow]
+   type = internal/xwindow
+   label = %title:0:30:...%
+
+[module/xkeyboard]
+   type = internal/xkeyboard
+   blacklist-0 = num lock
 
 [module/i3]
 	type = internal/i3
