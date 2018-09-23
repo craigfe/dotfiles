@@ -2,7 +2,8 @@
 
 shopt -s autocd # Allow cd-ing into a directory by typing the directory name
 
-export PATH=$PATH:~/.vim/bundle/vim-live-latex-preview/bin:~/.local/bin
+export PATH=$PATH:~/.vim/bundle/vim-live-latex-preview/bin:~/.local/bin:~/go/src/github.com/xintron/xmonad-log
+
 
 # Configure the PS1 environment variable (terminal prompt)
 if [ $(id -u) -eq 0 ];
