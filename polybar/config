@@ -24,7 +24,7 @@
 	screenchange-reload = true
 	bar_gap= 0
 	bar_width = 100%
-	bar_height = 35
+	bar_height = 28
 
 [bar/top]
 	monitor = ${env:MONITOR}
