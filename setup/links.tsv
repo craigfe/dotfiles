@@ -8,6 +8,7 @@ gnome/gnomerc	~/.gnomerc
 gnome/startup.desktop	~/.config/autostart/startup.desktop
 i3/	~/.config/i3/
 latex/	~/texmf/tex/latex/
+linting/stylish-haskell/	~/.config/stylish-haskell/
 polybar/config	~/.config/polybar
 ranger/	~/.config/ranger
 scripts/	~/.scripts/
