@@ -4,11 +4,11 @@
 	accent = ${DOTFILES:theme.accent}
 	bckgrd = #121212
 	select = #222222
+	warning = #CD0F0C
 
 	background = 			${self.bckgrd}
 	background-alt = 		${self.select}
 	foreground = 			#A5ffffff
-	;primary = 			${xrdb:accent}
 	primary = 			${self.accent}
 	alert = 			#bd2c40
 	transparent = 			#00000000
@@ -137,6 +137,8 @@
 	label-focused-foreground= ${colors.background}
 	label-focused-background = ${colors.primary}
 	label-focused-underline = ${colors.primary}
+;;	label-focused-background = #00ffffff
+;;	label-focused-underline = #00ffffff
 	label-focused-padding = 3
 	label-unfocused = %name%
 	label-unfocused-padding = 3
