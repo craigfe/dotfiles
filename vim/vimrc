@@ -32,7 +32,7 @@
 
 " Plugins: {
 	" Behavioural: {
-		Plugin 'ying17zi/vim-live-latex-preview', { 'for': 'tex' } " Live LaTeX compilation 
+		Plugin 'ying17zi/vim-live-latex-preview', { 'for': 'tex' } " Live LaTeX compilation
 		Plugin 'LaTeX-Box-Team/LaTeX-Box', { 'for': 'tex' } " Various LaTeX improvements
 		Plugin 'tpope/vim-surround' " Change surrounding quotes, brackets and tags easily
 		Plugin 'tpope/vim-fugitive' " Git wrapper
@@ -43,11 +43,13 @@
 		Plugin 'sjl/gundo.vim' " Non-linear undo tree
 		Plugin 'ctrlpvim/ctrlp.vim' " Fuzzy file finder
 		Plugin 'takac/vim-hardtime' " Disables character-wise navigation on HardMode
+		Plugin 'nbouscal/vim-stylish-haskell'
 	" }
 
 	" Cosmetic: {
 		Plugin 'vim-airline/vim-airline'
 		Plugin 'scrooloose/syntastic' 
+		Plugin 'Yggdroot/indentLine'
 
 		" Color themes
 		Plugin 'crusoexia/vim-monokai'
@@ -62,7 +64,7 @@
 
 " VundleEnd: {
 	call vundle#end()
-	filetype plugin indent on 
+	filetype plugin indent on
 " }
 
 " General: {
@@ -139,6 +141,14 @@
 	" }
 
 	set list lcs=trail:·,tab:»\  " Show tabs and trailing spaces as visible characters
+
+
+	" IndentLine {
+	let g:indentLine_char = ''
+	let g:indentLine_first_char = ''
+	let g:indentLine_showFirstIndentLevel = 1
+	let g:indentLine_setColors = 0
+	" }
 " }
 
 " Searching: {
@@ -228,7 +238,6 @@ autocmd FileType tex nnoremap <C-B> :!xelatex<space><c-r>%<Enter>
 	au BufRead,BufNewFile *.pl set filetype=prolog " not Perl
 	au BufRead,BufNewFile rc.conf set filetype=vim
 " }
-
 
 " LaTeX Live Preview
 let g:livepreview_previewer = 'mupdf'
