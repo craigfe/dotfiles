@@ -55,6 +55,7 @@ sed -i --follow-symlinks "/accent = /c\	accent = ${colour}" $user_settings
 echo ${colour} | tee $vis_theme $main
 
 if [ $RELOAD ]; then
-	 [[ $(pgrep -x vis > /dev/null) ]] && pkill -USR1 vis
-	"${dotfiles}/i3/restart"
+	[[ $(pgrep -x vis > /dev/null) ]] && pkill -USR1 vis
+	[[ $(pgrep xmonad > /dev/null) ]] && xmonad --recompile && xmonad --restart
+	[[ $(pgrep -x i3  > /dev/null) ]] && "${dotfiles}/i3/restart"
 fi
