@@ -18,6 +18,7 @@
 \RequirePackage{mathtools}
 \RequirePackage{xparse}
 \RequirePackage{microtype}           % Slightly better typesetting, for nerds
+\RequirePackage{fontspec}
 \RequirePackage{scrextend}           % addmargin environment
 
 \renewcommand*{\ttdefault}{cmtt} % Restore tt font to default
@@ -47,7 +48,7 @@ tabsize=3,
 showspaces=false,
 showstringspaces=false}
 
-% Define the header format
+ % Define the header format
 \title{\vspace{-1.7cm}\textsc{\Title}}
 \date{
   \Date\\
