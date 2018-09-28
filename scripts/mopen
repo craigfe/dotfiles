@@ -1,0 +1,35 @@
+#!/bin/sh
+
+# Open a PDF using mupdf unless it is already open, otherwise signal mupdf to
+# refresh the file form disk. Intended to be used at the end of the xelatex
+# build process.
+
+FILE="$1"
+if [ ! -r "$FILE" ]; then
+   PROG_NAME="`basename $0`"
+   echo >&2 "$PROG_NAME: could not read file '$FILE'"
+   echo >&2 "Usage: $PROG_NAME foo.pdf"
+   exit 65
+fi
+
+USER_NAME="`id -un`"
+PDFREADER=mupdf
+
+# Fully qualify the path to the file
+set -e
+WHERE="`dirname "$FILE"`"
+cd "$WHERE"
+FILE=`pwd`/`basename "$FILE"`
+set +e
+
+trap 'exit 0' USR2
+ps xo pid,user,command | while read pid uc; do
+   if echo "$uc" | egrep -q "^$USER_NAME.*$PDFREADER.*$FILE"; then
+      kill -HUP "$pid"
+      kill -USR2 "$$"
+      # NOTE potential race condition if code moves on to the exec
+      # before the kill-of-self happens (haven't seen it in practice)
+   fi
+done
+
+exec setsid $PDFREADER "$FILE" 2>&1
