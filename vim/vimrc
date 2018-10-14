@@ -33,7 +33,6 @@
 " Plugins: {
 	" Behavioural: {
 		Plugin 'ying17zi/vim-live-latex-preview', { 'for': 'tex' } " Live LaTeX compilation
-		Plugin 'LaTeX-Box-Team/LaTeX-Box', { 'for': 'tex' } " Various LaTeX improvements
 		Plugin 'tpope/vim-surround' " Change surrounding quotes, brackets and tags easily
 		Plugin 'tpope/vim-fugitive' " Git wrapper
 		Plugin 'tpope/vim-repeat' " Extend the vim . operator to be available to plugins
