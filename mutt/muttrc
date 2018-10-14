@@ -1,5 +1,6 @@
 set folder 		= imaps://imap.hermes.cam.ac.uk/
 set imap_user	= cf443
+set from        = "Craig Ferguson <cf443@cam.ac.uk>"
 set spoolfile	= +INBOX
 mailboxes 		= +INBOX
 
