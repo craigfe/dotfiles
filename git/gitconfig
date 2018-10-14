@@ -9,6 +9,8 @@
 	ps = push
 	co = checkout
 	df = diff
+	dfc = diff --cached
+	dfs = diff --staged
 	cl = clone
 	f = fetch
 	mg = merge
@@ -29,6 +31,8 @@
 	c = commit
 	cm = commit -m
 	cam = commit -a -m
+	cne = commit --amend --no-edit
+
 [core]
 	editor = nvim
 [pull]
