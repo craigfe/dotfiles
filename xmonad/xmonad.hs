@@ -1,10 +1,12 @@
 import qualified Codec.Binary.UTF8.String            as UTF8
+import           Data.Char
 import           Data.Maybe
 import           Graphics.X11.ExtraTypes
 import           System.Exit
 import           System.IO
 import           XMonad
 import           XMonad.Actions.CycleWS
+import           XMonad.Actions.DynamicProjects
 import           XMonad.Actions.SpawnOn
 import           XMonad.Hooks.DynamicLog
 import           XMonad.Hooks.ManageDocks
@@ -14,6 +16,7 @@ import           XMonad.Layout.Accordion
 import           XMonad.Layout.Fullscreen
 import           XMonad.Layout.Gaps
 import           XMonad.Layout.IndependentScreens
+import           XMonad.Layout.LayoutCombinators     (JumpToLayout (..))
 import           XMonad.Layout.MultiToggle
 import           XMonad.Layout.MultiToggle.Instances
 import           XMonad.Layout.Named
@@ -26,8 +29,11 @@ import           XMonad.Layout.Simplest
 import           XMonad.Layout.Spacing
 import           XMonad.Layout.SubLayouts
 import           XMonad.Layout.Tabbed
+import           XMonad.Layout.ThreeColumns
 import           XMonad.Layout.WindowNavigation
+import           XMonad.Operations
 import           XMonad.Util.Cursor
+import qualified XMonad.Util.ExtensibleState         as XS
 import           XMonad.Util.EZConfig
 import           XMonad.Util.NamedScratchpad
 import           XMonad.Util.Run                     (spawnPipe)
@@ -48,6 +54,7 @@ myTerminal = "alacritty"
 myScreensaver = "/usr/bin/gnome-screensaver-command --lock"
 mySelectScreenshot = "screenshot_clipboard"
 myWebBrowser = "google-chrome --force-device-scale-factor=1.25"
+myCalendar = "google-chrome --app=https://calendar.google.com"
 myScreenshot = "screenshot"
 myLauncher = "/home/craigfe/repos/config/rofi/menu/run"
 mySystemMenu = "/home/craigfe/repos/config/rofi/menu/system"
@@ -58,24 +65,26 @@ mySink = "alsa_output.pci-0000_00_1f.3.analog-stereo"
 -- Workspaces
 -- ------------------------------------------------------------------------
 
-myWorkspaces = map show ([1..9] ++ [0])
+myWorkspaces = map show ([1..9] ++ [0]) ++ ["E", "A", "S"]
+
 
 -- ------------------------------------------------------------------------
 -- Scratchpads
 -- ------------------------------------------------------------------------
 
-spotifyCommand = "spotify"
-messengerCommand = "google-chrome --app=https://www.messenger.com/"
+{-spotifyCommand = "spotify"-}
+{-messengerCommand = "google-chrome --app=https://www.messenger.com/"-}
 youtubeCommand = "google-chrome --app=https://www.youtube.com/"
 
 isSpotify   = (className =? "Spotify")
-isMessenger = (appName =? "www.messenger.com")
+{-isMessenger = (appName =? "www.messenger.com")-}
 isYoutube = (appName =? "www.youtube.com")
 
 scratchpads =
-  [ NS "spotify" spotifyCommand isSpotify (customFloating $ W.RationalRect (1/6) (1/6) (2/3) (2/3))
-  , NS "messenger" messengerCommand isMessenger (customFloating $ W.RationalRect (1/6) (1/6) (2/3) (2/3))
-  , NS "youtube" youtubeCommand isYoutube (customFloating $ W.RationalRect (31/48) (1/24) (8/24) (9/24))
+  [
+  {-NS "spotify" spotifyCommand isSpotify (customFloating $ W.RationalRect (1/12) (1/12) (5/6) (5/6))-}
+  {-, NS "messenger" messengerCommand isMessenger (customFloating $ W.RationalRect (1/12) (1/12) (5/6) (5/6))-}
+  {-, NS "youtube" youtubeCommand isYoutube (customFloating $ W.RationalRect (31/48) (1/24) (8/24) (9/24))-}
   ]
 
 -- -----------------------------------------------------------------------
@@ -104,7 +113,7 @@ myManageHook = manageSpawn
 -- Layouts
 -- ------------------------------------------------------------------------
 
-background = "#121212"
+background = "#222222"
 backgroundText = "#a5a5a5"
 
 base03  = "#002b36"
@@ -125,14 +134,14 @@ cyan    = "#2aa198"
 green   = "#859900"
 
 myTabTheme accent = def
-    { fontName              = "xft:Alte DIN 1451 Mittelschrift:style=Regular:size=11"
+    { fontName              = "xft:Alte DIN 1451 Mittelschrift:style=Regular:size=9"
     , activeColor           = accent
     , activeTextColor       = base03
     , activeBorderColor     = accent
     , inactiveColor         = background
     , inactiveTextColor     = backgroundText
     , inactiveBorderColor   = background
-	, decoHeight            = 30
+	, decoHeight            = 20
     }
 
 myTopBarTheme accent = def
@@ -145,7 +154,7 @@ myTopBarTheme accent = def
     , activeTextColor       = accent
     , urgentBorderColor     = red
     , urgentTextColor       = yellow
-    , decoHeight            = 7
+    , decoHeight            = 8
     }
 
 addTopBar accent = noFrillsDeco shrinkText (myTopBarTheme accent)
@@ -189,12 +198,48 @@ tabs = \accent -> named "Tabs"
 	$ addTabs shrinkText (myTabTheme accent)
 	$ Simplest
 
+threeCol = \accent -> named "ThreeCol"
+	$ addTopBar accent
+	$ avoidStruts
+	$ addTabs shrinkText (myTabTheme accent)
+	$ smartSpacing gap
+	$ gaps [(U,gap), (D,gap), (R,gap), (L,gap)]
+	$ ThreeColMid 1 (1/20) (1/2)
+	where
+		gap = 5
+
 myLayout accent = mirrorToggle
 	$ reflectToggle
-	$ tiled accent ||| fullscreen ||| accordion accent ||| tabs accent
+	$ ifWider smallMonResWidth wideLayouts standardLayouts
 	where
+		wideLayouts = (fullscreen ||| threeCol accent)
+		standardLayouts = (fullscreen ||| tiled accent ||| accordion accent ||| tabs accent)
 		mirrorToggle  = mkToggle (single MIRROR)
 		reflectToggle = mkToggle (single REFLECTX)
+		smallMonResWidth = 1920
+
+projects :: [Project]
+projects =
+	[ Project { projectName = "E"
+			  , projectDirectory = "~/"
+			  , projectStartHook = Just $ do
+			  		spawn "google-chrome --app=https://webmail.hermes.cam.ac.uk"
+			  }
+
+	, Project { projectName = "A"
+              , projectDirectory = "~/"
+			  , projectStartHook = Just $ do
+			  		sendMessage $ NextLayout
+					spawn "google-chrome --app=https://www.messenger.com/"
+					spawn "google-chrome --app=https://hangouts.google.com/?pli=1&authuser=1"
+			  }
+
+	, Project { projectName = "S"
+		      , projectDirectory = "~/"
+		      , projectStartHook = Just $ do
+			        spawn "spotify"
+		      }
+	]
 
 -- ------------------------------------------------------------------------
 -- Colors and borders
@@ -211,46 +256,58 @@ myModMask = mod4Mask
 myKeys = \c -> mkKeymap c $
   [ ("M-<Return>", spawn $ XMonad.terminal c)
   , ("M-S-<Return>", windows W.swapMaster)
-  , ("M-S-<Space>", setLayout $ XMonad.layoutHook c)
-  , ("M-C-l", spawn myScreensaver)
-  , ("M-a", namedScratchpadAction scratchpads "messenger")
-  , ("M-d", spawn myLauncher)
   , ("M-<Backspace>", spawn mySystemMenu)
-  , ("M-p", spawn mySelectScreenshot)
-  , ("M-S-p", spawn myScreenshot)
+  , ("M-S-<Space>", setLayout $ XMonad.layoutHook c)
   , ("M-<Tab>", windows W.focusDown)
   , ("M-S-<Tab>", moveToNextNonEmptyNoWrap)
-  , ("M-e", moveTo Next EmptyWS)
+
+	-- Main keys
   , ("M-q", kill)
   , ("M-w", spawn myWebBrowser)
   , ("M-S-w", spawn (myWebBrowser ++ " --incognito"))
+  , ("M-e", toggleOrView "E")
   , ("M-r", spawn "alacritty -e ranger")
   , ("M-t", withFocused $ windows . W.sink)
   , ("M-y", namedScratchpadAction scratchpads "youtube")
   , ("M-u", windows W.swapDown)
   , ("M-i", windows W.swapUp)
+  , ("M-o", moveTo Next EmptyWS)
+  , ("M-S-o", moveTo Next EmptyWS)
+  , ("M-p", spawn mySelectScreenshot)
+  , ("M-S-p", spawn myScreenshot)
   , ("M-[", sendMessage $ IncGap 5 R)
   , ("M-]", sendMessage $ DecGap 5 R)
+  , ("M-a", toggleOrView "A")
+  , ("M-S-a", windows $ W.shift "A")
+  , ("M-s", toggleOrView "S")
+  , ("M-S-s", spotifyPause)
+  , ("M-d", spawn myLauncher)
+  {-, ("M-f", )-}
+  {-, ("M-S-f", )-}
+  {-, ("M-g", )-}
+  {-, ("M-S-g", )-}
+  , ("M-h", sendMessage Shrink)
   , ("M-j", windows W.focusDown)
   , ("M-k", windows W.focusUp)
-  , ("M-n", sendMessage NextLayout)
-  , ("M-S-n", toSubl NextLayout)
-  , ("M-m", namedScratchpadAction scratchpads "spotify")
-  , ("M-S-m", spawn "dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause >> /dev/null")
-  , ("M-S-j", windows W.swapDown)
-  , ("M-S-k", windows W.swapUp)
-  , ("M-h", sendMessage Shrink)
   , ("M-l", sendMessage Expand)
+  , ("M-C-l", spawn myScreensaver)
   , ("M-;", nextScreen)
   , ("M-S-;", shiftNextScreen)
+  , ("M-n", sendMessage NextLayout)
+  , ("M-S-n", toSubl NextLayout)
+  , ("M-S-j", windows W.swapDown)
+  , ("M-S-k", windows W.swapUp)
   , ("M-x", spawn myLock)
+  , ("M-c", spawn myCalendar)
   , ("M-,", sendMessage (IncMasterN 1))
   , ("M-.", sendMessage (IncMasterN (-1)))
   , ("M-/", sendMessage $ Toggle MIRROR)
-  , ("M-S-<F2>", io exitSuccess)
-  , ("M-<F2>", restart "xmonad" True)
 
-     -- Multimedia keys
+	-- Function keys
+  , ("M-<F2>", restart "xmonad" True)
+  , ("M-S-<F2>", io exitSuccess)
+
+    -- Multimedia keys
   , ("<XF86AudioMute>", spawn $  "pactl set-sink-mute " ++ mySink ++ " toggle")
   , ("<XF86AudioLowerVolume>", spawn $  "pactl set-sink-mute " ++ mySink ++ " false; pactl set-sink-volume " ++ mySink ++ " -5%")
   , ("<XF86AudioRaiseVolume>", spawn $  "pactl set-sink-mute " ++ mySink ++ " false; pactl set-sink-volume " ++ mySink ++ " +5%")
@@ -269,6 +326,8 @@ myKeys = \c -> mkKeymap c $
 
 	++ zipM "M-C-" dirKeys dirs (sendMessage . pullGroup)
 	where
+
+	spotifyPause = spawn "dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause >> /dev/null"
 
 	zipM  mod keys actions f   = zipWith (\key action -> (mod ++ key, f action)) keys actions
 	zipM' mod keys actions f b = zipWith (\key action -> (mod ++ key, f action b)) keys actions
@@ -307,8 +366,8 @@ moveToPrevNonEmptyNoWrap = moveTo Prev (WSIs lessNonEmptyWs)
 -- Mouse bindings
 -- ------------------------------------------------------------------------
 
--- myFocusFollowsMouse :: Bool
--- myFocusFollowsMouse = True
+myFocusFollowsMouse :: Bool
+myFocusFollowsMouse = False
 
 -- myMouseBindings XConfig {XMonad.modMask = modMask} = M.fromList
 --   [
@@ -332,16 +391,16 @@ moveToPrevNonEmptyNoWrap = moveTo Prev (WSIs lessNonEmptyWs)
 myStartupHook = do
             spawn "source ~/.fehbg"
 			<+> spawn "~/repos/config/polybar/start"
-            -- spawn "compton --backend glx -f"
+            <+> spawn "compton"
+            <+> setDefaultCursor xC_left_ptr
+            <+> setWMName "LG3D"
             -- spawn "$HOME/.config/polybar/start" -- spawn "compton --backend glx --vsync opengl -fcCz -l -17 -t -17" --shadow-red 0.35 --shadow-green 0.92 --shadow-blue 0.93" --f
---             <+> setDefaultCursor xC_left_ptr
 --             -- <+> spawn "xsetroot -solid '#F5F6F7'"
 --             -- <+> spawn "xinput --set-prop 13 290 1"
 --             -- <+> spawn "xinput --set-prop 13 302 0"
 --             -- <+> spawn "~/bin/libinput-gestures"
 --             -- <+> spawn "xrandr --output HDMI1 --off"
 --             -- <+> spawn "xrandr --output HDMI1 --auto --right-of eDP1"
---             -- <+> setWMName "LG3D"
 --             -- <+> spawn "firefox"
 
 -- -----------------------------------------------------------------------
@@ -377,40 +436,13 @@ myAddSpaces len str = sstr ++ replicate (len - length sstr) ' '
   where
     sstr = shorten len str
 
--- main :: IO ()
--- main = do
---     dbus <- D.connectSession
---     -- Request access to the DBus name
---     D.requestName dbus (D.busName_ "org.xmonad.Log")
---         [D.nameAllowReplacement, D.nameReplaceExisting, D.nameDoNotQueue]
-
-
-    -- xmonad $ def { logHook = dynamicLogWithPP (myLogHook dbus) }
-
--- -- Override the PP values as you would otherwise, adding colors etc depending
--- -- on  the statusbar used
--- myLogHook :: D.Client -> PP
--- myLogHook dbus = def { ppOutput = dbusOutput dbus }
-
--- -- Emit a DBus signal on log updates
--- dbusOutput :: D.Client -> String -> IO ()
--- dbusOutput dbus str = do
---     let signal = (D.signal objectPath interfaceName memberName) {
---             D.signalBody = [D.toVariant $ UTF8.decodeString str]
---         }
---     D.emit dbus signal
---   where
---     objectPath = D.objectPath_ "/org/xmonad/Log"
---     interfaceName = D.interfaceName_ "org.xmonad.Log"
---     memberName = D.memberName_ "Update"
-
 -- ------------------------------------------------------------------------
 -- Set defaults
 -- ------------------------------------------------------------------------
 
 defaults accent = def {
     terminal           = myTerminal,
---     focusFollowsMouse  = myFocusFollowsMouse,
+    focusFollowsMouse  = myFocusFollowsMouse,
     borderWidth        = myBorderWidth,
     modMask            = myModMask,
     workspaces         = myWorkspaces,
@@ -428,7 +460,9 @@ main = do
 	accentFile <- readFile "/home/craigfe/repos/config/colours/out/theme"
 	dbus <- DC.connectSession
 	xmobar defaultConfig { modMask = mod4Mask }
-	xmonad $ docks (defaults (init accentFile)) {
+	xmonad
+		$ dynamicProjects projects
+		$ docks (defaults (init accentFile)) {
 		workspaces = myWorkspaces,
 		handleEventHook = docksEventHook,
 		logHook = dynamicLogWithPP (myLogHook (init accentFile) dbus)
