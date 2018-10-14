@@ -6,4 +6,5 @@ if [ "$battery_level" != "" ] && [ "$battery_level" -lt 15 ]; then
 	exit 0
 fi
 
+echo
 exit 0
