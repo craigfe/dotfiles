@@ -1,4 +1,4 @@
-# vim: ft=dosini
+#  vim: ft=dosini
 
 [colors]
 	accent = ${DOTFILES:theme.accent}
@@ -69,7 +69,7 @@
 	monitor = ${env:MONITOR}
 	monitor-strict = true
 	fixed-center = true
-	dpi = 96
+	dpi = 150
 	bottom = false
 	width = 1500
 	height = ${settings.bar_height}
@@ -88,7 +88,7 @@
 [bar/workspaces]
 	monitor = ${env:MONITOR}
 	monitor-strict = true
-	dpi = 96
+	dpi = 120
 	bottom = true
 	width = ${settings.bar_width}
 	height = 26
