@@ -65,8 +65,12 @@ mySink = "alsa_output.pci-0000_00_1f.3.analog-stereo"
 -- Workspaces
 -- ------------------------------------------------------------------------
 
-myWorkspaces = map show ([1..9] ++ [0]) ++ ["E", "A", "S"]
+emailWorkspace = "E"
+socialWorkspace = "A"
+musicWorkspace = "S"
+dissWorkspace = "D"
 
+myWorkspaces = map show ([1..9] ++ [0]) ++ [emailWorkspace, socialWorkspace, musicWorkspace, dissWorkspace]
 
 -- ------------------------------------------------------------------------
 -- Scratchpads
@@ -180,7 +184,7 @@ tiled = \accent -> named "Tiled"
 	{-$ subLayout [] (Simplest ||| Accordion)-}
 	{-$ Simplest-}
 
-fullscreen = named "Fullscreen"
+fullscreen = named "\xf2d0"
 	$ avoidStruts
 	$ noBorders
 	$ fullscreenFull
@@ -198,7 +202,7 @@ tabs = \accent -> named "Tabs"
 	$ addTabs shrinkText (myTabTheme accent)
 	$ Simplest
 
-threeCol = \accent -> named "ThreeCol"
+threeCol = \accent -> named "\xf279"
 	$ addTopBar accent
 	$ avoidStruts
 	$ addTabs shrinkText (myTabTheme accent)
@@ -220,13 +224,13 @@ myLayout accent = mirrorToggle
 
 projects :: [Project]
 projects =
-	[ Project { projectName = "E"
+	[ Project { projectName = emailWorkspace
 			  , projectDirectory = "~/"
 			  , projectStartHook = Just $ do
 			  		spawn "google-chrome --app=https://webmail.hermes.cam.ac.uk"
 			  }
 
-	, Project { projectName = "A"
+	, Project { projectName = socialWorkspace
               , projectDirectory = "~/"
 			  , projectStartHook = Just $ do
 			  		sendMessage $ NextLayout
@@ -234,10 +238,16 @@ projects =
 					spawn "google-chrome --app=https://hangouts.google.com/?pli=1&authuser=1"
 			  }
 
-	, Project { projectName = "S"
+	, Project { projectName = musicWorkspace
 		      , projectDirectory = "~/"
 		      , projectStartHook = Just $ do
 			        spawn "spotify"
+		      }
+
+	, Project { projectName = dissWorkspace
+		      , projectDirectory = "~/repos/part2-dissertation"
+		      , projectStartHook = Just $ do
+			        spawn "subl ~/repos/part2-dissertation"
 		      }
 	]
 
@@ -257,6 +267,7 @@ myKeys = \c -> mkKeymap c $
   [ ("M-<Return>", spawn $ XMonad.terminal c)
   , ("M-S-<Return>", windows W.swapMaster)
   , ("M-<Backspace>", spawn mySystemMenu)
+  , ("M-<Space>", spawn myLauncher)
   , ("M-S-<Space>", setLayout $ XMonad.layoutHook c)
   , ("M-<Tab>", windows W.focusDown)
   , ("M-S-<Tab>", moveToNextNonEmptyNoWrap)
@@ -265,7 +276,7 @@ myKeys = \c -> mkKeymap c $
   , ("M-q", kill)
   , ("M-w", spawn myWebBrowser)
   , ("M-S-w", spawn (myWebBrowser ++ " --incognito"))
-  , ("M-e", toggleOrView "E")
+  , ("M-e", toggleOrView emailWorkspace)
   , ("M-r", spawn "alacritty -e ranger")
   , ("M-t", withFocused $ windows . W.sink)
   , ("M-y", namedScratchpadAction scratchpads "youtube")
@@ -277,11 +288,11 @@ myKeys = \c -> mkKeymap c $
   , ("M-S-p", spawn myScreenshot)
   , ("M-[", sendMessage $ IncGap 5 R)
   , ("M-]", sendMessage $ DecGap 5 R)
-  , ("M-a", toggleOrView "A")
-  , ("M-S-a", windows $ W.shift "A")
-  , ("M-s", toggleOrView "S")
+  , ("M-a", toggleOrView socialWorkspace)
+  , ("M-S-a", windows $ W.shift socialWorkspace)
+  , ("M-s", toggleOrView musicWorkspace)
   , ("M-S-s", spotifyPause)
-  , ("M-d", spawn myLauncher)
+  , ("M-d", toggleOrView dissWorkspace)
   {-, ("M-f", )-}
   {-, ("M-S-f", )-}
   {-, ("M-g", )-}
