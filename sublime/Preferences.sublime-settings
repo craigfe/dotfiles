@@ -1,10 +1,17 @@
 {
+	"added_words":
+	[
+		"Irmin"
+	],
 	"color_scheme": "Packages/ayu/ayu-mirage.tmTheme",
 	"dpi_scale": 1.3,
 	"font_face": "Roboto Mono",
-	"font_size": 11,
+	"font_size": 12,
+	"hot_exit": false,
 	"ignored_packages":
 	[
 	],
-	"theme": "ayu-mirage.sublime-theme"
+	"remember_open_files": false,
+	"theme": "ayu-mirage.sublime-theme",
+	"vintage_lines.force_mode": true
 }
