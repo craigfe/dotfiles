@@ -5,7 +5,7 @@
     follow = mouse
     
 	#   [{width}]x{height}[+/-{x}+/-{y}]
-    geometry = "300x5-30+20"
+    geometry = "600x5-30+20"
 
     # Show how many messages are currently hidden (because of geometry).
     indicate_hidden = yes
