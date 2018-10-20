@@ -31,7 +31,7 @@
 	monitor-strict = true
 	fixed-center = true
 	dpi = ${DOTFILES:polybar.dpi}
-	bottom = false
+	bottom = true
 	width = ${settings.bar_width}
 	height = ${settings.bar_height}
 	offset-x = 0
