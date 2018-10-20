@@ -226,6 +226,10 @@ autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 	inoremap Kj <ESC>
 	inoremap KJ <ESC>
 
+	" (S-)Enter to create a new line (below)/above
+	nmap <CR> o<Esc>k
+	nmap <S-CR> O<Esc>j
+
 	" Navigation across splits w/o <C-W>
 	nnoremap <C-J> <C-W><C-J>
 	nnoremap <C-K> <C-W><C-K>
