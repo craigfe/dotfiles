@@ -7,6 +7,7 @@
 	# General
 	pl = pull
 	ps = push
+	pf = push --force
 	co = checkout
 	df = diff
 	dfc = diff --cached
