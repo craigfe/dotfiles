@@ -43,6 +43,12 @@
 		Plugin 'ctrlpvim/ctrlp.vim' " Fuzzy file finder
 		Plugin 'takac/vim-hardtime' " Disables character-wise navigation on HardMode
 		Plugin 'nbouscal/vim-stylish-haskell'
+
+		" Autocompletion
+		Plugin 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+		Plugin 'Shougo/neosnippet.vim'
+		Plugin 'Shougo/neosnippet-snippets'
+		Plugin 'copy/deoplete-ocaml'
 	" }
 
 	" Cosmetic: {
@@ -131,8 +137,39 @@
 	" hi Normal ctermbg=none " Disable the background color
 
 	" Autocompletion: {
-		set omnifunc=syntaxcomplete#Complete
+
+		" Deoplete
+		let g:deoplete#enable_at_startup = 1
+		let g:deoplete#complete_method = "complete"
+		let g:deoplete#ignore_sources = {}
+		let g:deoplete#ignore_sources.ocaml = ['buffer', 'around', 'member', 'tag']
+		let g:deoplete#auto_complete_delay = 0
+		
+		if !exists('g:deoplete#omni_patterns')
+			  let g:deoplete#omni#input_patterns = {}
+		endif
+
+		let g:deoplete#omni#input_patterns.ocaml = '[^. *\t]\.\w*|\s\w*|#'
+
+		imap <silent><expr><Tab> pumvisible() ? "\<Down>"
+			\ : (neosnippet#jumpable() ? "\<Plug>(neosnippet_jump)"
+			\ : (<SID>is_whitespace() ? "\<Tab>"
+			\ : deoplete#manual_complete()))
+
+		smap <silent><expr><Tab> pumvisible() ? "\<Down>"
+			\ : (neosnippet#jumpable() ? "\<Plug>(neosnippet_jump)"
+			\ : (<SID>is_whitespace() ? "\<Tab>"
+			\ : deoplete#manual_complete()))
+
+		inoremap <expr><S-Tab>  pumvisible() ? "\<Up>" : "\<C-h>"
+
+		function! s:is_whitespace() "{{{
+			let col = col('.') - 1
+			return ! col || getline('.')[col - 1] =~? '\s'
+		endfunction
 	" }
+
+
 
 	" Spelling: {
 		set spelllang=en_gb
