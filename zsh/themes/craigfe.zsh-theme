@@ -63,5 +63,5 @@ zle -N zle-line-init
 zle -N zle-line-finish
 zle -N zle-keymap-select
 
-PROMPT='$(vi_mode_prompt_info)${ret_status}λ%b '
+PROMPT='$(vi_mode_prompt_info)${ret_status}ᐅ%b '
 RPROMPT=' ' # Prevent vi-mode indicator from showing up
