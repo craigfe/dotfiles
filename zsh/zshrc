@@ -22,6 +22,7 @@ plugins=(
 	git
 	vi-mode
 	ssh-agent
+	zsh-syntax-highlighting
 )
 
 source $ZSH/oh-my-zsh.sh
