@@ -67,10 +67,11 @@ mySink = "alsa_output.pci-0000_00_1f.3.analog-stereo"
 
 emailWorkspace = "E"
 socialWorkspace = "A"
+projectWorkspace = "P"
 musicWorkspace = "S"
 dissWorkspace = "D"
 
-myWorkspaces = map show ([1..9] ++ [0]) ++ [emailWorkspace, socialWorkspace, musicWorkspace, dissWorkspace]
+myWorkspaces = map show ([1..9] ++ [0]) ++ [emailWorkspace, socialWorkspace, projectWorkspace, musicWorkspace, dissWorkspace]
 
 -- ------------------------------------------------------------------------
 -- Scratchpads
@@ -244,6 +245,12 @@ projects =
 			        spawn "spotify"
 		      }
 
+	, Project { projectName = projectWorkspace
+		      , projectDirectory = "~/repos/trace-rpc"
+		      , projectStartHook = Just $ do
+			        spawn "subl ~/repos/trace-rpc"
+		      }
+
 	, Project { projectName = dissWorkspace
 		      , projectDirectory = "~/repos/part2-dissertation"
 		      , projectStartHook = Just $ do
@@ -271,6 +278,8 @@ myKeys = \c -> mkKeymap c $
   , ("M-S-<Space>", setLayout $ XMonad.layoutHook c)
   , ("M-<Tab>", windows W.focusDown)
   , ("M-S-<Tab>", moveToNextNonEmptyNoWrap)
+  , ("<Print>", spawn mySelectScreenshot)
+  , ("S-<Print>", spawn myScreenshot)
 
 	-- Main keys
   , ("M-q", kill)
@@ -284,8 +293,8 @@ myKeys = \c -> mkKeymap c $
   , ("M-i", windows W.swapUp)
   , ("M-o", moveTo Next EmptyWS)
   , ("M-S-o", moveTo Next EmptyWS)
-  , ("M-p", spawn mySelectScreenshot)
-  , ("M-S-p", spawn myScreenshot)
+  , ("M-p", toggleOrView projectWorkspace)
+  , ("M-S-p", windows $ W.shift projectWorkspace)
   , ("M-[", sendMessage $ IncGap 5 R)
   , ("M-]", sendMessage $ DecGap 5 R)
   , ("M-a", toggleOrView socialWorkspace)
