@@ -53,8 +53,8 @@ def parse_arguments(argv):
 
 def read_config():
     config = configparser.ConfigParser()
-    config.read(os.path.expanduser("~/repos/dotfiles/settings/default.conf"))
-    config.read(os.path.expanduser("~/repos/dotfiles/settings/user.conf"))
+    config.read(os.path.expanduser("~/repos/config/settings/default.conf"))
+    config.read(os.path.expanduser("~/repos/config/settings/user.conf"))
 
     return config
 
