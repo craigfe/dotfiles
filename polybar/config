@@ -54,7 +54,7 @@
 	font-1 = FontAwesome:pixelsize=12;3
 	font-2 = Font Awesome 5 Free:pixelsize=12;3
 	font-3 = Font Awesome 5 Free Solid:pixelsize=12;3
-	font-4 = Alte DIN 1451 Mittelschrift gepraegt:size=11;2
+	font-4 = Alte DIN 1451 Mittelschrift gepraegt:size=14;2
 	font-5 = Alte DIN 1451 Mittelschrift gepraegt:size=13;2
 	tray-position = right
 	tray-padding = 4
@@ -98,7 +98,7 @@
 	border-bottom-size = 10
 	border-color = ${colors.transparent}
 	font-0 = din1451alt:size=10;1
-	font-5 = unifont:size=14;1
+	font-5 = unifont:size=17;1
 	modules-center = i3
 
 [module/warnings]
