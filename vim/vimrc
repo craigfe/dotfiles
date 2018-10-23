@@ -64,6 +64,7 @@
 		" File type highlighting
 		Plugin 'mboughaba/i3config.vim' " i3config syntax highlighting
 		Plugin 'leafgarland/typescript-vim' " Typescript syntax highlighting
+		Plugin 'tikhomirov/vim-glsl' " GLSL syntax highlighting
 	" }
 " }
 
