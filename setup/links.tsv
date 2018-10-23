@@ -3,6 +3,7 @@
 bash/bashrc	~/.bashrc
 bash/profile	~/.profile
 compton/compton.conf	~/.config/compton.conf
+emacs/spacemacs ~/.spacemacs
 git/gitconfig	~/.gitconfig
 gnome/gnomerc	~/.gnomerc
 gnome/startup.desktop	~/.config/autostart/startup.desktop
