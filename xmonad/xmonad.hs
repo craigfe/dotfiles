@@ -58,7 +58,7 @@ myCalendar = "google-chrome --app=https://calendar.google.com"
 myScreenshot = "screenshot"
 myLauncher = "/home/craigfe/repos/config/rofi/menu/run"
 mySystemMenu = "/home/craigfe/repos/config/rofi/menu/system"
-myLock = "i3lock -c 000000"
+myLock = "/home/craigfe/.scripts/lock"
 mySink = "alsa_output.pci-0000_00_1f.3.analog-stereo"
 
 -- ------------------------------------------------------------------------
@@ -211,16 +211,14 @@ threeCol = \accent -> named "\xf279"
 	$ gaps [(U,gap), (D,gap), (R,gap), (L,gap)]
 	$ ThreeColMid 1 (1/20) (1/2)
 	where
-		gap = 5
+		gap = 10
 
 myLayout accent = mirrorToggle
-	$ reflectToggle
 	$ ifWider smallMonResWidth wideLayouts standardLayouts
 	where
 		wideLayouts = (fullscreen ||| threeCol accent)
 		standardLayouts = (fullscreen ||| tiled accent ||| accordion accent ||| tabs accent)
 		mirrorToggle  = mkToggle (single MIRROR)
-		reflectToggle = mkToggle (single REFLECTX)
 		smallMonResWidth = 1920
 
 projects :: [Project]
@@ -237,7 +235,9 @@ projects =
 			  		sendMessage $ NextLayout
 					spawn "google-chrome --app=https://www.messenger.com/"
 					spawn "google-chrome --app=https://hangouts.google.com/?pli=1&authuser=1"
+					spawn "google-chrome --app=https://ocamllabs.slack.com/"
 			  }
+
 
 	, Project { projectName = musicWorkspace
 		      , projectDirectory = "~/"
@@ -248,7 +248,7 @@ projects =
 	, Project { projectName = projectWorkspace
 		      , projectDirectory = "~/repos/trace-rpc"
 		      , projectStartHook = Just $ do
-			        spawn "subl ~/repos/trace-rpc"
+			        spawn "emacs ~/repos/trace-rpc"
 		      }
 
 	, Project { projectName = dissWorkspace
