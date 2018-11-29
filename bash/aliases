@@ -9,6 +9,7 @@ alias cmatrix='cmatrix -bC red' # Nerdy matrix
 alias d='docker'
 alias dc='docker-compose'
 alias dcr='docker-compose restart'
+alias e='emacsclient'
 alias g='git'
 alias gh='cd $(git rev-parse --show-toplevel)' # Go to the root of the git repository
 alias grep='grep --color=always' # Always highlight the desired sequence
