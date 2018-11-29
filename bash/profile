@@ -2,7 +2,8 @@
 
 [[ -f ~/.bashrc ]] && . ~/.bashrc
 
-export PATH=$PATH:$HOME/.scripts
+
+export PATH="$PATH:$HOME/.scripts:$HOME/.local/bin:$HOME/.cargo/bin:$HOME/go/src/github.com/xintron/xmonad-log:$HOME/.vim/bundle/vim-live-latex-preview/bin"
 export EDITOR="nvim"
 export TERMINAL="urxvt"
 export BROWSER="chromium --enable-plugins --force-device-scale-factor=1.25"
