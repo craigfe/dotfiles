@@ -1,0 +1,10 @@
+#!/bin/bash
+
+x=$(ps axch -o cmd,%mem --sort=-%mem | \
+	awk '{ sum[$1] += $2 } END { for (i in sum) printf ("<b>%s\%</b>\t\t<i>%s</i>\n", sum[i], i)}' | \
+	sort -rnk1 |
+	head -n 5)
+
+notify-send "Maximal CPU usage:" "\n$x"
+
+
