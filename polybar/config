@@ -180,7 +180,7 @@
 [module/memory]
 	type = internal/memory
 	interval = 2
-	label = "  %gb_free%"
+	label = "%{A1:~/.scripts/mem_intensive:}  %gb_free%%{A}"
 	format-foreground = ${colors.primary}
 
 [module/filesystem]
@@ -230,7 +230,6 @@
 	ramp-signal-4 = 
 	ramp-signal-foreground = ${colors.foreground}
 	format-connected-foreground = ${colors.primary}
-	click-left = bash -/home/bresilla/.i3/rofii/menu/wifi
 
 [module/date]
 	type = internal/date
