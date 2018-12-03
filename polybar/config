@@ -180,7 +180,7 @@
 [module/memory]
 	type = internal/memory
 	interval = 2
-	label = "  %gb_free%%"
+	label = "  %gb_free%"
 	format-foreground = ${colors.primary}
 
 [module/filesystem]
