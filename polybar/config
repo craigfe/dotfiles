@@ -63,7 +63,7 @@
 ; TOP DRY NET HOT SYC WCH
 ;;	modules-right = inbox redshift backlight wlan volume cpu memory battery date
 	modules-center = warnings
-	modules-right = redshift backlight wlan volume cpu memory battery date
+	modules-right = redshift backlight wlan volume cpu memory filesystem battery date
 
 [bar/center]
 	monitor = ${env:MONITOR}
@@ -174,14 +174,21 @@
 	format = <label>
 	type = internal/cpu
 	interval = 2
-	label = " %percentage%%"
+	label = "  %percentage%%"
 	format-foreground = ${colors.primary}
 
 [module/memory]
 	type = internal/memory
 	interval = 2
-	label = " %percentage_used%%"
+	label = "  %gb_free%%"
 	format-foreground = ${colors.primary}
+
+[module/filesystem]
+	type = internal/fs
+	mount-0 = /
+	label-mounted = "  %free%"
+	label-mounted-foreground = ${colors.primary}
+
 
 [module/temperature]
 	type = internal/temperature
