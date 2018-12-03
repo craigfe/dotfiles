@@ -5,6 +5,6 @@ x=$(ps axch -o cmd,%mem --sort=-%mem | \
 	sort -rnk1 |
 	head -n 5)
 
-notify-send "Maximal CPU usage:" "\n$x"
+notify-send "Maximal memory usage:" "\n$x"
 
 
