@@ -3,6 +3,7 @@
 
 \RequirePackage[a4paper,margin=1in]{geometry} % Override default (awful) margins
 \RequirePackage[titletoc,title]{appendix}
+\RequirePackage[T1]{fontenc}
 \RequirePackage{listings}
 \RequirePackage[dvipsnames]{xcolor} % Better colour support
 \RequirePackage{enumerate}
@@ -18,10 +19,7 @@
 \RequirePackage{mathtools}
 \RequirePackage{xparse}
 \RequirePackage{microtype}           % Slightly better typesetting, for nerds
-\RequirePackage{fontspec}
 \RequirePackage{scrextend}           % addmargin environment
-
-\renewcommand*{\ttdefault}{cmtt} % Restore tt font to default
 
 \newcommand{\Course}{<no course>}
 \newcommand{\SupervisionNumber}{0}
