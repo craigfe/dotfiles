@@ -31,3 +31,6 @@ export SDKMAN_DIR=$HOME'/.sdkman'
 [[ -s $HOME'/.sdkman/bin/sdkman-init.sh' ]] && source $HOME"/.sdkman/bin/sdkman-init.sh"
 
 [[ -f /usr/local/bin/terraform ]] && complete -C /usr/local/bin/terraform terraform
+
+# mutt background fix
+COLORFGBG="default;default"

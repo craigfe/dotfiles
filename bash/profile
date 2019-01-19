@@ -10,6 +10,9 @@ export BROWSER="chromium-browser --enable-plugins --force-device-scale-factor=1.
 export BROWSER_PRIVATE="chromium-browser --enable-plugins --force-device-scale-factor=1.25 --incognito"
 export MUSIC="spotify --force-device-scale-factor=1.1"
 export SUDO_ASKPASS=~/repos/dotfiles/rofi/menu/password
+export GIT_ASKPASS=~/repos/dotfiles/rofi/menu/password
+export SSH_ASKPASS=~/repos/dotfiles/rofi/menu/password
+
 export MONITOR_1="eDP-1"
 export MONITOR_2="HDMI-1"
 
