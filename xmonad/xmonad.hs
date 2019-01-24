@@ -1,4 +1,5 @@
 import qualified Codec.Binary.UTF8.String            as UTF8
+import           Control.Arrow                       hiding ((<+>), (|||))
 import           Data.Char
 import           Data.Maybe
 import           Graphics.X11.ExtraTypes
@@ -7,12 +8,15 @@ import           System.IO
 import           XMonad
 import           XMonad.Actions.CycleWS
 import           XMonad.Actions.DynamicProjects
+import           XMonad.Actions.Navigation2D
 import           XMonad.Actions.SpawnOn
+import           XMonad.Actions.WorkspaceNames
 import           XMonad.Hooks.DynamicLog
 import           XMonad.Hooks.ManageDocks
 import           XMonad.Hooks.ManageHelpers
 import           XMonad.Hooks.SetWMName
 import           XMonad.Layout.Accordion
+import           XMonad.Layout.BinarySpacePartition
 import           XMonad.Layout.Fullscreen
 import           XMonad.Layout.Gaps
 import           XMonad.Layout.IndependentScreens
@@ -36,6 +40,7 @@ import           XMonad.Util.Cursor
 import qualified XMonad.Util.ExtensibleState         as XS
 import           XMonad.Util.EZConfig
 import           XMonad.Util.NamedScratchpad
+import           XMonad.Util.Run
 import           XMonad.Util.Run                     (spawnPipe)
 import           XMonad.Util.WorkspaceCompare
 
@@ -45,6 +50,8 @@ import qualified XMonad.StackSet                     as W
 
 import qualified DBus                                as D
 import qualified DBus.Client                         as DC
+
+x |> f = f x
 
 -- ------------------------------------------------------------------------
 -- Application Names
@@ -167,7 +174,7 @@ addTopBar accent = noFrillsDeco shrinkText (myTopBarTheme accent)
 tiled = \accent -> named "Tiled"
 	$ avoidStruts
 	$ addTopBar accent
-	$ lessBorders OnlyFloat
+	{-$ lessBorders OnlyFloat-}
 	$ smartSpacing gap
 	$ gaps [(U,gap), (D,gap), (R,gap), (L,gap)]
 	$ Tall nmaster delta ratio
@@ -185,7 +192,8 @@ tiled = \accent -> named "Tiled"
 	{-$ subLayout [] (Simplest ||| Accordion)-}
 	{-$ Simplest-}
 
-fullscreen = named "\xf2d0"
+fullscreenName = "\xf2d0"
+fullscreen = named fullscreenName
 	$ avoidStruts
 	$ noBorders
 	$ fullscreenFull
@@ -203,7 +211,8 @@ tabs = \accent -> named "Tabs"
 	$ addTabs shrinkText (myTabTheme accent)
 	$ Simplest
 
-threeCol = \accent -> named "\xf279"
+threeColName = "\xf279"
+threeCol = \accent -> named threeColName
 	$ addTopBar accent
 	$ avoidStruts
 	$ addTabs shrinkText (myTabTheme accent)
@@ -211,7 +220,7 @@ threeCol = \accent -> named "\xf279"
 	$ gaps [(U,gap), (D,gap), (R,gap), (L,gap)]
 	$ ThreeColMid 1 (1/20) (1/2)
 	where
-		gap = 10
+		gap = 5
 
 myLayout accent = mirrorToggle
 	$ ifWider smallMonResWidth wideLayouts standardLayouts
@@ -268,12 +277,18 @@ myBorderWidth = 0
 -- ------------------------------------------------------------------------
 -- Key bindings
 -- ------------------------------------------------------------------------
+incGap :: Int -> X ()
+incGap n = sendMessage $ ModifyGaps $ map (\(d,s) -> (d, s + n))
+
+decGap :: Int -> X ()
+decGap n = sendMessage $ ModifyGaps $ map (\(d,s) -> (d, s - n))
 
 myModMask = mod4Mask
 myKeys = \c -> mkKeymap c $
   [ ("M-<Return>", spawn $ XMonad.terminal c)
   , ("M-S-<Return>", windows W.swapMaster)
   , ("M-<Backspace>", spawn mySystemMenu)
+  , ("M-S-<Backspace>", spawn "systemctl suspend")
   , ("M-<Space>", spawn myLauncher)
   , ("M-S-<Space>", setLayout $ XMonad.layoutHook c)
   , ("M-<Tab>", windows W.focusDown)
@@ -282,6 +297,9 @@ myKeys = \c -> mkKeymap c $
   , ("S-<Print>", spawn myScreenshot)
 
 	-- Main keys
+  , ("M--", decGap 10 >> decWindowSpacing 10)
+  , ("M-=", incGap 10 >> incWindowSpacing 10)
+  {-, ("M--", sendMessage ModifyGaps $ \g -> map (\(d,s) -> (d, s + 5)))-}
   , ("M-q", kill)
   , ("M-w", spawn myWebBrowser)
   , ("M-S-w", spawn (myWebBrowser ++ " --incognito"))
@@ -289,8 +307,8 @@ myKeys = \c -> mkKeymap c $
   , ("M-r", spawn "alacritty -e ranger")
   , ("M-t", withFocused $ windows . W.sink)
   , ("M-y", namedScratchpadAction scratchpads "youtube")
-  , ("M-u", windows W.swapDown)
-  , ("M-i", windows W.swapUp)
+  , ("M-u", sendMessage Shrink)
+  , ("M-i", sendMessage Expand)
   , ("M-o", moveTo Next EmptyWS)
   , ("M-S-o", moveTo Next EmptyWS)
   , ("M-p", toggleOrView projectWorkspace)
@@ -302,17 +320,23 @@ myKeys = \c -> mkKeymap c $
   , ("M-s", toggleOrView musicWorkspace)
   , ("M-S-s", spotifyPause)
   , ("M-d", toggleOrView dissWorkspace)
+  , ("M-S-d", windows $ W.shift dissWorkspace)
   {-, ("M-f", )-}
   {-, ("M-S-f", )-}
   {-, ("M-g", )-}
   {-, ("M-S-g", )-}
-  , ("M-h", sendMessage Shrink)
-  , ("M-j", windows W.focusDown)
-  , ("M-k", windows W.focusUp)
-  , ("M-l", sendMessage Expand)
+  , ("M-h", windowGo L False) -- focus left
+  , ("M-j", windowGo D False) -- focus down
+  , ("M-k", windowGo U False) -- focus up
+  , ("M-l", windowGo R False) -- focus right
+  , ("M-S-h", windowSwap L False) -- swap left
+  , ("M-S-j", windowSwap D False) -- swap down
+  , ("M-S-k", windowSwap U False) -- swap up
+  , ("M-S-l", windowSwap R False) -- swap right
   , ("M-C-l", spawn myScreensaver)
   , ("M-;", nextScreen)
   , ("M-S-;", shiftNextScreen)
+  , ("M-'", setWSName ())
   , ("M-n", sendMessage NextLayout)
   , ("M-S-n", toSubl NextLayout)
   , ("M-S-j", windows W.swapDown)
@@ -345,7 +369,11 @@ myKeys = \c -> mkKeymap c $
   	, (m, f) <- [("M-",W.view), ("M-S-",W.shift)]]
 
 	++ zipM "M-C-" dirKeys dirs (sendMessage . pullGroup)
+
 	where
+
+	setWSName () = runProcessWithInput "/home/craigfe/repos/config/rofi/menu/print" [] ""
+		>>= setCurrentWorkspaceName
 
 	spotifyPause = spawn "dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause >> /dev/null"
 
@@ -427,17 +455,24 @@ myStartupHook = do
 -- Log hook
 -- -----------------------------------------------------------------------
 
-myLogHook :: String -> DC.Client -> PP
-myLogHook accent dbus = def
-    { ppOutput = dbusOutput dbus
-    , ppCurrent = wrap ("%{F" ++ accent ++ "} ") " %{F-}"
-    , ppVisible = wrap ("%{F" ++ blue ++ "} ") " %{F-}"
-    , ppUrgent = wrap ("%{F" ++ red ++ "} ") " %{F-}"
-    , ppHidden = wrap " " " "
-    , ppWsSep = "  "
-    , ppSep = "  |  "
-    , ppTitle = \t -> ""
-    }
+myLogHookPP :: String -> DC.Client -> X PP
+myLogHookPP accent dbus = do
+	nameMap <- getWorkspaceNames'
+	let names = nameFormat nameMap
+	return def { ppOutput = dbusOutput dbus
+		, ppCurrent = names >>> (addPolybarColour accent) >>> (wrap "[" "]")
+		, ppVisible = names >>> (addPolybarColour blue)
+		, ppUrgent = names >>> (addPolybarColour red)
+		, ppHidden = names >>> (wrap "  " "  ")
+		, ppWsSep = " "
+		, ppSep = "  |   "
+		, ppTitle = const ""
+		}
+		where
+		addPolybarColour c = wrap ("%{F" ++ c ++ "} ") " %{F-}"
+		nameFormat nameMap x = case nameMap x of
+			Nothing -> x
+			Just v -> (x ++ " : " ++ v)
 
 -- Emit a DBus signal on log updates
 dbusOutput :: DC.Client -> String -> IO ()
@@ -455,6 +490,9 @@ myAddSpaces :: Int -> String -> String
 myAddSpaces len str = sstr ++ replicate (len - length sstr) ' '
   where
     sstr = shorten len str
+
+myLogHook :: String -> DC.Client -> X ()
+myLogHook accent dbus = myLogHookPP accent dbus >>= dynamicLogWithPP
 
 -- ------------------------------------------------------------------------
 -- Set defaults
@@ -476,14 +514,23 @@ defaults accent = def {
 --     handleEventHook    = E.fullscreenEventHook
 }
 
+myNavigation = def {
+	layoutNavigation = [ (threeColName, centerNavigation)
+						, (fullscreenName, centerNavigation)]
+	, unmappedWindowRect = [ (fullscreenName, singleWindowRect) ]
+	}
+
 main = do
 	accentFile <- readFile "/home/craigfe/repos/config/colours/out/theme"
 	dbus <- DC.connectSession
+	let accent = init accentFile
 	xmobar defaultConfig { modMask = mod4Mask }
 	xmonad
+		$ withNavigation2DConfig myNavigation
 		$ dynamicProjects projects
-		$ docks (defaults (init accentFile)) {
+		$ docks (defaults accent) {
 		workspaces = myWorkspaces,
 		handleEventHook = docksEventHook,
-		logHook = dynamicLogWithPP (myLogHook (init accentFile) dbus)
-	}
+		logHook = myLogHook accent dbus
+		}
+
