@@ -1,0 +1,13 @@
+#!/bin/bash
+
+DOTFILES="$(dirname "$(dirname "$(dirname "$(realpath $0)"))")")"
+THEME_INPUT="$HOME/.config/rofi/styles/print.css"
+
+# Generate the theme file using a named pipe
+THEME_OUTPUT="$HOME/.config/rofi/styles/.pipe-theme"
+[ ! -p $THEME_OUTPUT ] && mkfifo "$HOME/.config/rofi/styles/.pipe-theme"
+$DOTFILES/settings/settings stream "$THEME_INPUT" "$THEME_OUTPUT" &
+
+rofi -dmenu -p "" -theme "$THEME_OUTPUT" -i |\
+	awk '{print toupper($0)}' |\
+	tr -d '\n'
