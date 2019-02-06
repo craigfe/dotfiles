@@ -6,6 +6,7 @@
 \RequirePackage[T1]{fontenc}
 \RequirePackage{listings}
 \RequirePackage[dvipsnames]{xcolor} % Better colour support
+\RequirePackage[UKenglish]{datetime}
 \RequirePackage{enumerate}
 \RequirePackage{color}
 \RequirePackage{graphicx}
@@ -28,6 +29,13 @@
 \newcommand{\Me}{Craig Ferguson}
 \newcommand{\CRSID}{cf443}
 \newcommand{\College}{Churchill College}
+
+\newdateformat{withoutyearformat}{%
+  \dayofweekname{\THEDAY}{\THEMONTH}{\THEYEAR}\ %
+  \ordinal{DAY}\ %
+  \monthname[\THEMONTH]%
+}
+\withoutyearformat
 
 % Set default Java colouring -- similar to Eclipse IDE
 \definecolor{javared}{rgb}{0.6,0,0} % for strings
