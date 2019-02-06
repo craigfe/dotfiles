@@ -28,6 +28,7 @@ import           XMonad.Layout.NoBorders
 import           XMonad.Layout.NoFrillsDecoration
 import           XMonad.Layout.PerScreen
 import           XMonad.Layout.Reflect
+import           XMonad.Layout.Reflect
 import           XMonad.Layout.ShowWName
 import           XMonad.Layout.Simplest
 import           XMonad.Layout.Spacing
@@ -65,6 +66,7 @@ myCalendar = "google-chrome --app=https://calendar.google.com"
 myScreenshot = "screenshot"
 myLauncher = "/home/craigfe/repos/config/rofi/menu/run"
 mySystemMenu = "/home/craigfe/repos/config/rofi/menu/system"
+myAccentFile = "/home/craigfe/repos/config/colours/out/theme"
 myLock = "/home/craigfe/.scripts/lock"
 mySink = "alsa_output.pci-0000_00_1f.3.analog-stereo"
 
@@ -153,7 +155,7 @@ myTabTheme accent = def
     , inactiveColor         = background
     , inactiveTextColor     = backgroundText
     , inactiveBorderColor   = background
-	, decoHeight            = 20
+    , decoHeight            = 20
     }
 
 myTopBarTheme accent = def
@@ -171,101 +173,72 @@ myTopBarTheme accent = def
 
 addTopBar accent = noFrillsDeco shrinkText (myTopBarTheme accent)
 
-tiled = \accent -> named "Tiled"
-	$ avoidStruts
-	$ addTopBar accent
-	{-$ lessBorders OnlyFloat-}
-	$ smartSpacing gap
-	$ gaps [(U,gap), (D,gap), (R,gap), (L,gap)]
-	$ Tall nmaster delta ratio
-	where
-		gap = 5
-		nmaster = 1
-		ratio = 1/2
-		delta = 3/100
-
-{-flex = \accent -> named "Flex"-}
-	{-$ avoidStruts-}
-	{-$ addTopBar accent-}
-	{-$ windowNavigation-}
-	{-$ addTabs shrinkText (myTabTheme accent)-}
-	{-$ subLayout [] (Simplest ||| Accordion)-}
-	{-$ Simplest-}
-
 fullscreenName = "\xf2d0"
 fullscreen = named fullscreenName
-	$ avoidStruts
-	$ noBorders
-	$ fullscreenFull
-	$ Full
-
-accordion = \accent -> named "Accordion"
-	$ avoidStruts
-	$ addTopBar accent
-	$ noBorders
-	$ Accordion
-
-tabs = \accent -> named "Tabs"
-	$ addTopBar accent
-	$ avoidStruts
-	$ addTabs shrinkText (myTabTheme accent)
-	$ Simplest
+  $ avoidStrutsOn []
+  $ noBorders
+  $ fullscreenFull
+  $ Full
 
 threeColName = "\xf279"
 threeCol = \accent -> named threeColName
-	$ addTopBar accent
-	$ avoidStruts
-	$ addTabs shrinkText (myTabTheme accent)
-	$ smartSpacing gap
-	$ gaps [(U,gap), (D,gap), (R,gap), (L,gap)]
-	$ ThreeColMid 1 (1/20) (1/2)
-	where
-		gap = 5
+  $ addTopBar accent
+  $ avoidStruts
+  $ windowNavigation
+  $ addTabs shrinkText (myTabTheme accent)
+  $ subLayout [0,1] (Simplest ||| Accordion)
+  $ mkToggle (single REFLECTX)
+  $ smartSpacing gap
+  $ gaps [(U,gap), (D,gap), (R,gap), (L,gap)]
+  $ tcm
+  where
+    tcm = ThreeColMid 1 (1/20) (1/2)
+    gap = 5
 
 myLayout accent = mirrorToggle
-	$ ifWider smallMonResWidth wideLayouts standardLayouts
-	where
-		wideLayouts = (fullscreen ||| threeCol accent)
-		standardLayouts = (fullscreen ||| tiled accent ||| accordion accent ||| tabs accent)
-		mirrorToggle  = mkToggle (single MIRROR)
-		smallMonResWidth = 1920
+  (fullscreen ||| threeCol accent)
+  {-ifWider smallMonResWidth wideLayouts standardLayouts-}
+  where
+    {-wideLayouts = (fullscreen ||| threeCol accent)-}
+    {-standardLayouts = (fullscreen ||| tiled accent ||| accordion accent ||| tabs accent)-}
+    mirrorToggle  = mkToggle (single MIRROR)
+    {-smallMonResWidth = 1920-}
 
 projects :: [Project]
 projects =
-	[ Project { projectName = emailWorkspace
-			  , projectDirectory = "~/"
-			  , projectStartHook = Just $ do
-			  		spawn "google-chrome --app=https://webmail.hermes.cam.ac.uk"
-			  }
+  [ Project { projectName = emailWorkspace
+            , projectDirectory = "~/"
+            , projectStartHook = Just $ do
+                spawn "google-chrome --app=https://webmail.hermes.cam.ac.uk"
+            }
 
-	, Project { projectName = socialWorkspace
-              , projectDirectory = "~/"
-			  , projectStartHook = Just $ do
-			  		sendMessage $ NextLayout
-					spawn "google-chrome --app=https://www.messenger.com/"
-					spawn "google-chrome --app=https://hangouts.google.com/?pli=1&authuser=1"
-					spawn "google-chrome --app=https://ocamllabs.slack.com/"
-			  }
+  , Project { projectName = socialWorkspace
+            , projectDirectory = "~/"
+            , projectStartHook = Just $ do
+                sendMessage $ NextLayout
+                spawn "google-chrome --app=https://www.messenger.com/"
+                spawn "google-chrome --app=https://hangouts.google.com/?pli=1&authuser=1"
+                spawn "google-chrome --app=https://ocamllabs.slack.com/"
+            }
 
+  , Project { projectName = musicWorkspace
+            , projectDirectory = "~/"
+            , projectStartHook = Just $ do
+                spawn "spotify"
+            }
 
-	, Project { projectName = musicWorkspace
-		      , projectDirectory = "~/"
-		      , projectStartHook = Just $ do
-			        spawn "spotify"
-		      }
+  , Project { projectName = projectWorkspace
+            , projectDirectory = "~/repos/trace-rpc"
+            , projectStartHook = Just $ do
+                spawn "emacs ~/repos/trace-rpc"
+            }
 
-	, Project { projectName = projectWorkspace
-		      , projectDirectory = "~/repos/trace-rpc"
-		      , projectStartHook = Just $ do
-			        spawn "emacs ~/repos/trace-rpc"
-		      }
-
-	, Project { projectName = dissWorkspace
-		      , projectDirectory = "~/repos/part2-dissertation"
-		      , projectStartHook = Just $ do
-			        spawn "subl ~/repos/part2-dissertation"
-		      }
-	]
+  , Project { projectName = dissWorkspace
+            , projectDirectory = "~/repos/part2-dissertation"
+            , projectStartHook = Just $ do
+                spawn "subl ~/repos/part2-dissertation"
+            }
+  ]
 
 -- ------------------------------------------------------------------------
 -- Colors and borders
@@ -296,9 +269,11 @@ myKeys = \c -> mkKeymap c $
   , ("<Print>", spawn mySelectScreenshot)
   , ("S-<Print>", spawn myScreenshot)
 
-	-- Main keys
-  , ("M--", decGap 10 >> decWindowSpacing 10)
-  , ("M-=", incGap 10 >> incWindowSpacing 10)
+  -- Main keys
+  , ("M--", incGap 10 >> incWindowSpacing 10)
+  , ("M-S--", incGap 5 >> incWindowSpacing 5)
+  , ("M-=", decGap 10 >> decWindowSpacing 10)
+  , ("M-S-=", decGap 5 >> decWindowSpacing 5)
   {-, ("M--", sendMessage ModifyGaps $ \g -> map (\(d,s) -> (d, s + 5)))-}
   , ("M-q", kill)
   , ("M-w", spawn myWebBrowser)
@@ -306,48 +281,40 @@ myKeys = \c -> mkKeymap c $
   , ("M-e", toggleOrView emailWorkspace)
   , ("M-r", spawn "alacritty -e ranger")
   , ("M-t", withFocused $ windows . W.sink)
-  , ("M-y", namedScratchpadAction scratchpads "youtube")
+  , ("M-y", onGroup W.focusUp')
   , ("M-u", sendMessage Shrink)
+  , ("M-M1-u", withFocused (sendMessage . UnMerge))
   , ("M-i", sendMessage Expand)
-  , ("M-o", moveTo Next EmptyWS)
+  , ("M-o", onGroup W.focusDown')
   , ("M-S-o", moveTo Next EmptyWS)
   , ("M-p", toggleOrView projectWorkspace)
   , ("M-S-p", windows $ W.shift projectWorkspace)
-  , ("M-[", sendMessage $ IncGap 5 R)
-  , ("M-]", sendMessage $ DecGap 5 R)
+  {-, ("M-[", sendMessage $ DecGap 5 R)-}
+  {-, ("M-]", sendMessage $ IncGap 5 R)-}
   , ("M-a", toggleOrView socialWorkspace)
   , ("M-S-a", windows $ W.shift socialWorkspace)
   , ("M-s", toggleOrView musicWorkspace)
   , ("M-S-s", spotifyPause)
   , ("M-d", toggleOrView dissWorkspace)
   , ("M-S-d", windows $ W.shift dissWorkspace)
-  {-, ("M-f", )-}
+  , ("M-f", sendMessage ToggleStruts)
   {-, ("M-S-f", )-}
   {-, ("M-g", )-}
   {-, ("M-S-g", )-}
-  , ("M-h", windowGo L False) -- focus left
-  , ("M-j", windowGo D False) -- focus down
-  , ("M-k", windowGo U False) -- focus up
-  , ("M-l", windowGo R False) -- focus right
-  , ("M-S-h", windowSwap L False) -- swap left
-  , ("M-S-j", windowSwap D False) -- swap down
-  , ("M-S-k", windowSwap U False) -- swap up
-  , ("M-S-l", windowSwap R False) -- swap right
-  , ("M-C-l", spawn myScreensaver)
+
   , ("M-;", nextScreen)
   , ("M-S-;", shiftNextScreen)
   , ("M-'", setWSName ())
+  , ("M-#", sendMessage $ Toggle REFLECTX)
   , ("M-n", sendMessage NextLayout)
   , ("M-S-n", toSubl NextLayout)
-  , ("M-S-j", windows W.swapDown)
-  , ("M-S-k", windows W.swapUp)
+  , ("M-M1-m", withFocused (sendMessage . MergeAll))
   , ("M-x", spawn myLock)
   , ("M-c", spawn myCalendar)
   , ("M-,", sendMessage (IncMasterN 1))
   , ("M-.", sendMessage (IncMasterN (-1)))
-  , ("M-/", sendMessage $ Toggle MIRROR)
 
-	-- Function keys
+  -- Function keys
   , ("M-<F2>", restart "xmonad" True)
   , ("M-S-<F2>", io exitSuccess)
 
@@ -362,27 +329,31 @@ myKeys = \c -> mkKeymap c $
   , ("<XF86AudioNext>", spawn "playerctl next")
   ]
   ++
-  -- mod-[0..9], Switch to workspace N
+  -- mod-[0..9]      , Switch to workspace N
   -- mod-shift-[0..9], Move client to workspace N
   [(m ++ k, windows $ f w)
-  	| (w, k) <- zip (XMonad.workspaces c) myWorkspaces
-  	, (m, f) <- [("M-",W.view), ("M-S-",W.shift)]]
+    | (w, k) <- zip (XMonad.workspaces c) myWorkspaces
+    , (m, f) <- [("M-",W.view), ("M-S-",W.shift)]]
 
-	++ zipM "M-C-" dirKeys dirs (sendMessage . pullGroup)
+  -- mod-[h,j,k,l],       Switch focused window
+  -- mod-shift-[h,j,k,l], Move focused window
+  -- mod-alt-[h,j,k,l],   Push focused window into sublayout
+  ++ zipM "M-"    dirKeys dirs (\dir -> windowGo dir False)
+  ++ zipM "M-S-"  dirKeys dirs (\dir -> windowSwap dir False)
+  ++ zipM "M-M1-" dirKeys dirs (sendMessage . pushGroup)
 
-	where
+  where
+    setWSName () = runProcessWithInput "/home/craigfe/repos/config/rofi/menu/print" [] ""
+            >>= setCurrentWorkspaceName
 
-	setWSName () = runProcessWithInput "/home/craigfe/repos/config/rofi/menu/print" [] ""
-		>>= setCurrentWorkspaceName
+    spotifyPause = spawn "dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause >> /dev/null"
 
-	spotifyPause = spawn "dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause >> /dev/null"
+    zipM  mod keys actions f   = zipWith (\key action -> (mod ++ key, f action)) keys actions
+    zipM' mod keys actions f b = zipWith (\key action -> (mod ++ key, f action b)) keys actions
 
-	zipM  mod keys actions f   = zipWith (\key action -> (mod ++ key, f action)) keys actions
-	zipM' mod keys actions f b = zipWith (\key action -> (mod ++ key, f action b)) keys actions
-
-	notSP = (return $ ("SP" /=) . W.tag) :: X (WindowSpace -> Bool)
-	dirKeys = ["j","k","h","l"]
-	dirs = [D,U,L,R]
+    notSP = (return $ ("SP" /=) . W.tag) :: X (WindowSpace -> Bool)
+    dirKeys = ["j","k","h","l"]
+    dirs = [D,U,L,R]
 
 
 compareToCurrent :: X (WindowSpace -> Ordering)
@@ -521,7 +492,7 @@ myNavigation = def {
 	}
 
 main = do
-	accentFile <- readFile "/home/craigfe/repos/config/colours/out/theme"
+	accentFile <- readFile myAccentFile
 	dbus <- DC.connectSession
 	let accent = init accentFile
 	xmobar defaultConfig { modMask = mod4Mask }
