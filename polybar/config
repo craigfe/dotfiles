@@ -50,12 +50,12 @@
 	spacing = 2
 	module-margin-left = 4
 	module-margin-right = 4
-	font-0 = Alte DIN 1451 Mittelschrift:size=12;2
+	font-0 = Lato Heavy:size=12;2
 	font-1 = FontAwesome:pixelsize=12;3
 	font-2 = Font Awesome 5 Free:pixelsize=12;3
 	font-3 = Font Awesome 5 Free Solid:pixelsize=12;3
-	font-4 = Alte DIN 1451 Mittelschrift gepraegt:size=14;2
-	font-5 = Alte DIN 1451 Mittelschrift gepraegt:size=13;2
+	font-4 = Lato Heavy:size=12;2
+	font-5 = Lato Heavy:size=13;2
 	tray-position = right
 	tray-padding = 4
 	
