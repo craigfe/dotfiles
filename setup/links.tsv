@@ -8,9 +8,12 @@ git/gitconfig	~/.gitconfig
 gnome/gnomerc	~/.gnomerc
 gnome/startup.desktop	~/.config/autostart/startup.desktop
 i3/	~/.config/i3/
+ipsec/ipsec.conf	/etc/ipsec.conf
 latex/	~/texmf/tex/latex/
 linting/stylish-haskell/	~/.config/stylish-haskell/
 polybar/config	~/.config/polybar
+networkmanager/	/etc/NetworkManager/
+ranger/	~/.config/ranger
 ranger/	~/.config/ranger
 scripts/	~/.scripts/
 shortcuts/	~/.shortcuts/
