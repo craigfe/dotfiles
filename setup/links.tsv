@@ -13,6 +13,7 @@ latex/	~/texmf/tex/latex/
 linting/stylish-haskell/	~/.config/stylish-haskell/
 polybar/config	~/.config/polybar
 networkmanager/	/etc/NetworkManager/
+nomacs/settings.ini	~/.local/share/nomacs/settings.ini
 ranger/	~/.config/ranger
 ranger/	~/.config/ranger
 scripts/	~/.scripts/
