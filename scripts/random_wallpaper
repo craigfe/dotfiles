@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+IMG="$(find "$1" -name \*.jpg -o -name \*.png -type f |\
+	shuf -n 1)"
+
+~/.scripts/set_wallpaper "$IMG"
+
+

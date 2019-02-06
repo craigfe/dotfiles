@@ -8,7 +8,7 @@ THEME_OUTPUT="$HOME/.config/rofi/styles/.pipe-theme"
 [ ! -p $THEME_OUTPUT ] && mkfifo "$HOME/.config/rofi/styles/.pipe-theme"
 $DOTFILES/settings/settings stream "$THEME_INPUT" "$THEME_OUTPUT" &
 
-action=$(echo -e "RELOAD\nCOLOUR\nBLUETOOTH\nLOCK\nSUSPEND\nLOGOUT\nREBOOT\nPOWEROFF" | \
+action=$(echo -e "RELOAD\nCOLOUR\nBLUETOOTH\nWALLPAPER\nLOCK\nSUSPEND\nLOGOUT\nREBOOT\nPOWEROFF" | \
 	awk '{print $(NF-1)}' | \
 	rofi -theme "$THEME_OUTPUT" -dmenu -i -p "SYSTEM: ")
 
@@ -29,6 +29,10 @@ case $action in
 
 	COLOUR)
 		exec ~/.config/rofi/menu/colour
+	;;
+
+	WALLPAPER)
+		exec ~/.scripts/random_wallpaper ~/repos/wallpapers
 	;;
 
 	LOCK)
