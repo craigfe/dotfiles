@@ -65,6 +65,8 @@ bindkey -M menuselect 'k' vi-up-line-or-history
 bindkey -M menuselect 'l' vi-forward-char
 bindkey -M menuselect 'j' vi-down-line-or-history
 
+bindkey '^[[[SE' autosuggest-execute
+
 # OPAM configuration
 . /home/craigfe/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true
 
