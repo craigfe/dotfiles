@@ -1,5 +1,5 @@
 #!/bin/bash
 
 while true; do 
-	ls "$1" | entr xelatex "$1"
+	ls "$1" | entr tectonic "$1"
 done
