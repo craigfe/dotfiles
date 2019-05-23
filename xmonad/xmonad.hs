@@ -59,9 +59,10 @@ x |> f = f x
 -- ------------------------------------------------------------------------
 
 myTerminal = "alacritty"
+myPdfViewer = "zathura"
 myScreensaver = "/usr/bin/gnome-screensaver-command --lock"
 mySelectScreenshot = "screenshot_clipboard"
-myWebBrowser = "google-chrome --force-device-scale-factor=1.25"
+myWebBrowser = "firefox-trunk"
 myCalendar = "google-chrome --app=https://calendar.google.com"
 myScreenshot = "screenshot"
 myLauncher = "/home/craigfe/repos/config/rofi/menu/run"
@@ -69,7 +70,6 @@ mySystemMenu = "/home/craigfe/repos/config/rofi/menu/system"
 myAccentFile = "/home/craigfe/repos/config/colours/out/theme"
 myLock = "/home/craigfe/.scripts/lock"
 mySink = "alsa_output.pci-0000_00_1f.3.analog-stereo"
-
 -- ------------------------------------------------------------------------
 -- Workspaces
 -- ------------------------------------------------------------------------
@@ -236,7 +236,7 @@ projects =
   , Project { projectName = dissWorkspace
             , projectDirectory = "~/repos/part2-dissertation"
             , projectStartHook = Just $ do
-                spawn "subl ~/repos/part2-dissertation"
+                spawn "em ~/repos/part2-dissertation"
             }
   ]
 
@@ -264,7 +264,7 @@ myKeys = \c -> mkKeymap c $
   , ("M-S-<Backspace>", spawn "systemctl suspend")
   , ("M-<Space>", spawn myLauncher)
   , ("M-S-<Space>", setLayout $ XMonad.layoutHook c)
-  , ("M-<Tab>", windows W.focusDown)
+  , ("M-<Tab>", sendMessage $ Toggle REFLECTX)
   , ("M-S-<Tab>", moveToNextNonEmptyNoWrap)
   , ("<Print>", spawn mySelectScreenshot)
   , ("S-<Print>", spawn myScreenshot)
@@ -305,10 +305,11 @@ myKeys = \c -> mkKeymap c $
   , ("M-;", nextScreen)
   , ("M-S-;", shiftNextScreen)
   , ("M-'", setWSName ())
-  , ("M-#", sendMessage $ Toggle REFLECTX)
+  -- , ("M-#", )
   , ("M-n", sendMessage NextLayout)
   , ("M-S-n", toSubl NextLayout)
   , ("M-M1-m", withFocused (sendMessage . MergeAll))
+  , ("M-z", spawn myPdfViewer)
   , ("M-x", spawn myLock)
   , ("M-c", spawn myCalendar)
   , ("M-,", sendMessage (IncMasterN 1))
