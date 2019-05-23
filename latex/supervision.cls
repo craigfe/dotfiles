@@ -4,6 +4,9 @@
 \RequirePackage[a4paper,margin=1in]{geometry} % Override default (awful) margins
 \RequirePackage[titletoc,title]{appendix}
 \RequirePackage[T1]{fontenc}
+\RequirePackage{amsmath}
+\RequirePackage{amsfonts}
+\RequirePackage{amssymb}
 \RequirePackage{listings}
 \RequirePackage[dvipsnames]{xcolor} % Better colour support
 \RequirePackage[UKenglish]{datetime}
@@ -21,10 +24,11 @@
 \RequirePackage{xparse}
 \RequirePackage{microtype}           % Slightly better typesetting, for nerds
 \RequirePackage{scrextend}           % addmargin environment
+\RequirePackage{caption} % Custom caption format
 
 \newcommand{\Course}{<no course>}
 \newcommand{\SupervisionNumber}{0}
-\newcommand{\Title}{\Course\ - Supervision \SupervisionNumber}
+\newcommand{\Title}{\Course\ -- Supervision \SupervisionNumber}
 \newcommand{\Date}{\today}
 \newcommand{\Me}{Craig Ferguson}
 \newcommand{\CRSID}{cf443}
@@ -53,6 +57,11 @@ morecomment=[s][\color{javadocblue}]{/**}{*/},
 tabsize=3,
 showspaces=false,
 showstringspaces=false}
+
+% Captions
+\captionsetup[figure]{width=0.8\textwidth,labelfont=sc,textfont={it}}
+\captionsetup[table]{width=0.8\textwidth,labelfont=sc,textfont={it}}
+\captionsetup[lstlisting]{width=0.8\textwidth,labelfont=sc,textfont={it}}
 
  % Define the header format
 \title{\vspace{-1.7cm}\textsc{\Title}}
