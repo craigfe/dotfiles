@@ -2,35 +2,5 @@
 
 shopt -s autocd # Allow cd-ing into a directory by typing the directory name
 
-# Configure the PS1 environment variable (terminal prompt)
-if [ $(id -u) -eq 0 ];
-then # root user
-	export PS1='\[\033[1;31m\][\[\033[1;36m\]\u\[\033[1;31m\]@\[\033[1;32m\]\h \[\033[1;31m\]: \[\033[1;35m\]\W\[\033[1;31m\]]# \[\033[0m\]'
-else # not root user
-	export PS1='\[\033[1;31m\][\[\033[1;36m\]\u\[\033[1;31m\]@\[\033[1;32m\]\h \[\033[1;31m\]: \[\033[1;35m\]\W\[\033[1;31m\]]$ \[\033[0m\]'
-fi
-
 # Use vim mode
 set -o vi
-
-# Colour schemes
-# (cat ~/.cache/wal/sequences &) # Import colour scheme from 'wal' asychronously
-
-# Set functions
-function swap()
-{
-    local TMPFILE=tmp.$$
-    mv "$1" $TMPFILE && mv "$2" "$1" && mv $TMPFILE $2
-}
-
-if  [ -f ~/.aliases ]; then
-	. ~/.aliases
-fi
-
-export SDKMAN_DIR=$HOME'/.sdkman'
-[[ -s $HOME'/.sdkman/bin/sdkman-init.sh' ]] && source $HOME"/.sdkman/bin/sdkman-init.sh"
-
-[[ -f /usr/local/bin/terraform ]] && complete -C /usr/local/bin/terraform terraform
-
-# mutt background fix
-COLORFGBG="default;default"

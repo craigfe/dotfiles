@@ -1,18 +1,35 @@
 #!/bin/bash
+# shellcheck source=/dev/null
 
-[[ -f ~/.bashrc ]] && . ~/.bashrc
-
+[[ -f ~/.bashrc ]]                && . ~/.bashrc
+[[ -f ~/.aliases ]]               && . ~/.aliases
+[[ -f ~/.fzf.bash ]]              && . ~/.fzf.bash
+[[ -f ~/.secrets/aws.sh ]]        && . ~/.secrets/aws.sh
+[[ -f /usr/local/bin/terraform ]] && complete -C /usr/local/bin/terraform terraform
 
 export PATH="$PATH:$HOME/.scripts:$HOME/.local/bin:$HOME/.cargo/bin:$HOME/go/src/github.com/xintron/xmonad-log:$HOME/.vim/bundle/vim-live-latex-preview/bin"
-export EDITOR="nvim"
+export EDITOR="emacsclient --alternate-editor='emacs' --no-wait --create-frame"
 export TERMINAL="alacritty"
 export BROWSER="chromium-browser --enable-plugins --force-device-scale-factor=1.25"
 export BROWSER_PRIVATE="chromium-browser --enable-plugins --force-device-scale-factor=1.25 --incognito"
 export MUSIC="spotify --force-device-scale-factor=1.1"
 export SUDO_ASKPASS=~/repos/dotfiles/rofi/menu/password
-export GIT_ASKPASS=~/repos/dotfiles/rofi/menu/password
+# export GIT_ASKPASS=~/repos/dotfiles/rofi/menu/password
 export SSH_ASKPASS=~/repos/dotfiles/rofi/menu/password
+
+export SDKMAN_DIR=$HOME'/.sdkman'
+[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
 
 export MONITOR_1="eDP-1"
 export MONITOR_2="HDMI-1"
 
+# Configure the PS1 environment variable (terminal prompt)
+if [ "$(id -u)" -eq 0 ];
+then # root user
+	export PS1='\[\033[1;31m\][\[\033[1;36m\]\u\[\033[1;31m\]@\[\033[1;32m\]\h \[\033[1;31m\]: \[\033[1;35m\]\W\[\033[1;31m\]]# \[\033[0m\]'
+else # not root user
+	export PS1='\[\033[1;31m\][\[\033[1;36m\]\u\[\033[1;31m\]@\[\033[1;32m\]\h \[\033[1;31m\]: \[\033[1;35m\]\W\[\033[1;31m\]]$ \[\033[0m\]'
+fi
+
+# mutt background fix
+export COLORFGBG="default;default"
