@@ -6,6 +6,6 @@ mkdir -p "$HOME/.config/polybar/out"
 "$DOTFILES/settings/settings" stream "$HOME/.config/polybar/config" "$HOME/.config/polybar/out/config"
 
 for m in $(polybar --list-monitors | cut -d":" -f1); do
-	MONITOR=$m polybar --reload top --config="$HOME/.config/polybar/out/config" &
+	MONITOR=$m polybar --reload main --config="$HOME/.config/polybar/out/config" &
 done
 

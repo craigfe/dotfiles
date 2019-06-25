@@ -2,16 +2,16 @@
 
 [colors]
 	accent = ${DOTFILES:theme.accent}
-	bckgrd = #121212
+	bckgrd = #BB121212
 	select = #222222
 	warning = #CD0F0C
 
-	background = 			${self.bckgrd}
-	background-alt = 		${self.select}
-	foreground = 			#A5ffffff
-	primary = 			${self.accent}
-	alert = 			#bd2c40
-	transparent = 			#00000000
+	background = ${self.bckgrd}
+	background-alt = ${self.select}
+	foreground = #A5ffffff
+	primary =	${self.accent}
+	alert = #bd2c40
+	transparent = #00000000
 
 [global/wm]
 	margin-top = 0
@@ -26,7 +26,7 @@
 	bar_width = 100%
 	bar_height = 28
 
-[bar/top]
+[bar/main]
 	monitor = ${env:MONITOR}
 	monitor-strict = true
 	fixed-center = true
@@ -36,8 +36,8 @@
 	height = ${settings.bar_height}
 	offset-x = 0
 	offset-y = 0
-	background = ${colors.background}
 	foreground = ${colors.foreground}
+	background = ${colors.background}
 	overline-size = 0
 	overline-color = #f00
 	underline-size = 2
@@ -46,7 +46,6 @@
 	border-left-size = ${settings.bar_gap}
 	border-right-size = ${settings.bar_gap}
 	border-bottom-size = 0
-	border-color = ${colors.transparent}
 	spacing = 2
 	module-margin-left = 4
 	module-margin-right = 4
@@ -84,22 +83,6 @@
 	modules-left = search
 	click-left = bash ~/.i3/rofii/menu/search
 	;wm-restack = i3
-
-[bar/workspaces]
-	monitor = ${env:MONITOR}
-	monitor-strict = true
-	dpi = 120
-	bottom = true
-	width = ${settings.bar_width}
-	height = 26
-	background = ${colors.transparent}
-	foreground = ${colors.foreground}
-	border-top-size = 0
-	border-bottom-size = 10
-	border-color = ${colors.transparent}
-	font-0 = din1451alt:size=10;1
-	font-5 = unifont:size=17;1
-	modules-center = i3
 
 [module/warnings]
 	type = custom/script
