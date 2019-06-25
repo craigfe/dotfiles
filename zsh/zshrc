@@ -38,7 +38,7 @@ source $HOME/.aliases
 if [[ -n $SSH_CONNECTION ]]; then
   export EDITOR='vim'
 else
-  export EDITOR='nvim'
+  export EDITOR="emacsclient --alternate-editor='emacs' --no-wait --create-frame"
 fi
 
 # Compilation flags

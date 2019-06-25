@@ -115,12 +115,12 @@
 	" }
 
 	" Folding: {
-		set foldmethod=indent " 'zc' folds at the current indent; 'zo' opens a fold
-		set foldopen+=jump " Open folds if we jump into them
-		set foldlevel=99
+		"set foldmethod=indent " 'zc' folds at the current indent; 'zo' opens a fold
+		"set foldopen+=jump " Open folds if we jump into them
+		"set foldlevel=99
 
-		" Unfold on open
-		au BufRead * normal zR
+		"" Unfold on open
+		"au BufRead * normal zR
 		
 	" }
 
@@ -134,7 +134,7 @@
 	syntax enable
 	let ayucolor="mirage"
 	set termguicolors
-	colorscheme ayu
+	colorscheme monokai
 
 	" hi Normal ctermbg=none " Disable the background color
 
@@ -257,7 +257,7 @@ autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 
 	" Navigation using guides
 	noremap <Space><Tab> <Esc>/<Enter>"_c4l
-	inoremap <Space><Tab> <Esc>/<++><Enter>"_c4l
+	inoremap <Space><Tab> <Esc>/<Enter>"_c4l
 	vnoremap <Space><Tab> <Esc>/<++><Enter>"_c4l
 	map <Space><Tab> <Esc>/<++><Enter>"_c4l
 	inoremap ;gui <++>
@@ -270,10 +270,9 @@ autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 let g:ctrlp_show_hidden = 1
 let g:ctrlp_max_files = 0
 
-
 " Build configurations
-autocmd FileType tex inoremap <C-B> <Esc>:!xelatex<space><c-r>%<Enter>a
-autocmd FileType tex nnoremap <C-B> :!xelatex<space><c-r>%<Enter>
+autocmd VimLeave *.tex !texclear % " Automatically clean build files when closing a .tex file
+autocmd FileType tex nnoremap <silent> <leader>b :!xelatex<space>%<space><Bar><space>mopen<space>%:r.pdf<cr>
 
 " Filetypes: {
 	au BufRead,BufNewFile *.tex set filetype=tex
@@ -308,3 +307,36 @@ let g:livepreview_previewer = 'mupdf'
 		autocmd FileType tex inoremap ;btab \begin{tabular}<Enter>\toprule<Enter><++><Enter>\midrule<Enter><++><Enter>\bottomrule<Enter>\end{tabular}<Enter><Enter><++><Esc>8kA{}<Esc>i
 	" }
 " }
+
+" ## added by OPAM user-setup for vim / base ## 93ee63e278bdfc07d1139a748ed3fff2 ## you can edit, but keep this line
+let s:opam_share_dir = system("opam config var share")
+let s:opam_share_dir = substitute(s:opam_share_dir, '[\r\n]*$', '', '')
+
+let s:opam_configuration = {}
+
+function! OpamConfOcpIndent()
+  execute "set rtp^=" . s:opam_share_dir . "/ocp-indent/vim"
+endfunction
+let s:opam_configuration['ocp-indent'] = function('OpamConfOcpIndent')
+
+function! OpamConfOcpIndex()
+  execute "set rtp+=" . s:opam_share_dir . "/ocp-index/vim"
+endfunction
+let s:opam_configuration['ocp-index'] = function('OpamConfOcpIndex')
+
+function! OpamConfMerlin()
+  let l:dir = s:opam_share_dir . "/merlin/vim"
+  execute "set rtp+=" . l:dir
+endfunction
+let s:opam_configuration['merlin'] = function('OpamConfMerlin')
+
+let s:opam_packages = ["ocp-indent", "ocp-index", "merlin"]
+let s:opam_check_cmdline = ["opam list --installed --short --safe --color=never"] + s:opam_packages
+let s:opam_available_tools = split(system(join(s:opam_check_cmdline)))
+for tool in s:opam_packages
+  " Respect package order (merlin should be after ocp-index)
+  if count(s:opam_available_tools, tool) > 0
+    call s:opam_configuration[tool]()
+  endif
+endfor
+" ## end of OPAM user-setup addition for vim / base ## keep this line
