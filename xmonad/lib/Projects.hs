@@ -11,6 +11,8 @@ projectWorkspace = "P"
 musicWorkspace   = "S"
 dissWorkspace    = "D"
 
+projectsWorkspaces = [emailWorkspace, socialWorkspace, projectWorkspace, musicWorkspace, dissWorkspace]
+
 projects =
   dynamicProjects [ Project { projectName = emailWorkspace
             , projectDirectory = "~/"

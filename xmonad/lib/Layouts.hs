@@ -96,5 +96,5 @@ myLayout accent = mirrorToggle
   where
     {-wideLayouts = (fullscreen ||| threeCol accent)-}
     {-standardLayouts = (fullscreen ||| tiled accent ||| accordion accent ||| tabs accent)-}
-    mirrorToggle  = mkToggle (single MIRROR)
+    mirrorToggle = mkToggle (single MIRROR)
     {-smallMonResWidth = 1920-}

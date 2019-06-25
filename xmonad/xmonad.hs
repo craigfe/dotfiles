@@ -81,6 +81,7 @@ defaults accent = def {
 
 myNavigation = def {
 	  layoutNavigation   = [ (threeColName, centerNavigation)
+                               , (bspName, centerNavigation)
                                , (fullscreenName, centerNavigation) ]
 	, unmappedWindowRect = [ (fullscreenName, singleWindowRect) ]
 	}

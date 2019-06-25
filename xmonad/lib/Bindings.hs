@@ -7,29 +7,30 @@ import           XMonad.Actions.CycleWS
 import           XMonad.Actions.Navigation2D
 import           XMonad.Actions.WorkspaceNames
 import           XMonad.Hooks.ManageDocks
+import           XMonad.Layout.BinarySpacePartition
 import           XMonad.Layout.Gaps
+import           XMonad.Layout.LayoutCombinators
+import           XMonad.Layout.MultiToggle
+import           XMonad.Layout.Reflect
 import           XMonad.Layout.Spacing
 import           XMonad.Layout.SubLayouts
-import           XMonad.Layout.Reflect
-import           XMonad.Layout.MultiToggle
-import           XMonad.Util.Run
-import           XMonad.Util.Run                     (spawnPipe)
+import qualified XMonad.Layout.ToggleLayouts        as TL
 import           XMonad.Util.EZConfig
+import           XMonad.Util.Run
+import           XMonad.Util.Run                    (spawnPipe)
 import           XMonad.Util.WorkspaceCompare
 
-import Projects
+import           Layouts
+import           Projects
 
-import qualified Data.Map                            as M
-import qualified XMonad.StackSet                     as W
+import qualified Data.Map                           as M
+import qualified XMonad.StackSet                    as W
 
--- ------------------------------------------------------------------------
--- Workspaces
--- ------------------------------------------------------------------------
-
-myWorkspaces = map show ([1..9] ++ [0]) ++ [emailWorkspace, socialWorkspace, projectWorkspace, musicWorkspace, dissWorkspace]
+myWorkspaces = map show ([1..9] ++ [0]) ++ projectsWorkspaces
 
 myAccentFile       = "/home/craigfe/repos/config/colours/out/theme"
 myCalendar         = "google-chrome --app=https://calendar.google.com"
+myEditor           = "emacsclient --alternate-editor='emacs' --no-wait --create-frame"
 myLauncher         = "/home/craigfe/repos/config/rofi/menu/run"
 myLock             = "/home/craigfe/.scripts/lock"
 myPdfViewer        = "zathura"
@@ -39,7 +40,7 @@ mySelectScreenshot = "screenshot_clipboard"
 mySystemMenu       = "/home/craigfe/repos/config/rofi/menu/system"
 mySink             = "alsa_output.pci-0000_00_1f.3.analog-stereo"
 myTerminal         = "alacritty"
-myWebBrowser       = "firefox-trunk"
+myWebBrowser       = "google-chrome"
 
 compareToCurrent :: X (WindowSpace -> Ordering)
 compareToCurrent =
@@ -87,33 +88,43 @@ myKeys = \c -> mkKeymap c $
   , ("M-q", kill)
   , ("M-w", spawn myWebBrowser)
   , ("M-S-w", spawn (myWebBrowser ++ " --incognito"))
-  , ("M-e", toggleOrView emailWorkspace)
+  , ("M-e", spawn (myEditor ++ " ~"))
   , ("M-r", spawn "alacritty -e ranger")
   , ("M-t", withFocused $ windows . W.sink)
-  , ("M-y", onGroup W.focusUp')
-  , ("M-u", sendMessage Shrink)
   , ("M-M1-u", withFocused (sendMessage . UnMerge))
-  , ("M-i", sendMessage Expand)
-  , ("M-o", onGroup W.focusDown')
+
+  , ("M-y", (sendMessage Shrink) >> (sendMessage $ ExpandTowards L))
+  , ("M-u", sendMessage $ ExpandTowards D)
+  , ("M-i", sendMessage $ ExpandTowards U)
+  , ("M-o", (sendMessage Expand) >> (sendMessage $ ExpandTowards R))
+
+  -- , ("<XF86Wakeup>-h", sendMessage $ ExpandTowards L)
+  -- , ("<XF86Wakeup>-j", sendMessage $ ExpandTowards D)
+  -- , ("<XF86Wakeup>-k", sendMessage $ ExpandTowards U)
+  -- , ("<XF86Wakeup>-l", sendMessage $ ExpandTowards R)
+
+  , ("M-[", onGroup W.focusUp')
+  , ("M-]", onGroup W.focusDown')
+
   , ("M-S-o", moveTo Next EmptyWS)
-  , ("M-p", toggleOrView projectWorkspace)
-  , ("M-S-p", windows $ W.shift projectWorkspace)
-  {-, ("M-[", sendMessage $ DecGap 5 R)-}
-  {-, ("M-]", sendMessage $ IncGap 5 R)-}
+
+  -- , ("M-p", toggleOrView projectWorkspace)
+  -- , ("M-S-p", windows $ W.shift projectWorkspace)
+
   , ("M-a", toggleOrView socialWorkspace)
   , ("M-S-a", windows $ W.shift socialWorkspace)
   , ("M-s", toggleOrView musicWorkspace)
   , ("M-S-s", spotifyPause)
   , ("M-d", toggleOrView dissWorkspace)
   , ("M-S-d", windows $ W.shift dissWorkspace)
-  , ("M-f", sendMessage ToggleStruts)
-  {-, ("M-S-f", )-}
-  {-, ("M-g", )-}
-  {-, ("M-S-g", )-}
+  , ("M-f", sendMessage Rotate)
+  , ("M-S-f", sendMessage Swap)
+  , ("M-g", sendMessage ToggleStruts)
 
   , ("M-;", nextScreen)
   , ("M-S-;", shiftNextScreen)
   , ("M-'", setWSName ())
+
   -- , ("M-#", )
   , ("M-n", sendMessage NextLayout)
   , ("M-S-n", toSubl NextLayout)
@@ -129,14 +140,17 @@ myKeys = \c -> mkKeymap c $
   , ("M-S-<F2>", io exitSuccess)
 
     -- Multimedia keys
-  , ("<XF86AudioMute>", spawn $  "pactl set-sink-mute " ++ mySink ++ " toggle")
-  , ("<XF86AudioLowerVolume>", spawn $  "pactl set-sink-mute " ++ mySink ++ " false; pactl set-sink-volume " ++ mySink ++ " -5%")
-  , ("<XF86AudioRaiseVolume>", spawn $  "pactl set-sink-mute " ++ mySink ++ " false; pactl set-sink-volume " ++ mySink ++ " +5%")
+  , ("<XF86AudioMute>",         spawn $ "pactl set-sink-mute " ++ mySink ++ " toggle")
+  , ("<XF86AudioLowerVolume>",  spawn $ "pactl set-sink-mute " ++ mySink ++ " false; pactl set-sink-volume " ++ mySink ++ " -5%")
+  , ("<XF86AudioRaiseVolume>",  spawn $ "pactl set-sink-mute " ++ mySink ++ " false; pactl set-sink-volume " ++ mySink ++ " +5%")
   , ("<XF86MonBrightnessDown>", spawn "~/.scripts/backlight --dec 5")
-  , ("<XF86MonBrightnessUp>", spawn "~/.scripts/backlight --inc 5")
-  , ("<XF86AudioPrev>", spawn "playerctl previous")
-  , ("<XF86AudioPlay>", spawn "playerctl play-pause")
-  , ("<XF86AudioNext>", spawn "playerctl next")
+  , ("<XF86MonBrightnessUp>",   spawn "~/.scripts/backlight --inc 5")
+  , ("<XF86AudioPrev>",         spawn "playerctl previous")
+  , ("<XF86AudioPlay>",         spawn "playerctl play-pause")
+  , ("<XF86AudioNext>",         spawn "playerctl next")
+
+  -- , ("M-M1-1", setLayout fullscreen)
+  -- , ("M-M1-2", sendMessage $ JumpToLayout bspName)
   ]
 
   -- mod-[0..9]      , Switch to workspace N
