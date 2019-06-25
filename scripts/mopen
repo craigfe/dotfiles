@@ -6,25 +6,25 @@
 
 FILE="$1"
 if [ ! -r "$FILE" ]; then
-   PROG_NAME="`basename $0`"
+   PROG_NAME="$(basename "$0")"
    echo >&2 "$PROG_NAME: could not read file '$FILE'"
    echo >&2 "Usage: $PROG_NAME foo.pdf"
    exit 65
 fi
 
-USER_NAME="`id -un`"
+USER_NAME="$(id -un)"
 PDFREADER=mupdf
 
 # Fully qualify the path to the file
 set -e
-WHERE="`dirname "$FILE"`"
+WHERE="$(dirname "$FILE")"
 cd "$WHERE"
-FILE=`pwd`/`basename "$FILE"`
+FILE="$(pwd)/$(basename "$FILE")"
 set +e
 
 trap 'exit 0' USR2
-ps xo pid,user,command | while read pid uc; do
-   if echo "$uc" | egrep -q "^$USER_NAME.*$PDFREADER.*$FILE"; then
+ps xo pid,user,command | while read -r pid uc; do
+   if echo "$uc" | grep -Eq "^$USER_NAME.*$PDFREADER.*$FILE"; then
       kill -HUP "$pid"
       kill -USR2 "$$"
       # NOTE potential race condition if code moves on to the exec

@@ -5,7 +5,8 @@ export output="$HOME/.config/i3/config"
 export includes="$HOME/.config/i3/config.d"
 index="$HOME/.config/i3/config.d/index.txt"
 
-export DOTFILES="$(dirname "$(dirname "$(realpath $0)"))")"
+DOTFILES="$(dirname "$(dirname "$(realpath "$0")"))")"
+export DOTFILES
 
 # Replace the current config file
 [[ -f "$output" ]] && rm "$output"
@@ -23,34 +24,32 @@ EOF
 include_file () {
 
 	# Include a header for each file
-	header $1 >> $output
+	header "$1" >> "$output"
 
 	ext="${1##*.}"
 	case $ext in
-		# If the file is a 'conf' file, include it directly	
+		# If the file is a 'conf' file, include it directly
 		"conf")
-			cat "$includes/$1" | "$DOTFILES/settings/settings" stream >> $output
+			< "$includes/$1" "$DOTFILES/settings/settings" stream >> "$output"
 		;;
 
 		# If the file is a shell script, execute it
 		"sh")
-			"$includes/$1" | "$DOTFILES/settings/settings" stream >> $output
+			< "$includes/$1" "$DOTFILES/settings/settings" stream >> "$output"
 		;;
 
 		*)
 			>&2 echo "Unrecognised extension: $1"
 		;;
 	esac
-	
-	echo >> $output
+
+	echo >> "$output"
 }
 
 export -f include_file
 export -f header
 
-cat "$index" | \
-	grep -oP "import \K[a-zA-Z0-9\_\-\.]+(?=;)" | \
-	xargs -n 1 bash -c 'include_file "$@"' _
+grep -oP "import \K[a-zA-Z0-9\_\-\.]+(?=;)" "$index" | \
+	  xargs -n 1 bash -c 'include_file "$@"' _
 
-echo "# vi""m: filetype=i3config" >> $output
-
+echo "# vi""m: filetype=i3config" >> "$output"

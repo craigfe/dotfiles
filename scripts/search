@@ -1,6 +1,6 @@
 #!/bin/bash
 
-ROFI_OPTIONS=(-theme $HOME/.config/rofi/styles/bar.css -m 0 -width 1500)
+ROFI_OPTIONS=(-theme "$HOME/.config/rofi/styles/bar.css" -m 0 -width 1500)
 
 another=$(echo "runapp
 locate
@@ -15,7 +15,7 @@ if [ "$another" == "locate" ] ; then
 	find /media/bresilla/indrive1/Code | rofi "${ROFI_OPTIONS[@]}" -threads 0 -dmenu -i -p 'locate:' | xargs -r -0 xdg-open;
 
 elif [ "$another" == "websearch" ] ; then
-	surfraw -browser=$BROWSER $(sr -elvi | awk -F'-' '{print $1}' | sed '/:/d' | awk '{$1=$1};1' | rofi "${ROFI_OPTIONS[@]}" -kb-row-select 'Tab' -kb-row-tab 'Control+space' -dmenu -i -p 'websearch: ')
+	surfraw -browser="$BROWSER $(sr -elvi | awk -F'-' '{print $1}' | sed '/:/d' | awk '{$1=$1};1' | rofi "${ROFI_OPTIONS[@]}" -kb-row-select 'Tab' -kb-row-tab 'Control+space' -dmenu -i -p 'websearch: ')"
 
 elif [ "$another" == "youtube" ] ; then
 	exec ~/.config/rofi/menu/uplay;
@@ -36,5 +36,5 @@ elif [ -z "$another" ] ; then
 	echo "variable empty"
 
 else
-    xdg-open https://www.google.com/search?q=$another
+    xdg-open "https://www.google.com/search?q=$another"
 fi

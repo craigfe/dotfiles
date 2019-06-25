@@ -2,8 +2,8 @@
 
 # Get the current monitor dimensions
 dimensions=$(xrandr --current | grep -oP 'primary \K[0-9]*x[0-9]*')
-width=$(echo $dimensions | cut -d 'x' -f1)
-height=$(echo $dimensions | cut -d 'x' -f2)
+width=$(echo "$dimensions" | cut -d 'x' -f1)
+height=$(echo "$dimensions" | cut -d 'x' -f2)
 
 mess='[instance="www.messenger.com"]'
 mess_height=$height

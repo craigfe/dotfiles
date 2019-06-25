@@ -1,19 +1,19 @@
 #!/bin/bash
 
-DOTFILES="$(dirname "$(dirname "$(dirname "$(realpath $0)"))")")"
+DOTFILES="$(dirname "$(dirname "$(dirname "$(realpath "$0")"))")")"
 THEME_INPUT="$HOME/.config/rofi/styles/full.css"
 
 # Generate the theme file using a named pipe
 THEME_OUTPUT="$HOME/.config/rofi/styles/.pipe-theme"
-[ ! -p $THEME_OUTPUT ] && mkfifo "$HOME/.config/rofi/styles/.pipe-theme"
-$DOTFILES/settings/settings stream "$THEME_INPUT" "$THEME_OUTPUT" &
+[ ! -p "$THEME_OUTPUT" ] && mkfifo "$HOME/.config/rofi/styles/.pipe-theme"
+"$DOTFILES/settings/settings" stream "$THEME_INPUT" "$THEME_OUTPUT" &
 
 action=$(echo -e "RELOAD\nCOLOUR\nBLUETOOTH\nWALLPAPER\nLOCK\nSUSPEND\nLOGOUT\nREBOOT\nPOWEROFF" | \
 	awk '{print $(NF-1)}' | \
 	rofi -theme "$THEME_OUTPUT" -dmenu -i -p "SYSTEM: ")
 
 # Flush the pipe
-dd if=$THEME_OUTPUT iflag=nonblock of=/dev/null
+dd if="$THEME_OUTPUT" iflag=nonblock of=/dev/null
 
 case $action in
 
@@ -56,7 +56,7 @@ case $action in
 	;;
 
 	*)
-		echo $action
+		echo "$action"
 	;;
 
 esac

@@ -4,26 +4,25 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
-DOTFILES="$(dirname "$(dirname "$(realpath $0)"))")"
-COLOURS=$DOTFILES/colours/colours.tsv
+DOTFILES="$(dirname "$(dirname "$(realpath "$0")"))")"
 THEME_INPUT="$HOME/.config/rofi/styles/full.css"
 
 # Generate the theme file using a named pipe
 THEME_OUTPUT="$HOME/.config/rofi/styles/.pipe-theme"
-[ ! -p $THEME_OUTPUT ] && mkfifo "$HOME/.config/rofi/styles/.pipe-theme"
-$DOTFILES/settings/settings stream "$THEME_INPUT" "$THEME_OUTPUT" &
+[ ! -p "$THEME_OUTPUT" ] && mkfifo "$HOME/.config/rofi/styles/.pipe-theme"
+"$DOTFILES/settings/settings" stream "$THEME_INPUT" "$THEME_OUTPUT" &
 
 # Get device selection from the user
 device="$(bt-device -l | tail -n +2 | rev | cut -d ' ' -f 2- | rev | \
 	rofi -theme "$THEME_OUTPUT" -dmenu -i -p "CONNECT: ")"
 
 # Flush the pipe
-dd if=$THEME_OUTPUT iflag=nonblock of=/dev/null
+dd if="$THEME_OUTPUT" iflag=nonblock of=/dev/null
 
-mac=$(bt-device -l | grep "$device" | awk '{print $NF}' | tr -d '()')
+mac="$(bt-device -l | grep "$device" | awk '{print $NF}' | tr -d '()')"
 
 # Get the current connectivity
-connected=$(bt-device --info="$mac" | sed -n -e 's/^\s*Connected: //p')
+connected="$(bt-device --info="$mac" | sed -n -e 's/^\s*Connected: //p')"
 
 if [ "$connected" == "0" ]; then
 

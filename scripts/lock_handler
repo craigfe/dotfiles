@@ -9,11 +9,11 @@ init_filenames() {
 	# create folder in ~/.cache/i3lock directory
 	res_folder="$HOME/.cache/i3lock/$1"
 	folder="$HOME/.cache/i3lock/current"
-        echo "Got" $@ $res_folder
-	if [ ! -d  $folder -o -n "$2" ]
+        echo "Got" "$@" "$res_folder"
+	if [ ! -d  "$folder" ] || [ -n "$2" ]
 	then
-	    rm $folder
-	    ln -s $res_folder $folder
+	    rm "$folder"
+	    ln -s "$res_folder" "$folder"
 	fi
 
 	# ratio for rectangle to be drawn for time background on lockscreen
@@ -37,10 +37,10 @@ init_filenames() {
 	l_dimblur="$folder/l_dimblur.png"
 }
 
-init_filenames $res
+init_filenames "$res"
 
 prelock() {
-    if [ ! -z "$(pidof dunst)" ] ; then
+    if [ -n "$(pidof dunst)" ] ; then
         pkill -u "$USER" -USR1 dunst
     fi
 }
@@ -59,17 +59,17 @@ lock() {
 		--timepos="x+110:h-70" \
 		--datepos="x+135:h-45" \
 		--clock --datestr "Type password to unlock..." \
-		--insidecolor=$background --ringcolor=$foreground --line-uses-inside \
-		--keyhlcolor=$letterEnteredColor --bshlcolor=$letterRemovedColor --separatorcolor=$background \
+		--insidecolor="$background" --ringcolor="$foreground" --line-uses-inside \
+		--keyhlcolor=$letterEnteredColor --bshlcolor=$letterRemovedColor --separatorcolor="$background" \
 		--insidevercolor=$passwordCorrect --insidewrongcolor=$passwordIncorrect \
-		--ringvercolor=$foreground --ringwrongcolor=$foreground --indpos="x+280:h-70" \
+		--ringvercolor="$foreground" --ringwrongcolor=$foreground --indpos="x+280:h-70" \
 		--radius=20 --ring-width=4 --veriftext="" --wrongtext="" \
 		--verifcolor="$foreground" --timecolor="$foreground" --datecolor="$foreground" \
-		--noinputtext="" --force-clock $lockargs
+		--noinputtext="" --force-clock "$lockargs"
 }
 
 postlock() {
-    if [ ! -z "$(pidof dunst)" ] ; then
+    if [ -n "$(pidof dunst)" ] ; then
         pkill -u "$USER" -USR2 dunst
     fi
 }
@@ -80,9 +80,9 @@ rec_get_random() {
 		user_input="$dir"
 		return
 	fi
-	dir=($dir/*)
-	dir=${dir[RANDOM % ${#dir[@]}]}
-	rec_get_random "$dir"
+	dir=("$dir"/*)
+	dir_rand=${dir[RANDOM % ${#dir[@]}]}
+	rec_get_random "$dir_rand"
 }
 
 lockselect() {
@@ -181,7 +181,7 @@ usage() {
 # Options
 case "$1" in
 	"")
-		if [ ! -f $l_dim ]; then
+		if [ ! -f "$l_dim" ]; then
 			echo "Important: Update the image cache (e.g. betterlockscreen -u path/to/image.jpg)."
 			echo
 			echo "		Image cache must be updated to initially configure or update wallpaper used"
@@ -225,22 +225,22 @@ case "$1" in
 		case "$2" in
 			"")
 				# set resized image as wallpaper if no argument is supplied by user
-				feh --bg-fill $resized
+				feh --bg-fill "$resized"
 				;;
 
 			dim)
 				# set dimmed image as wallpaper
-				feh --bg-fill $dim
+				feh --bg-fill "$dim"
 				;;
 
 			blur)
 				# set blurred image as wallpaper
-				feh --bg-fill $blur
+				feh --bg-fill "$blur"
 				;;
 
 			dimblur)
 				# set dimmed + blurred image as wallpaper
-				feh --bg-fill $dimblur
+				feh --bg-fill "$dimblur"
 				;;
 		esac
 		;;
@@ -257,7 +257,7 @@ case "$1" in
 			case "$1" in
 			-r | --resolution )
 				res="$2"
-				init_filenames $res force
+				init_filenames "$res" force
 				shift 2
 				;;
 			-b | --blur )
@@ -272,9 +272,9 @@ case "$1" in
 		rectangles=" "
 		SR=$(xrandr --query | grep ' connected' | grep -o '[0-9][0-9]*x[0-9][0-9]*[^ ]*')
 		for RES in $SR; do
-			SRA=(${RES//[x+]/ })
-			CX=$((${SRA[2]} + 25))
-			CY=$((${SRA[1]} - 30))
+			SRA=("${RES//[x+]/ }")
+			CX=$((SRA[2] + 25))
+			CY=$((SRA[1] - 30))
 			rectangles+="rectangle $CX,$CY $((CX+300)),$((CY-80)) "
 		done
 
@@ -282,7 +282,7 @@ case "$1" in
 		user_image="$folder/user_image.png"
 
 		# create folder
-		if [ ! -d $folder ]; then
+		if [ ! -d "$folder" ]; then
 			echo "Creating '$folder' directory to cache processed images."
 			mkdir -p "$folder"
 		fi
@@ -292,7 +292,7 @@ case "$1" in
 
 		# get user image
 		cp "$user_input" "$user_image"
-		if [ ! -f $user_image ]; then
+		if [ ! -f "$user_image" ]; then
 			echo "Please specify the path to the image you would like to use"
 			exit 1
 		fi

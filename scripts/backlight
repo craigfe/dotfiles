@@ -6,22 +6,23 @@ alias sudo="sudo "
 
 case $1 in
     -g|--get)
-		calc "round(100*$(gsd_backlight --get-brightness)/$(gsd_backlight --get-max-brightness))"
-    ;;
-	-i|--inc)
-		if [ -z "$2" ]; then
-			set -- "$1" 5
-		fi
-		$0 $(calc "$($0 --get) + $2") 
-	;;
-	-d|--dec)
-		if [ -z "$2" ]; then
-			set -- "$1" 5
-		fi
-		$0 $(calc "$($0 --get) - $2")
-	;;
-	*)
-		sudo gsd_backlight --set-brightness $(calc "round($1/100 * $(gsd_backlight --get-max-brightness))")
-	;;	
+		    calc "round(100*$(gsd_backlight --get-brightness)/$(gsd_backlight --get-max-brightness))"
+        ;;
+	  -i|--inc)
+		    if [ -z "$2" ]; then
+			      set -- "$1" 5
+		    fi
+		    "$0" "$(calc "$($0 --get) + $2")"
+	      ;;
+	  -d|--dec)
+		    if [ -z "$2" ]; then
+			      set -- "$1" 5
+		    fi
+		    "$0" "$(calc "$($0 --get) - $2")"
+	      ;;
+	  *)
+        sudo /usr/lib/gnome-settings-daemon/gsd-backlight-helper \
+             --set-brightness "$(calc "round($1/100 * $(gsd_backlight --get-max-brightness))")"
+	      ;;
 esac
 

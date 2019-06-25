@@ -1,46 +1,45 @@
 #!/bin/bash
 
-DOTFILES="$(dirname "$(dirname "$(dirname "$(realpath $0)"))")")"
-COLOURS=$DOTFILES/colours/colours.tsv
+DOTFILES="$(dirname "$(dirname "$(dirname "$(realpath "$0")"))")")"
+COLOURS="$DOTFILES/colours/colours.tsv"
 THEME_INPUT="$HOME/.config/rofi/styles/full.css"
 
 # Generate the theme file using a named pipe
 THEME_OUTPUT="$HOME/.config/rofi/styles/.pipe-theme"
-[ ! -p $THEME_OUTPUT ] && mkfifo "$HOME/.config/rofi/styles/.pipe-theme"
-$DOTFILES/settings/settings stream "$THEME_INPUT" "$THEME_OUTPUT" &
+[ ! -p "$THEME_OUTPUT" ] && mkfifo "$HOME/.config/rofi/styles/.pipe-theme"
+"$DOTFILES/settings/settings" stream "$THEME_INPUT" "$THEME_OUTPUT" &
 
 # Get colour selection from the user
-name=$(cat $COLOURS | \
-	awk -F $"\t" '{ print $1 }' | \
+name="$(< "$COLOURS" awk -F $"\t" '{ print $1 }' | \
 	(cat && echo -e 'clipboard\nwallpaper') | \
-	rofi -theme "$THEME_OUTPUT" -dmenu -i -p "COLOUR: ")
+	rofi -theme "$THEME_OUTPUT" -dmenu -i -p "COLOUR: ")"
 
 # Flush the pipe
-dd if=$THEME_OUTPUT iflag=nonblock of=/dev/null
+dd "if=$THEME_OUTPUT" iflag=nonblock of=/dev/null
 
-if [ -z $name ]; then
+if [ -z "$name" ]; then
 	>&2 echo "No colour name provided"
 	exit 1
 fi
 
 # If the supplied string begins with #, use that
-if [ ${name:0:1} == "#" ]; then
+if [ "${name:0:1}" == "#" ]; then
 	echo "Colour passed directly"
-	colour=$name
+	colour="$name"
 
 # clipboard: read from the system clipboard
 elif [ "$name" == "clipboard" ]; then
-	colour=$(xsel -ob)
+	colour="$(xsel -ob)"
 
 # wallpaper: determine the highlight colour from the wallpaper
 elif [ "$name" == "wallpaper" ]; then
-	colour=$($DOTFILES/colours/palette)
+	colour="$("$DOTFILES/colours/palette")"
 
 # Otherwise, attempt to lookup the selected name from the TSV file
 else
-	colour=$(awk -F $"\t" -v name="$name" '$1 == name { print $2; exit }' $COLOURS)
+	colour="$(awk -F $"\t" -v name="$name" '$1 == name { print $2; exit }' "$COLOURS")"
 
-	if [ -z $colour ]; then
+	if [ -z "$colour" ]; then
 		>&2 echo "Could not find the specified colour (name)"
 		exit 2
 	fi
@@ -52,4 +51,4 @@ if ! [[ $colour =~ ^#[0-9A-Fa-f]{6}$ ]]; then
 	exit 3
 fi
 
-"$DOTFILES/colours/set_colours" --reload $colour
+"$DOTFILES/colours/set_colours --reload $colour"
