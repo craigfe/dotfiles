@@ -5,9 +5,11 @@ import           XMonad.Core
 import           XMonad.Hooks.SetWMName
 import           XMonad.Util.Cursor
 
+import qualified Config
+
 myStartupHook = do
             spawn "source ~/.fehbg"
-            <+> spawn "~/repos/config/polybar/start"
+            <+> spawn Config.myBarInit
             <+> setDefaultCursor xC_left_ptr
             <+> setWMName "LG3D"
 

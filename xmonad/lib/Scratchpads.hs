@@ -10,7 +10,7 @@ isSpotify   = (className =? "Spotify")
 {-isMessenger = (appName =? "www.messenger.com")-}
 isYoutube = (appName =? "www.youtube.com")
 
-scratchpads =
+v =
   [
   {-NS "spotify" spotifyCommand isSpotify (customFloating $ W.RationalRect (1/12) (1/12) (5/6) (5/6))-}
   {-, NS "messenger" messengerCommand isMessenger (customFloating $ W.RationalRect (1/12) (1/12) (5/6) (5/6))-}

@@ -1,22 +1,16 @@
 module Layouts where
 
 import           XMonad
+import           XMonad.Actions.Navigation2D
 import           XMonad.Layout.NoFrillsDecoration
 import           XMonad.Layout.Accordion
 import           XMonad.Layout.BinarySpacePartition
 import           XMonad.Layout.Fullscreen
-import           XMonad.Layout.Gaps
-import           XMonad.Layout.IndependentScreens
-import           XMonad.Layout.LayoutCombinators     (JumpToLayout (..))
+import           XMonad.Layout.LayoutModifier
 import           XMonad.Layout.MultiToggle
-import           XMonad.Layout.MultiToggle.Instances
 import           XMonad.Layout.Named
 import           XMonad.Layout.NoBorders
-import           XMonad.Layout.NoFrillsDecoration
-import           XMonad.Layout.PerScreen
 import           XMonad.Layout.Reflect
-import           XMonad.Layout.Reflect
-import           XMonad.Layout.ShowWName
 import           XMonad.Layout.Simplest
 import           XMonad.Layout.Spacing
 import           XMonad.Layout.SubLayouts
@@ -27,6 +21,7 @@ import           XMonad.Hooks.ManageDocks
 
 import Colours
 
+myTabTheme :: String -> Theme
 myTabTheme accent = def
     { fontName              = "xft:Alte DIN 1451 Mittelschrift:style=Regular:size=9"
     , activeColor           = accent
@@ -38,8 +33,9 @@ myTabTheme accent = def
     , decoHeight            = 20
     }
 
+myTopBarTheme :: String -> Theme
 myTopBarTheme accent = def
-    { fontName              = "mono 10"
+    { fontName              = "xft:Alte DIN 1451 Mittelschrift:style=Regular:size=9"
     , inactiveBorderColor   = background
     , inactiveColor         = background
     , inactiveTextColor     = background
@@ -53,14 +49,27 @@ myTopBarTheme accent = def
 
 addTopBar accent = noFrillsDeco shrinkText (myTopBarTheme accent)
 
+spacingModifier :: l a -> ModifiedLayout Spacing l a
+spacingModifier = spacingRaw smartBorder screenBorder screenBorderEnabled windowBorder windowBorderEnabled
+  where
+    smartBorder = True
+    screenBorder = Border 10 10 10 10
+    screenBorderEnabled = False
+    windowBorder = Border 10 10 10 10
+    windowBorderEnabled = True
+
+fullscreenName :: String
 fullscreenName = "\xf2d0"
+
 fullscreen = named fullscreenName
   $ avoidStrutsOn []
   $ noBorders
   $ fullscreenFull
   $ Full
 
+threeColName :: String
 threeColName = "\xf279"
+
 threeCol = \accent ->
   named threeColName
   $ addTopBar accent
@@ -69,32 +78,29 @@ threeCol = \accent ->
   $ addTabs shrinkText (myTabTheme accent)
   $ subLayout [0,1] (Simplest ||| Accordion)
   $ mkToggle (single REFLECTX)
-  $ smartSpacing gap
-  $ gaps [(U,gap), (D,gap), (R,gap), (L,gap)]
-  $ tcm
-  where
-    gap = 5
-    tcm = ThreeColMid 1 (1/20) (1/2)
+  $ spacingModifier
+  $ ThreeColMid 1 (1/20) (1/2)
 
+bspName :: String
 bspName = "B"
-bsp = \accent -> named bspName
+
+bsp = \accent ->
+  named bspName
   $ addTopBar accent
   $ avoidStruts
   $ windowNavigation
   $ addTabs shrinkText (myTabTheme accent)
   $ subLayout [0,1] (Simplest ||| Accordion)
   $ mkToggle (single REFLECTX)
-  $ smartSpacing gap
-  $ gaps [(U,gap), (D,gap), (R,gap), (L,gap)]
+  $ spacingModifier
   $ emptyBSP
-  where
-    gap = 5
 
-myLayout accent = mirrorToggle
-  (fullscreen ||| threeCol accent ||| bsp accent)
-  {-ifWider smallMonResWidth wideLayouts standardLayouts-}
-  where
-    {-wideLayouts = (fullscreen ||| threeCol accent)-}
-    {-standardLayouts = (fullscreen ||| tiled accent ||| accordion accent ||| tabs accent)-}
-    mirrorToggle = mkToggle (single MIRROR)
-    {-smallMonResWidth = 1920-}
+myLayout accent = (bsp accent ||| fullscreen ||| threeCol accent)
+
+my2DNavigation :: XConfig a -> XConfig a
+my2DNavigation = withNavigation2DConfig def {
+          layoutNavigation   = [ (threeColName, centerNavigation)
+                               , (bspName, centerNavigation)
+                               , (fullscreenName, centerNavigation) ]
+        , unmappedWindowRect = [ (fullscreenName, singleWindowRect) ]
+        }

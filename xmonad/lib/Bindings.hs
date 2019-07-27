@@ -9,38 +9,20 @@ import           XMonad.Actions.WorkspaceNames
 import           XMonad.Hooks.ManageDocks
 import           XMonad.Layout.BinarySpacePartition
 import           XMonad.Layout.Gaps
-import           XMonad.Layout.LayoutCombinators
 import           XMonad.Layout.MultiToggle
 import           XMonad.Layout.Reflect
 import           XMonad.Layout.Spacing
 import           XMonad.Layout.SubLayouts
-import qualified XMonad.Layout.ToggleLayouts        as TL
 import           XMonad.Util.EZConfig
 import           XMonad.Util.Run
-import           XMonad.Util.Run                    (spawnPipe)
 import           XMonad.Util.WorkspaceCompare
 
-import           Layouts
+import           Config
 import           Projects
 
-import qualified Data.Map                           as M
 import qualified XMonad.StackSet                    as W
 
 myWorkspaces = map show ([1..9] ++ [0]) ++ projectsWorkspaces
-
-myAccentFile       = "/home/craigfe/repos/config/colours/out/theme"
-myCalendar         = "google-chrome --app=https://calendar.google.com"
-myEditor           = "emacsclient --alternate-editor='emacs' --no-wait --create-frame"
-myLauncher         = "/home/craigfe/repos/config/rofi/menu/run"
-myLock             = "/home/craigfe/.scripts/lock"
-myPdfViewer        = "zathura"
-myScreensaver      = "/usr/bin/gnome-screensaver-command --lock"
-myScreenshot       = "screenshot"
-mySelectScreenshot = "screenshot_clipboard"
-mySystemMenu       = "/home/craigfe/repos/config/rofi/menu/system"
-mySink             = "alsa_output.pci-0000_00_1f.3.analog-stereo"
-myTerminal         = "alacritty"
-myWebBrowser       = "google-chrome"
 
 compareToCurrent :: X (WindowSpace -> Ordering)
 compareToCurrent =
@@ -49,10 +31,12 @@ compareToCurrent =
        let cur = W.workspace (W.current ws)
        return $ comp (W.tag cur) . W.tag
 
+greaterNonEmptyWs :: X (WindowSpace -> Bool)
 greaterNonEmptyWs =
     do comp <- compareToCurrent
        return (\w -> comp w == LT && isJust (W.stack w))
 
+lessNonEmptyWs :: X (WindowSpace -> Bool)
 lessNonEmptyWs =
     do comp <- compareToCurrent
        return (\w -> comp w == GT && isJust (W.stack w))
@@ -66,7 +50,9 @@ incGap n = sendMessage $ ModifyGaps $ map (\(d,s) -> (d, s + n))
 decGap :: Int -> X ()
 decGap n = sendMessage $ ModifyGaps $ map (\(d,s) -> (d, s - n))
 
+myModMask :: KeyMask
 myModMask = mod4Mask
+
 myKeys = \c -> mkKeymap c $
   [ ("M-<Return>", spawn $ XMonad.terminal c)
   , ("M-S-<Return>", windows W.swapMaster)
@@ -80,14 +66,14 @@ myKeys = \c -> mkKeymap c $
   , ("S-<Print>", spawn myScreenshot)
 
   -- Main keys
-  , ("M--", incGap 10 >> incWindowSpacing 10)
-  , ("M-S--", incGap 5 >> incWindowSpacing 5)
-  , ("M-=", decGap 10 >> decWindowSpacing 10)
-  , ("M-S-=", decGap 5 >> decWindowSpacing 5)
-  {-, ("M--", sendMessage ModifyGaps $ \g -> map (\(d,s) -> (d, s + 5)))-}
+  , ("M--", incWindowSpacing 10)
+  , ("M-S--", incWindowSpacing 2)
+  , ("M-=", decWindowSpacing 10)
+  , ("M-S-=", decWindowSpacing 2)
+
   , ("M-q", kill)
   , ("M-w", spawn myWebBrowser)
-  , ("M-S-w", spawn (myWebBrowser ++ " --incognito"))
+  , ("M-S-w", spawn myPrivateWebBrowser)
   , ("M-e", spawn (myEditor ++ " ~"))
   , ("M-r", spawn "alacritty -e ranger")
   , ("M-t", withFocused $ windows . W.sink)
@@ -115,8 +101,9 @@ myKeys = \c -> mkKeymap c $
   , ("M-S-a", windows $ W.shift socialWorkspace)
   , ("M-s", toggleOrView musicWorkspace)
   , ("M-S-s", spotifyPause)
-  , ("M-d", toggleOrView dissWorkspace)
-  , ("M-S-d", windows $ W.shift dissWorkspace)
+  , ("M-d", spawn myLauncher)
+  -- , ("M-S-d", windows $ W.shift dissWorkspace)
+
   , ("M-f", sendMessage Rotate)
   , ("M-S-f", sendMessage Swap)
   , ("M-g", sendMessage ToggleStruts)
@@ -167,7 +154,7 @@ myKeys = \c -> mkKeymap c $
   ++ zipM "M-M1-" dirKeys dirs (sendMessage . pushGroup)
 
   where
-    setWSName () = runProcessWithInput "/home/craigfe/repos/config/rofi/menu/print" [] ""
+    setWSName () = runProcessWithInput "/home/craigfe/r/dotfiles/rofi/menu/print" [] ""
             >>= setCurrentWorkspaceName
 
     spotifyPause = spawn "dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause >> /dev/null"
