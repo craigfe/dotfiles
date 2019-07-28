@@ -1,6 +1,7 @@
 [user]
-	email = cf443@cam.ac.uk
+	email = me@craigfe.io
 	name = Craig Ferguson
+	signingkey = A5A512AEE54B0C6E
 
 [color]
 	ui = true
@@ -22,7 +23,7 @@
 	
 	# Logging
 	l = "log --graph --all --pretty=format:\"%C(yellow)%h%Creset %Cgreen%an%Creset %s%C(bold blue)%d\""
-
+	loga = "log --oneline --graph --all"
 	lg = !"git lg1"
 	lg1 = log --graph --abbrev-commit --decorate --date=relative --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)' --all
 	lg2 = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n''          %C(white)%s%C(reset) %C(dim white)- %an%C(reset)' --all
@@ -41,8 +42,20 @@
 [core]
 	editor = nvim
 
+[rebase]
+	autoStash = true
+
 [pull]
 	rebase = true
 
 [push]
 	default = simple
+
+[commit]
+	gpgsign = true
+
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
