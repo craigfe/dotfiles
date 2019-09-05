@@ -49,7 +49,7 @@
 
   (define-minor-mode fira-code-mode
     "Fira Code ligatures minor mode"
-    :lighter " Fira Code"
+    :lighter "F"
     (setq-local prettify-symbols-unprettify-at-point 'right-edge)
     (if fira-code-mode
         (fira-code-mode--enable)

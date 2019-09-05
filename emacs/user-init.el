@@ -6,6 +6,7 @@ executes.
 before packages are loaded. If you are unsure, you should try in setting them in
 `dotspacemacs/user-config' first."
 
-  (setq tuareg-indent-align-with-first-arg t)
+  (require 'opam-user-setup "~/r/dotfiles/emacs/opam-user-setup.el")
+
   (setq exec-path-from-shell-check-startup-files nil)
   )
