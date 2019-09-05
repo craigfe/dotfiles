@@ -1,5 +1,5 @@
 * {
-	accent: ${DOTFILES:theme.accent};
+    accent: red;
     background: rgba(0, 0, 0, 0.50);
     transparent: rgba(0, 0, 0, 0);
 

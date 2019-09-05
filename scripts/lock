@@ -2,6 +2,6 @@
 
 pkill -u "$USER" -USR1 dunst # Suspend message display
 
-~/.scripts/lock_handler -l
+betterlockscreen -l
 
 pkill -u "$USER" -USR2 dunst # Resume message display

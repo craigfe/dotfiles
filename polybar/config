@@ -1,14 +1,14 @@
 #  vim: ft=dosini
 
 [colors]
-	accent = ${DOTFILES:theme.accent}
+	accent = #90F9FF
 	bckgrd = #BB121212
 	select = #222222
 	warning = #CD0F0C
 
 	background = ${self.bckgrd}
 	background-alt = ${self.select}
-	foreground = #A5ffffff
+	foreground = #CCffffff
 	primary =	${self.accent}
 	alert = #bd2c40
 	transparent = #00000000
@@ -24,13 +24,13 @@
 	screenchange-reload = true
 	bar_gap= 0
 	bar_width = 100%
-	bar_height = 28
+	bar_height = 24
 
 [bar/main]
 	monitor = ${env:MONITOR}
 	monitor-strict = true
 	fixed-center = true
-	dpi = ${DOTFILES:polybar.dpi}
+	dpi = 100
 	bottom = true
 	width = ${settings.bar_width}
 	height = ${settings.bar_height}
@@ -49,7 +49,7 @@
 	spacing = 2
 	module-margin-left = 4
 	module-margin-right = 4
-	font-0 = Lato Heavy:size=12;2
+	font-0 = Alte DIN 1451 Mittelschrift gepraegt:size=10;2
 	font-1 = FontAwesome:pixelsize=12;3
 	font-2 = Font Awesome 5 Free:pixelsize=12;3
 	font-3 = Font Awesome 5 Free Solid:pixelsize=12;3
@@ -64,30 +64,10 @@
 	modules-center = warnings
 	modules-right = redshift backlight wlan volume cpu memory filesystem battery date
 
-[bar/center]
-	monitor = ${env:MONITOR}
-	monitor-strict = true
-	fixed-center = true
-	dpi = 150
-	bottom = false
-	width = 1500
-	height = ${settings.bar_height}
-	override-redirect = true
-	offset-x = 1170
-	offset-y = ${settings.bar_gap}
-	background = ${colors.background-alt}
-	foreground = ${colors.foreground}
-	spacing = 2
-	font-0 = din1451alt:size=12;3
-	font-5 = unifont:size=12;3
-	modules-left = search
-	click-left = bash ~/.i3/rofii/menu/search
-	;wm-restack = i3
-
 [module/warnings]
 	type = custom/script
 	interval = 1
-	exec = user-warnings
+	exec = /home/craigfe/.scripts/user-warnings
 	label = "%{T6}%output%%{T6}"
 	label-foreground = ${colors.warning}
 
@@ -113,7 +93,7 @@
 	strip-wsnumbers = false
 	pin-workspaces = true
 	enable-scroll = false
-	label-mode-padding = 3
+	label-mode-padding = 2
 	label-mode-foreground = ${colors.foreground}
 	label-mode-background = ${colors.primary}
 	label-focused = %name%
@@ -122,9 +102,9 @@
 	label-focused-underline = ${colors.primary}
 ;;	label-focused-background = #00ffffff
 ;;	label-focused-underline = #00ffffff
-	label-focused-padding = 3
+	label-focused-padding = 2
 	label-unfocused = %name%
-	label-unfocused-padding = 3
+	label-unfocused-padding = 2
 	label-unfocused-background = ${colors.background}
 	label-urgent = %name%
 	label-urgent-foreground= ${colors.alert}
@@ -199,7 +179,7 @@
 
 [module/wlan]
 	type = internal/network
-	interface = wlp3s0
+	interface = wlp2s0
 	interval = 3.0
 	format-connected = <label-connected>
 	format-connected-prefix = " "
@@ -217,9 +197,9 @@
 [module/date]
 	type = internal/date
 	interval = 1.0
-	date = %a %b %d, 
+	date = %a %b %d (%V), 
 	time = %H:%M
-	date-alt = %A, %d %B %Y
+	date-alt = %A, %d %B %Y (%V)
 	time-alt = %H:%M:%S
 	label = %date% %time%
 	format =    <label>
@@ -227,7 +207,7 @@
 	format-foreground = ${colors.primary}
 
 [module/volume]
-	type = internal/volume
+	type = internal/alsa
 	format-volume = <ramp-volume><label-volume>
 	format-muted = <label-muted>
 	format-volume-foreground = ${colors.primary}
