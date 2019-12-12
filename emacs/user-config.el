@@ -1,5 +1,9 @@
 ;; this function is called at the very end of Spacemacs initialization after layers configuration.
 (defun dotspacemacs/user-config ()
+
+  ;; Subfiles
+  (load "~/r/dotfiles/emacs/email.el")
+
   (setq inhibit-startup-screen t
         initial-buffer-choice nil)
 
@@ -20,46 +24,17 @@
 
   ;; (define-key yas-minor-mode-map (kbd "TAB") yas-expand)
 
-  ;; Tuareg mode -- the OCaml major mode
-  ;; https://github.com/ocaml/tuareg
 
-  (add-hook 'tuareg-mode-hook
-            (lambda ()
-              (bind-keys*
-               ;; Navigate between Merlin errors with M-{j,k}
-               ("M-j" . merlin-error-next)
-               ("M-k" . merlin-error-prev)
+  ;; ---------------------------------------------------------------------------
+  ;; Languages
+  ;; ---------------------------------------------------------------------------
 
-               ;; Navigate between compilation errors with M-{u,i}
-               ("M-u" . next-error)
-               ("M-i" . previous-error))
+  (mapc 'load (file-expand-wildcards "~/r/dotfiles/emacs/languages/*.el"))
 
-              ;; 'merlin-error-{next,prev} check errors and move at the same time
-              (setq merlin-error-check-then-move nil)
+  ;; ---------------------------------------------------------------------------
+  ;; Fonts
+  ;; ---------------------------------------------------------------------------
 
-              ;; Navigate between compilation errors with M-S-{j,k}
-
-              ;; Projectile rebinds this to 'helm-make-projectile, which is not
-              ;; what I want for OCaml.
-              (local-set-key "SPC c c" 'compile)
-              (set (make-local-variable 'compile-command) "dune build @check")
-              (setq compilation-read-command nil) ;; don't require confirm
-
-              ;; Rebind <tab> to run OCamlformat
-              (define-key merlin-mode-map (kbd "<tab>") 'ocamlformat)
-
-              ;; Run ocamlformat before saving
-              (add-hook 'before-save-hook 'ocamlformat-before-save)
-
-              ;; Fira Code ligatures
-              ;; (load "~/r/dotfiles/emacs/ligatures.el")
-              ))
-
-  ;; bind ", {m/n}" to "merlin-error-{prev/next}" in tuareg mode
-  (spacemacs/set-leader-keys-for-major-mode 'tuareg-mode "n" 'merlin-error-prev)
-  (spacemacs/set-leader-keys-for-major-mode 'tuareg-mode "m" 'merlin-error-next)
-
-  ;; font configuration
   (set-frame-font "Source Code Pro Semibold-10" t t)
 
   ;; Use variable width font faces in current buffer
@@ -76,16 +51,26 @@
                                  (LaTeX-mode)
                                  (my-buffer-face-mode-variable))))
 
+  ;; ---------------------------------------------------------------------------
+  ;; Org mode
+  ;; ---------------------------------------------------------------------------
 
   (setq org-directory "~/org")
   (setq org-cycle-separator-lines 1)
 
-  (setq-default TeX-engine 'xetex)
-  ;; (add-to-list 'TeX-view-program-selection
-  ;;              '(output-pdf "Zathura"))
+  (defun my/org-mode-hook ()
+    "Stop the org-level headers from increasing in height relative to the other text."
+    (dolist (face '(org-level-1
+                    org-level-2
+                    org-level-3
+                    org-level-4
+                    org-level-5))
+      (set-face-attribute face nil :weight 'semi-bold :height 1.0)))
 
-  (setq-default line-spacing 5)
-  (setq-default fill-column 100)
+  (add-hook 'org-mode-hook 'my/org-mode-hook)
+
+  (setq-default line-spacing 3)
+  (setq-default fill-column 80)
 
   ;; Always follow symlinks to edit Git version-controlled files directly
   (setq vc-follow-symlinks t)
@@ -97,13 +82,7 @@
 
   (setq avy-timout-seconds 0.3)
 
-  (setq-default evil-escape-key-sequence "kj")
+  (setq-default evil-escape-key-sequence "qw")
+  )
 
-  ;; Disable fontification of section headings
-  ;; (setq font-latex-fontify-script nil)
-  ;; (setq font-latex-fontify-sectioning 'color)
 
-  ;; Use monospace fonts / no indenting on lstlisting environments
-  ;; (add-to-list 'LaTeX-verbatim-environments "lstlisting")
-  ;; (add-to-list 'LaTeX-indent-environment-list '("lstlisting" current-indentation))
-)
