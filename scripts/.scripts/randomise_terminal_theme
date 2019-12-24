@@ -1,0 +1,4 @@
+#!/bin/bash
+
+THEME=$(grep --color=never -oP "[a-z0-9]*: &\K[a-z0-9]*" ~/.config/alacritty/alacritty.yml | shuf -n 1)
+sed --in-place "s/colors: \*.*/colors: \*${THEME}/" ~/.config/alacritty/alacritty.yml

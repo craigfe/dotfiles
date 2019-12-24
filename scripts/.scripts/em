@@ -1,3 +1,3 @@
 #!/usr/bin/env zsh
 
-emacsclient --alternate-editor='emacs' --no-wait --create-frame &
+emacsclient --alternate-editor='emacs' --no-wait --create-frame $1 &
