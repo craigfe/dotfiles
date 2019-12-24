@@ -5,6 +5,7 @@ import           XMonad.Actions.Navigation2D
 import           XMonad.Layout.NoFrillsDecoration
 import           XMonad.Layout.Accordion
 import           XMonad.Layout.BinarySpacePartition
+import           XMonad.Layout.EqualSpacing
 import           XMonad.Layout.Fullscreen
 import           XMonad.Layout.LayoutModifier
 import           XMonad.Layout.MultiToggle
@@ -58,6 +59,14 @@ spacingModifier = spacingRaw smartBorder screenBorder screenBorderEnabled window
     windowBorder = Border 10 10 10 10
     windowBorderEnabled = True
 
+equalSpacingModifier :: l a -> ModifiedLayout EqualSpacing l a
+equalSpacingModifier = equalSpacing gap add mult min
+  where
+    gap = 36
+    add = 6
+    mult = 1
+    min = 1
+
 fullscreenName :: String
 fullscreenName = "\xf2d0"
 
@@ -93,9 +102,10 @@ bsp = \accent ->
   $ subLayout [0,1] (Simplest ||| Accordion)
   $ mkToggle (single REFLECTX)
   $ spacingModifier
+  -- $ equalSpacingModifier
   $ emptyBSP
 
-myLayout accent = (bsp accent ||| fullscreen ||| threeCol accent)
+myLayout accent = (bsp accent ||| fullscreen)
 
 my2DNavigation :: XConfig a -> XConfig a
 my2DNavigation = withNavigation2DConfig def {

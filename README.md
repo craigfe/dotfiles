@@ -4,7 +4,7 @@
 ![desktop-2](.assets/desktop02.png) 
 ![desktop-3](.assets/desktop03.png) 
 
-Configuration files for various programs.
+Configuration files for various programs. Managed by GNU [stow][https://www.gnu.org/software/stow/].
 
 This repository currently contains configuration for the following programs:
 

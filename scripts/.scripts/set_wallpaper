@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
 
-from haishoku.haishoku import Haishoku
-
 import argparse
 import os
 import shutil
@@ -12,26 +10,11 @@ def parse_arguments(argv):
     parser = argparse.ArgumentParser(prog=argv[0], description="Set the desktop wallpaper.")
     parser.add_argument("path", help='path to the image to use')
     parser.add_argument("--theme", action="store_true", help="reload the theme using the colour palette")
-
     return parser.parse_args(sys.argv[1:])
 
 def eprint(*args, **kwargs):
     """Print a series of strings to stderr."""
     print(*args, file=sys.stderr, **kwargs)
-
-def get_destination():
-    return os.path.expanduser("~/.config/wall")
-
-def rgb_to_hex(rgb):
-    return '#%02x%02x%02x' % rgb
-
-def get_dominant_colour(path = get_destination()):
-    return rgb_to_hex(Haishoku.getPalette(path)[1][1])
-
-def set_theme():
-    dirname = os.path.dirname(__file__)
-    script = os.path.join(dirname, "../colours/set_colours")
-    return subprocess.call([script, '-r', get_dominant_colour()])
 
 def main(argv):
     args = parse_arguments(argv)
@@ -46,18 +29,21 @@ def main(argv):
         eprint("The supplied file must have a recognised extension (.jpg, .png)")
         return 3
 
-    dest = get_destination()
-    shutil.copy(fullpath,dest)
-
-    rc = subprocess.call(['feh', '--no-fehbg', '--bg-scale', dest])
+    dest = fullpath
+    rc = subprocess.call(['feh', '--bg-fill', dest])
 
     if rc != 0:
         return 4
 
-    if args.theme:
-        rc = set_theme()
-        if rc != 0:
-            return 5
+    resolution = subprocess.check_output("xrandr | grep '\*' | cut -f4 -d ' ' | cut -f1 -d '+' | head -n 1",shell=True)
+    print("Detected resolution: " + str(resolution) + "\n")
+
+    resolution = "2560x1440"
+
+    rc = subprocess.call(['betterlockscreen', '--update', dest, '--resolution', resolution, '--blur', '1'])
+
+    if rc != 0:
+        return 5
 
     return 0
 

@@ -1,0 +1,3 @@
+#!/bin/bash
+
+xmodmap /home/craigfe/r/dotfiles/X/Xmodmap

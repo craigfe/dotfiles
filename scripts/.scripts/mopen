@@ -1,4 +1,5 @@
 #!/bin/sh
+set -euo pipefail
 
 # Open a PDF using mupdf unless it is already open, otherwise signal mupdf to
 # refresh the file form disk. Intended to be used at the end of the xelatex

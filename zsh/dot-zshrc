@@ -1,8 +1,13 @@
-export ZSH="${HOME}/.oh-my-zsh"
+#!/bin/zsh
+
+export ZSH="/usr/share/oh-my-zsh"
+export ZSH_HOME="/usr/share/zsh"
 
 ZSH_THEME="craigfe"
 
 bindkey -v # Use Vi mode
+
+export PATH="$HOME/.local/bin:$HOME/.scripts:$PATH:$(ruby -e 'puts Gem.user_dir')/bin"
 
 # Uncomment the following line to disable auto-setting terminal title.
 # DISABLE_AUTO_TITLE="true"
@@ -15,15 +20,11 @@ COMPLETION_WAITING_DOTS="false"
 # Don't mark untracked files as dirty
 DISABLE_UNTRACKED_FILES_DIRTY="true"
 
-plugins=(
-	git
-	vi-mode
-	ssh-agent
-	zsh-syntax-highlighting
-)
+plugins=(git vi-mode ssh-agent)
 
 source $ZSH/oh-my-zsh.sh
-source $HOME/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
+source $ZSH_HOME/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+source $ZSH_HOME/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 source $HOME/.aliases
 [ -f $HOME/.shortcuts/out/shell ] && source $HOME/.shortcuts/out/shell
 
@@ -38,7 +39,8 @@ source $HOME/.aliases
 if [[ -n $SSH_CONNECTION ]]; then
   export EDITOR='vim'
 else
-  export EDITOR="emacsclient --alternate-editor='emacs' --no-wait --create-frame"
+  export EDITOR='nvim'
+  # export EDITOR="emacsclient --alternate-editor='emacs' --no-wait --create-frame"
 fi
 
 # Compilation flags
@@ -54,7 +56,7 @@ export WORKON_HOME=$HOME/.virtualenvs
 export PROJECT_HOME=$HOME/repos
 export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
 export VIRTUALENVWRAPPER_SCRIPT=$HOME/.local/bin/virtualenvwrapper.sh
-source $HOME/.local/bin/virtualenvwrapper_lazy.sh
+# source $HOME/.local/bin/virtualenvwrapper_lazy.sh
 
 # Use the Vi navigation keys in menu completion
 zstyle ':completion:*' menu select
@@ -67,8 +69,26 @@ bindkey -M menuselect 'j' vi-down-line-or-history
 
 bindkey '^[[[SE' autosuggest-execute
 
+projectgoto () {
+	cd "/home/craigfe/t/$(ls -1 /home/craigfe/t | dmenu)"
+}
+
+bindkey -s '^g' 'projectgoto\n'
+
 # OPAM configuration
 . /home/craigfe/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true
 
+# AWS credentials
+. ~/.aws/get_credentials.sh
+
 # Travis configuration
 [ -f /home/craigfe/.travis/travis.sh ] && source /home/craigfe/.travis/travis.sh
+
+# Nix configuration
+export NIX_PATH="nixpkgs=https://github.com/NixOS/nixpkgs/archive/release-19.09.tar.gz"
+export NIX_REMOTE=daemon
+
+# Set up Node Version Manager
+export NVM_DIR="$HOME/.nvm"                            # You can change this if you want.
+export NVM_SOURCE="/usr/share/nvm"                     # The AUR package installs it to here.
+[ -s "$NVM_SOURCE/nvm.sh" ] && . "$NVM_SOURCE/nvm.sh"  # Load NVM

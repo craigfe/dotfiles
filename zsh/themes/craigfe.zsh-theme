@@ -13,7 +13,16 @@ ZSH_THEME_GIT_PROMPT_CLEAN=""
 function git_custom_status {
     local cb=$(git_current_branch)
     if [ -n "$cb" ]; then
-        echo "$(parse_git_dirty)$ZSH_THEME_GIT_PROMPT_PREFIX$(git_current_branch)$ZSH_THEME_GIT_PROMPT_SUFFIX"
+        local track=$(git status -sb | grep -oP '\.\.\.\K(.*)(?=\/)' | sed -r 's/\x1B\[([0-9]{1,2}(;[0-9]{1,2})?)?[mGK]//g')
+        local thinspace="\xE2\x80\x89"
+
+        if [ "$track" = 'origin' ]; then
+            track=""
+        else
+            track="$thinspace←$thinspace$track"
+        fi
+
+        echo "$(parse_git_dirty)$ZSH_THEME_GIT_PROMPT_PREFIX$(git_current_branch)$track$ZSH_THEME_GIT_PROMPT_SUFFIX"
     fi
 }
 
@@ -42,17 +51,17 @@ function opam_status {
 
 # Calculate the length of a string post colour parsing
 function parsed_length {
-	local zero='%([BSUbfksu]|([FB]|){*})'
-  echo ${#${(S%%)1//$~zero/}}
+    local zero='%([BSUbfksu]|([FK]|){*})'
+    echo ${#${(S%%)1//$~zero/}}
 }
 
 # The precmd function is invoked before the zsh promt is printed
 function precmd {
-	local LEFT=$'%B%{$fg[red]%}[ %{$fg[cyan]%}%B%n%{$fg[red]%}%B@%{$fg[green]%}%m%{$reset_color%}%B%{$fg[red]%} ] %{$fg[magenta]%}%B%~%{$reset_color%}'
+	local LEFT=$'%{$fg[red]%}⟦ %{$fg[cyan]%}%B%n%{$fg[red]%}@%{$fg[green]%}%m%{$reset_color%}%{$fg[red]%} ⟧ %{$fg[magenta]%}%B%~%{$reset_color%}'
 	local RIGHT="$(opam_status) $(git_custom_status)"
 
 	# Calculate the number of spaces to print between LEFT and RIGHT (accounting for multiline left)
-	local SPACES=$(($COLUMNS-$(parsed_length $RIGHT) - ($(parsed_length $LEFT)) % $COLUMNS))
+	local SPACES=$(($COLUMNS - $(parsed_length $RIGHT) - ($(parsed_length $LEFT)) % $COLUMNS + 4))
 
 	# Don't show right prompt if it must wrap to a new line
 	if [ $SPACES -gt 1 ]; then
@@ -86,5 +95,6 @@ zle -N zle-line-init
 zle -N zle-line-finish
 zle -N zle-keymap-select
 
-PROMPT='$(vi_mode_prompt_info)${ret_status}ᐅ%b '
+SYMBOL='%(!.∞.ᐅ)'
+PROMPT='$(vi_mode_prompt_info)${ret_status}$SYMBOL%b '
 RPROMPT=' ' # Prevent vi-mode indicator from showing up

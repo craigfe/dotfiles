@@ -2,7 +2,7 @@
 (defun dotspacemacs/user-config ()
 
   ;; Subfiles
-  (load "~/r/dotfiles/emacs/email.el")
+  (load "~/r/dotfiles/emacs/lib/email.el")
 
   (setq inhibit-startup-screen t
         initial-buffer-choice nil)
@@ -29,7 +29,7 @@
   ;; Languages
   ;; ---------------------------------------------------------------------------
 
-  (mapc 'load (file-expand-wildcards "~/r/dotfiles/emacs/languages/*.el"))
+  (mapc 'load (file-expand-wildcards "~/r/dotfiles/emacs/lib/languages/*.el"))
 
   ;; ---------------------------------------------------------------------------
   ;; Fonts

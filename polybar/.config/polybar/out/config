@@ -1,0 +1,273 @@
+#  vim: ft=dosini
+
+[colors]
+	accent = #90F9FF
+	bckgrd = #BB121212
+	select = #222222
+	warning = #CD0F0C
+
+	background = ${self.bckgrd}
+	background-alt = ${self.select}
+	foreground = #CCffffff
+	primary =	${self.accent}
+	alert = #bd2c40
+	transparent = #00000000
+
+[global/wm]
+	margin-top = 0
+	margin-bottom = 0
+
+[settings]
+	throttle-output = 5
+	throttle-output-for = 10
+	throttle-input-for = 30
+	screenchange-reload = true
+	bar_gap= 0
+	bar_width = 100%
+	bar_height = 24
+
+[bar/main]
+	monitor = ${env:MONITOR}
+	monitor-strict = true
+	fixed-center = true
+	dpi = 100
+	bottom = true
+	width = ${settings.bar_width}
+	height = ${settings.bar_height}
+	offset-x = 0
+	offset-y = 0
+	foreground = ${colors.foreground}
+	background = ${colors.background}
+	overline-size = 0
+	overline-color = #f00
+	underline-size = 2
+	underline-color = #00f
+	border-top-size = ${settings.bar_gap}
+	border-left-size = ${settings.bar_gap}
+	border-right-size = ${settings.bar_gap}
+	border-bottom-size = 0
+	spacing = 2
+	module-margin-left = 4
+	module-margin-right = 4
+	font-0 = Alte DIN 1451 Mittelschrift gepraegt:size=10;2
+	font-1 = FontAwesome:pixelsize=12;3
+	font-2 = Font Awesome 5 Free:pixelsize=12;3
+	font-3 = Font Awesome 5 Free Solid:pixelsize=12;3
+	font-4 = Lato Heavy:size=12;2
+	font-5 = Lato Heavy:size=13;2
+	tray-position = right
+	tray-padding = 4
+	
+	modules-left = i3 xmonad
+; TOP DRY NET HOT SYC WCH
+;;	modules-right = inbox redshift backlight wlan volume cpu memory battery date
+	modules-center = warnings
+	modules-right = redshift backlight wlan volume cpu memory filesystem battery date
+
+[module/warnings]
+	type = custom/script
+	interval = 1
+	exec = /home/craigfe/.scripts/user-warnings
+	label = "%{T6}%output%%{T6}"
+	label-foreground = ${colors.warning}
+
+[module/xmonad]
+   type = custom/script
+   exec = xmonad-log
+   tail = true
+   label = "  %{T5}%output%%{T5}"
+
+[module/xwindow]
+   type = internal/xwindow
+   label = %title:0:30:...%
+
+[module/xkeyboard]
+   type = internal/xkeyboard
+   blacklist-0 = num lock
+
+[module/i3]
+	type = internal/i3
+	format = <label-state> <label-mode>
+	index-sort = true
+	wrapping-scroll = false
+	strip-wsnumbers = false
+	pin-workspaces = true
+	enable-scroll = false
+	label-mode-padding = 2
+	label-mode-foreground = ${colors.foreground}
+	label-mode-background = ${colors.primary}
+	label-focused = %name%
+	label-focused-foreground= ${colors.background}
+	label-focused-background = ${colors.primary}
+	label-focused-underline = ${colors.primary}
+;;	label-focused-background = #00ffffff
+;;	label-focused-underline = #00ffffff
+	label-focused-padding = 2
+	label-unfocused = %name%
+	label-unfocused-padding = 2
+	label-unfocused-background = ${colors.background}
+	label-urgent = %name%
+	label-urgent-foreground= ${colors.alert}
+	label-urgent-background = ${colors.background-alt}
+	label-urgent-padding = 8
+	label-visible = %name%
+	label-visible-background = ${colors.background-alt}
+	label-visible-padding = ${self.label-focused-padding}
+	
+[module/search]
+	type = custom/script
+	exec = echo "             search:              "
+	interval = 60
+	label = %output%
+	format = <label>
+	format-foreground = ${colors.background}
+	format-background = ${colors.primary}
+	
+[module/mouseloc]
+	type = custom/script
+	exec = xdotool getmouselocation | awk '{print $1 "   " $2}'
+	interval = 0.1
+	label = %output%
+	format = <label>
+	format-foreground = ${colors.primary}
+	
+	
+[module/cpu]
+	format-label = internal/cpu
+	format = <label>
+	type = internal/cpu
+	interval = 2
+	label = "  %percentage%%"
+	format-foreground = ${colors.primary}
+
+[module/memory]
+	type = internal/memory
+	interval = 2
+	label = "%{A1:~/.scripts/mem_intensive:}  %gb_free%%{A}"
+	format-foreground = ${colors.primary}
+
+[module/filesystem]
+	type = internal/fs
+	mount-0 = /
+	label-mounted = "  %free%"
+	label-mounted-foreground = ${colors.primary}
+
+
+[module/temperature]
+	type = internal/temperature
+	warn-temperature = 65
+
+	format = <label> 
+	format-warn = <label-warn>
+
+	label = %temperature%
+	label-warn = %temperature%!!!
+	
+[module/cputemp]
+	type = custom/script
+	exec = sensors | grep --max-count=1 "CPU Temperature:" | awk '{print substr($0,22,2)}'
+	interval = 10
+	label = " %output%°C"
+	format-foreground = ${colors.primary}
+
+[module/gputemp]
+	type = custom/script
+	exec = nvidia-smi --query-gpu=temperature.gpu --format=csv,noheader,nounits
+	interval = 10
+	label = "GPU %output%°C"
+	format-foreground = ${colors.primary}
+
+[module/wlan]
+	type = internal/network
+	interface = wlp2s0
+	interval = 3.0
+	format-connected = <label-connected>
+	format-connected-prefix = " "
+	label-connected = %essid%
+	label-disconnected = "%{A1:connman-gtk &:}%{A}"
+	label-disconnected-foreground = #5b
+	ramp-signal-0 = 
+	ramp-signal-1 = 
+	ramp-signal-2 = 
+	ramp-signal-3 = 
+	ramp-signal-4 = 
+	ramp-signal-foreground = ${colors.foreground}
+	format-connected-foreground = ${colors.primary}
+
+[module/date]
+	type = internal/date
+	interval = 1.0
+	date = %a %b %d (%V), 
+	time = %H:%M
+	date-alt = %A, %d %B %Y (%V)
+	time-alt = %H:%M:%S
+	label = %date% %time%
+	format =    <label>
+	format-padding = 3
+	format-foreground = ${colors.primary}
+
+[module/volume]
+	type = internal/alsa
+	format-volume = <ramp-volume><label-volume>
+	format-muted = <label-muted>
+	format-volume-foreground = ${colors.primary}
+	label-volume = %percentage%
+	label-muted =   M
+	label-muted-foreground = #aaa
+	format-volume-padding = 3
+	format-muted-padding = 3
+	ramp-volume-0 = 
+	ramp-volume-1 = 
+	ramp-volume-2 = 
+	ramp-headphones-0 = 
+
+[module/backlight]
+	type = internal/backlight
+	card = intel_backlight
+	enable-scroll = true
+	format = <label>
+	label =  %percentage%%
+	label-foreground = ${colors.primary}
+
+[module/battery]
+	type = internal/battery
+	battery = BAT0
+	adapter = AC
+	full-at = 98
+	time-format = %H:%M
+	label-discharging = %percentage% %time%
+	format-charging = <animation-charging> <label-charging>
+	format-charging-foreground = ${colors.primary}
+	label-charging-foreground = ${colors.primary}
+	format-discharging = <ramp-capacity> <label-discharging>
+	format-discharging-foreground = ${colors.primary}
+	label-discharging-foreground = ${colors.primary}
+	format-full-prefix = " "
+	format-full-prefix-foreground = ${colors.primary}
+	label-full-foreground = ${colors.primary}
+	ramp-capacity-0 = 
+	ramp-capacity-1 = 
+	ramp-capacity-2 = 
+	ramp-capacity-3 = 
+	ramp-capacity-4 = 
+	ramp-capacity-foreground = ${colors.primary}
+	animation-charging-0 = 
+	animation-charging-1 = 
+	animation-charging-2 = 
+	animation-charging-3 = 
+	animation-charging-4 = 
+	animation-charging-foreground = ${colors.primary}
+	animation-charging-framerate = 750
+
+[module/redshift]
+	type = custom/script
+	exec = ~/.config/polybar/modules/redshift
+	interval = 50
+	label-foreground = ${colors.primary}
+
+[module/inbox]
+	type = custom/script
+	exec = ~/.config/polybar/modules/inbox
+	interval = 120
+	click-left = "urxvt -e mutt &"
+	label-foreground = ${colors.primary}

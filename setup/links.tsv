@@ -1,10 +1,6 @@
 # The following files are to be linked into this repo
 #  entries are of the form: <target (relative to repo)> <name>
-bash/bashrc	~/.bashrc
-bash/profile	~/.profile
 compton/compton.conf	~/.config/compton.conf
-emacs/spacemacs ~/.spacemacs
-git/gitconfig	~/.gitconfig
 gnome/gnomerc	~/.gnomerc
 gnome/startup.desktop	~/.config/autostart/startup.desktop
 i3/	~/.config/i3/
@@ -14,14 +10,7 @@ linting/stylish-haskell/	~/.config/stylish-haskell/
 polybar/config	~/.config/polybar
 networkmanager/	/etc/NetworkManager/
 nomacs/settings.ini	~/.local/share/nomacs/settings.ini
-ranger/	~/.config/ranger
-ranger/	~/.config/ranger
-scripts/	~/.scripts/
-shortcuts/	~/.shortcuts/
-ssh/config	~/.ssh/config
 tmux/tmux.conf	~/.tmux.conf
 vim/vimrc	~/.vimrc
 vis/config	~/.config/vis/config
-X/Xresources	~/.Xresources
-X/xinitrc	~/.xinitrc
 

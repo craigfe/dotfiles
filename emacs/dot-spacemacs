@@ -459,8 +459,8 @@ It should only modify the values of Spacemacs settings."
    dotspacemacs-whitespace-cleanup nil
    ))
 
-(load "~/r/dotfiles/emacs/user-init.el")
-(load "~/r/dotfiles/emacs/user-config.el")
+(load "~/r/dotfiles/emacs/lib/user-init.el")
+(load "~/r/dotfiles/emacs/lib/user-config.el")
 
 ;; Do not write anything past this comment. This is where Emacs will
 ;; auto-generate custom variable definitions.

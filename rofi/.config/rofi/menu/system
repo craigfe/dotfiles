@@ -10,7 +10,7 @@ THEME_OUTPUT="$HOME/.config/rofi/styles/.pipe-theme"
 
 action=$(echo -e "RELOAD\nCOLOUR\nBLUETOOTH\nWALLPAPER\nLOCK\nSUSPEND\nLOGOUT\nREBOOT\nPOWEROFF" | \
 	awk '{print $(NF-1)}' | \
-	rofi -theme "$THEME_OUTPUT" -dmenu -i -p "SYSTEM: ")
+	rofi -dmenu -i -p "SYSTEM: ")
 
 # Flush the pipe
 dd if="$THEME_OUTPUT" iflag=nonblock of=/dev/null

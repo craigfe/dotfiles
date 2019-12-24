@@ -7,15 +7,20 @@
 [[ -f ~/.secrets/aws.sh ]]        && . ~/.secrets/aws.sh
 [[ -f /usr/local/bin/terraform ]] && complete -C /usr/local/bin/terraform terraform
 
-export PATH="$PATH:$HOME/.scripts:$HOME/.local/bin:$HOME/.cargo/bin:$HOME/go/src/github.com/xintron/xmonad-log:$HOME/.vim/bundle/vim-live-latex-preview/bin"
+# Background
+/home/craigfe/.fehbg
+
+# Keyboard configuration
+setxkbmap gb
+xmodmap /home/craigfe/r/dotfiles/X/Xmodmap
+
+export PATH="$PATH:$HOME/.scripts:$HOME/.local/bin:$HOME/.cargo/bin:$HOME/go/src/github.com/xintron/xmonad-log:$HOME/.vim/bundle/vim-live-latex-preview/bin:$HOME/t/duniverse/_opam/bin/duniverse"
 export EDITOR="emacsclient --alternate-editor='emacs' --no-wait --create-frame"
 export TERMINAL="alacritty"
 export BROWSER="chromium-browser --enable-plugins --force-device-scale-factor=1.25"
 export BROWSER_PRIVATE="chromium-browser --enable-plugins --force-device-scale-factor=1.25 --incognito"
 export MUSIC="spotify --force-device-scale-factor=1.1"
-export SUDO_ASKPASS=~/repos/dotfiles/rofi/menu/password
-# export GIT_ASKPASS=~/repos/dotfiles/rofi/menu/password
-export SSH_ASKPASS=~/repos/dotfiles/rofi/menu/password
+export GPG_TTY=$(tty)
 
 export SDKMAN_DIR=$HOME'/.sdkman'
 [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"

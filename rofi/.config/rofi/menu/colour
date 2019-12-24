@@ -12,7 +12,7 @@ THEME_OUTPUT="$HOME/.config/rofi/styles/.pipe-theme"
 # Get colour selection from the user
 name="$(< "$COLOURS" awk -F $"\t" '{ print $1 }' | \
 	(cat && echo -e 'clipboard\nwallpaper') | \
-	rofi -theme "$THEME_OUTPUT" -dmenu -i -p "COLOUR: ")"
+	rofi -dmenu -i -p "COLOUR: ")"
 
 # Flush the pipe
 dd "if=$THEME_OUTPUT" iflag=nonblock of=/dev/null

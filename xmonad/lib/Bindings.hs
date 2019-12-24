@@ -118,7 +118,7 @@ myKeys = \c -> mkKeymap c $
   , ("M-M1-m", withFocused (sendMessage . MergeAll))
   , ("M-z", spawn myPdfViewer)
   , ("M-x", spawn myLock)
-  , ("M-c", spawn myCalendar)
+  , ("M-c", spawn myCI)
   , ("M-,", sendMessage (IncMasterN 1))
   , ("M-.", sendMessage (IncMasterN (-1)))
 

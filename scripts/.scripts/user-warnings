@@ -1,6 +1,7 @@
 #!/bin/sh
+set -euo pipefail
 
-battery_level=$(acpi -b | grep -oP "Discharging, \K[0-9]+(?=%)")
+battery_level=$(acpi -b | grep --color=never -oP "Battery 1: Discharging, \K[0-9]+(?=%)")
 if [ "$battery_level" != "" ] && [ "$battery_level" -lt 15 ]; then
 	echo "LOW BATTERY"
 	exit 0

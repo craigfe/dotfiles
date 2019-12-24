@@ -9,7 +9,6 @@ for f in $(git ls-files | sort -u); do
 		    {
 			      shellcheck "$f" && echo "[OK]: successfully linted $f"
 		    } || {
-			      # add to errors
 			      ERRORS+=("$f")
 		    }
 	  fi

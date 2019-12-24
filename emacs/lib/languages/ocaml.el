@@ -44,7 +44,7 @@
   (add-hook 'before-save-hook 'ocamlformat-before-save)
 
   ;; Fira Code ligatures
-  (load "~/r/dotfiles/emacs/ligatures.el")
+  (load "~/r/dotfiles/emacs/lib/ligatures.el")
   )
 
 (add-hook 'tuareg-mode-hook 'my/tuareg-mode-hook)
