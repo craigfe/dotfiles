@@ -53,12 +53,15 @@ decGap n = sendMessage $ ModifyGaps $ map (\(d,s) -> (d, s - n))
 myModMask :: KeyMask
 myModMask = mod4Mask
 
+-- fuzzyXpConfig = xpConfig { searchPredicate = Fuzzy.test }
+
 myKeys = \c -> mkKeymap c $
   [ ("M-<Return>", spawn $ XMonad.terminal c)
   , ("M-S-<Return>", windows W.swapMaster)
   , ("M-<Backspace>", spawn mySystemMenu)
   , ("M-S-<Backspace>", spawn "systemctl suspend")
-  , ("M-<Space>", spawn myLauncher)
+  -- , ("M-<Space>", unicodePrompt "" xpConfig)
+  , ("<XF86MonBrightnessUp>", spawn "~/.scripts/backlight --inc 5")
   , ("M-S-<Space>", setLayout $ XMonad.layoutHook c)
   , ("M-<Tab>", sendMessage $ Toggle REFLECTX)
   , ("M-S-<Tab>", moveToNextNonEmptyNoWrap)

@@ -1,0 +1,39 @@
+name:                xmonad-craigfe
+version:             0.1.0.0
+github:              "CraigFe/dotfiles"
+license:             BSD3
+author:              "Craig Ferguson"
+maintainer:          "me@craigfe.io"
+copyright:           "Copyright (c) 2019 Craig Ferguson"
+
+description: Please see the README on GitHub at <https://github.com/CraigFe/dotfiles#readme>
+
+library:
+  source-dirs: lib
+  dependencies:
+  - base
+  - bytestring
+  - containers
+  - dbus
+  - random
+  - utf8-string
+  - X11
+  - xmonad >= 0.15
+  - xmonad-contrib >= 0.15
+
+executables:
+  xmonad-x86_64-linux:
+    main: xmonad.hs
+    source-dirs: bin
+    dependencies:
+    - base
+    - dbus
+    - xmonad
+    - xmonad-contrib >= 0.15
+    - xmonad-craigfe
+    ghc-options:
+    - -Wall
+    - -Werror
+    - -rtsopts
+    - -threaded
+    - -with-rtsopts=-N

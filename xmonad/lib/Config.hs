@@ -2,7 +2,7 @@ module Config where
 
 myDotfiles          = "/home/craigfe/r/dotfiles"
 myAccentFile        = myDotfiles ++ "/colours/out/theme"
-myBarInit           = myDotfiles ++ "/polybar/start"
+myBarInit           = "/home/.config/polybar/start"
 myLauncher          = myDotfiles ++ "/rofi/menu/run"
 mySystemMenu        = myDotfiles ++ "/rofi/menu/system"
 

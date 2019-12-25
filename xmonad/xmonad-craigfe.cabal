@@ -1,0 +1,65 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.33.0.
+--
+-- see: https://github.com/sol/hpack
+--
+-- hash: 2f7352c9bbaf1ba0441b7cd5548b4f06758130f00db1af9ae145c79bc8ceded6
+
+name:           xmonad-craigfe
+version:        0.1.0.0
+description:    Please see the README on GitHub at <https://github.com/CraigFe/dotfiles#readme>
+homepage:       https://github.com/CraigFe/dotfiles#readme
+bug-reports:    https://github.com/CraigFe/dotfiles/issues
+author:         Craig Ferguson
+maintainer:     me@craigfe.io
+copyright:      Copyright (c) 2019 Craig Ferguson
+license:        BSD3
+build-type:     Simple
+
+source-repository head
+  type: git
+  location: https://github.com/CraigFe/dotfiles
+
+library
+  exposed-modules:
+      Bindings
+      Colours
+      Config
+      Layouts
+      Logging
+      Mouse
+      Projects
+      Scratchpads
+      Startup
+      XMonad.Layout.EqualSpacing
+  other-modules:
+      Paths_xmonad_craigfe
+  hs-source-dirs:
+      lib
+  build-depends:
+      X11
+    , base
+    , bytestring
+    , containers
+    , dbus
+    , random
+    , utf8-string
+    , xmonad >=0.15
+    , xmonad-contrib >=0.15
+  default-language: Haskell2010
+
+executable xmonad-x86_64-linux
+  main-is: xmonad.hs
+  other-modules:
+      Paths_xmonad_craigfe
+  hs-source-dirs:
+      bin
+  ghc-options: -Wall -Werror -rtsopts -threaded -with-rtsopts=-N
+  build-depends:
+      base
+    , dbus
+    , xmonad
+    , xmonad-contrib >=0.15
+    , xmonad-craigfe
+  default-language: Haskell2010

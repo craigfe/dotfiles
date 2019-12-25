@@ -1,3 +1,5 @@
+{-# OPTIONS -fno-warn-missing-signatures #-}
+
 import qualified DBus.Client                 as DC
 
 import           XMonad
@@ -51,7 +53,7 @@ defaults accent = def {
         startupHook        = Startup.myStartupHook
     }
 
-
+main :: IO ()
 main = do
   accentFile <- readFile Config.myAccentFile
   dbus <- DC.connectSession
