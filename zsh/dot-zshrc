@@ -1,19 +1,13 @@
 #!/bin/zsh
-
 export ZSH="/usr/share/oh-my-zsh"
 export ZSH_HOME="/usr/share/zsh"
 
 ZSH_THEME="craigfe"
 
-bindkey -v # Use Vi mode
+# Use Vi mode
+bindkey -v
 
-export PATH="$HOME/.local/bin:$HOME/.scripts:$PATH:$(ruby -e 'puts Gem.user_dir')/bin"
-
-# Uncomment the following line to disable auto-setting terminal title.
-# DISABLE_AUTO_TITLE="true"
-
-# Uncomment the following line to enable command auto-correction.
-# ENABLE_CORRECTION="true"
+export PATH="$HOME/.local/bin:$HOME/.scripts:$PATH:$(ruby -e 'puts Gem.user_dir')/bin:$HOME/.yarn/bin"
 
 COMPLETION_WAITING_DOTS="false"
 
@@ -30,21 +24,12 @@ source $HOME/.aliases
 
 # User configuration
 
-# export MANPATH="/usr/local/man:$MANPATH"
-
-# You may need to manually set your language environment
-# export LANG=en_US.UTF-8
-
 # Preferred editor for local and remote sessions
 if [[ -n $SSH_CONNECTION ]]; then
   export EDITOR='vim'
 else
-  export EDITOR='nvim'
-  # export EDITOR="emacsclient --alternate-editor='emacs' --no-wait --create-frame"
+  export EDITOR="emacsclient --alternate-editor='emacs' --no-wait --create-frame"
 fi
-
-# Compilation flags
-# export ARCHFLAGS="-arch x86_64"
 
 # ssh
 export SSH_KEY_PATH="~/.ssh/rsa_id"
@@ -69,11 +54,10 @@ bindkey -M menuselect 'j' vi-down-line-or-history
 
 bindkey '^[[[SE' autosuggest-execute
 
-projectgoto () {
-	cd "/home/craigfe/t/$(ls -1 /home/craigfe/t | dmenu)"
-}
-
 bindkey -s '^g' 'projectgoto\n'
+
+# Jump (https://github.com/gsamokovarov/jump)
+eval "$(jump shell)"
 
 # OPAM configuration
 . /home/craigfe/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true
@@ -82,13 +66,23 @@ bindkey -s '^g' 'projectgoto\n'
 . ~/.aws/get_credentials.sh
 
 # Travis configuration
-[ -f /home/craigfe/.travis/travis.sh ] && source /home/craigfe/.travis/travis.sh
+# [ -f /home/craigfe/.travis/travis.sh ] && source /home/craigfe/.travis/travis.sh
 
 # Nix configuration
 export NIX_PATH="nixpkgs=https://github.com/NixOS/nixpkgs/archive/release-19.09.tar.gz"
+export PATH="$PATH:$HOME/.nix-profile/bin"
 export NIX_REMOTE=daemon
 
 # Set up Node Version Manager
 export NVM_DIR="$HOME/.nvm"                            # You can change this if you want.
 export NVM_SOURCE="/usr/share/nvm"                     # The AUR package installs it to here.
 [ -s "$NVM_SOURCE/nvm.sh" ] && . "$NVM_SOURCE/nvm.sh"  # Load NVM
+
+# Oskel configuration
+export PATH="$PATH:$HOME/t/skeleton/_build/install/default/bin"
+export OSKEL_FULL_NAME="Craig Ferguson"
+export OSKEL_EMAIL="me@craigfe.io"
+export OSKEL_GITHUB_ORG="CraigFe"
+
+export PATH="$PATH:$HOME/t/dune-release/_build/install/default/bin"
+
