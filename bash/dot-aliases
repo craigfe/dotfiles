@@ -7,8 +7,10 @@ alias cbi='xsel -ib' # Clipboard in (copy) using xsel
 alias cbo='xsel -ob' # Clipboard out (paste) using xsel
 alias ccat='highlight --out-format=xterm256' # Coloured cat w/ syntax highlighting
 alias cmatrix='cmatrix -bC red' # Nerdy matrix
-alias d='docker'
-alias dc='docker-compose'
+alias d='dune'
+alias db='dune build'
+alias dc='dune build @check'
+alias dr='dune runtest --force'
 alias dcr='docker-compose restart'
 alias g='git'
 alias gh='cd $(git rev-parse --show-toplevel)' # Go to the root of the git repository
