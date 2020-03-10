@@ -48,8 +48,22 @@
 
 (add-hook 'tuareg-mode-hook 'my/tuareg-mode-hook)
 
+;; Add support for `foo_intf.ml' ↔ `foo.ml' in tuareg-find-alternate-file
+(custom-set-variables
+ '(tuareg-other-file-alist
+   (quote
+    (("\\.mli\\'" (".ml" ".mll" ".mly"))
+     ("_intf.ml\\'" (".ml"))
+     ("\\.ml\\'" (".mli" "_intf.ml"))
+     ("\\.mll\\'" (".mli"))
+     ("\\.mly\\'" (".mli"))
+     ("\\.eliomi\\'" (".eliom"))
+     ("\\.eliom\\'" (".eliomi"))))))
+
 ;; bind ", {m/n}" to "merlin-error-{prev/next}" in tuareg mode
 (spacemacs/set-leader-keys-for-major-mode 'tuareg-mode "n" 'merlin-error-prev)
 (spacemacs/set-leader-keys-for-major-mode 'tuareg-mode "m" 'merlin-error-next)
 (spacemacs/set-leader-keys-for-major-mode 'tuareg-mode "f" 'merlin-type-enclosing)
 (spacemacs/set-leader-keys-for-major-mode 'tuareg-mode "a" 'tuareg-find-alternate-file)
+
+
