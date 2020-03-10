@@ -2,63 +2,115 @@
   ;; Ligature stuff
   ;; ---------------------------------------------------------------------------
 
-  (defun fira-code-mode--make-alist (list)
-    "Generate prettify-symbols alist from LIST."
-    (let ((idx -1))
-      (mapcar
-       (lambda (s)
-         (setq idx (1+ idx))
-         (let* ((code (+ #Xe100 idx))
-                (width (string-width s))
-                (prefix ())
-                (suffix '(?\s (Br . Br)))
-                (n 1))
-           (while (< n width)
-             (setq prefix (append prefix '(?\s (Br . Bl))))
-             (setq n (1+ n)))
-           (cons s (append prefix suffix (list (decode-char 'ucs code))))))
-       list)))
+(defun hasklig-mode--make-alist (list)
+  "Generate prettify-symbols alist from LIST."
+  (let ((idx -1))
+    (mapcar
+     (lambda (s)
+       (setq idx (1+ idx))
+       (let* ((code (+ #Xe100 idx))
+              (width (string-width s))
+              (prefix ())
+              (suffix '(?\s (Br . Br)))
+              (n 1))
+         (while (< n width)
+           (setq prefix (append prefix '(?\s (Br . Bl))))
+           (setq n (1+ n)))
+         (cons s (append prefix suffix (list (decode-char 'ucs code))))))
+     list)))
 
-  (defconst fira-code-mode--ligatures
-    '("www" "**" "***" "**/" "*>" "*/" "\\\\" "\\\\\\"
-      "{-" "[]" "::" ":::" ":=" "!!" "!=" "!==" "-}"
-      "--" "---" "-->" "->" "->>" "-<" "-<<" "-~"
-      "#{" "#[" "##" "###" "####" "#(" "#?" "#_" "#_("
-      ".-" ".=" ".." "..<" "..." "?=" "??" ";;" "/*"
-      "/**" "/=" "/==" "/>" "//" "///" "&&" "||" "||="
-      "|=" "|>" "^=" "$>" "++" "+++" "+>" "=:=" "=="
-      "===" "==>" "=>" "=>>" "<=" "=<<" "=/=" ">-" ">="
-      ">=>" ">>" ">>-" ">>=" ">>>" "<*" "<*>" "<|" "<|>"
-      "<$" "<$>" "<!--" "<-" "<--" "<->" "<+" "<+>" "<="
-      "<==" "<=>" "<=<" "<>" "<<" "<<-" "<<=" "<<<" "<~"
-      "<~~" "</" "</>" "~@" "~-" "~=" "~>" "~~" "~~>" "%%"
-      "disabled--ligature_x_" ":" "+" "+" "*"))
+;; Hasklig ligatures. See https://github.com/i-tu/Hasklig/blob/master/GlyphOrderAndAliasDB.
+(defconst hasklig-mode--ligatures
+  '("&&" "***" "*>" "\\\\" "||" "|>" "::"
+    "==" "===" "==>" "=>" "=<<" "!!" ">>"
+    ">>=" ">>>" ">>-" ">-" "->" "-<" "-<<"
+    "<*" "<*>" "<|" "<|>" "<$>" "<>" "<-"
+    "<<" "<<<" "<+>" ".." "..." "++" "+++"
+    "/=" ":::" ">=>" "->>" "<=>" "<=<" "<->"))
 
-  (defvar fira-code-mode--old-prettify-alist)
+(defvar hasklig-mode--old-prettify-alist)
 
-  (defun fira-code-mode--enable ()
-    "Enable Fira Code ligatures in current buffer."
-    (setq-local fira-code-mode--old-prettify-alist prettify-symbols-alist)
-    (setq-local prettify-symbols-alist (append (fira-code-mode--make-alist fira-code-mode--ligatures) fira-code-mode--old-prettify-alist))
-    (prettify-symbols-mode t))
+(defun hasklig-mode--enable ()
+  "Enable Hasklig ligatures in current buffer."
+  (setq-local hasklig-mode--old-prettify-alist prettify-symbols-alist)
+  (setq-local prettify-symbols-alist (append (hasklig-mode--make-alist hasklig-mode--ligatures) hasklig-mode--old-prettify-alist))
+  (prettify-symbols-mode t))
 
-  (defun fira-code-mode--disable ()
-    "Disable Fira Code ligatures in current buffer."
-    (setq-local prettify-symbols-alist fira-code-mode--old-prettify-alist)
+(defun hasklig-mode--disable ()
+  "Disable Hasklig ligatures in current buffer."
+  (setq-local prettify-symbols-alist hasklig-mode--old-prettify-alist)
+  (prettify-symbols-mode -1))
+
+;;;###autoload
+(define-minor-mode hasklig-mode
+  "Hasklig Ligatures minor mode."
+  :lighter " Hasklig"
+  (setq-local prettify-symbols-unprettify-at-point 'right-edge)
+  (if hasklig-mode
+      (hasklig-mode--enable)
+      (hasklig-mode--disable)))
+
+(provide 'hasklig-mode)
+;;; hasklig-mode.el ends here
+
+(defun jetbrains-ligature-mode--make-alist (list)
+   "Generate prettify-symbols alist from LIST."
+   (let ((idx -1))
+     (mapcar
+      (lambda (s)
+        (setq idx (1+ idx))
+        (if s
+            (let* ((code (+ #X10001 idx))
+                   (width (string-width s))
+                   (prefix ())
+                   (suffix '(?\s (Br . Br)))
+                   (n 1))
+              (while (< n width)
+                (setq prefix (append prefix '(?\s (Br . Bl))))
+                (setq n (1+ n)))
+              (cons s (append prefix suffix (list (decode-char 'ucs code)))))))
+      list)))
+
+ (defconst jetbrains-ligature-mode--ligatures
+   '("-->" "//" "/**" "/*" "*/" "<!--" ":=" "->>" "<<-" "->" "<-"
+     "<=>" "==" "!=" "<=" ">=" "=:=" "!==" "&&" "||" "..." ".."
+     nil nil nil nil nil nil nil nil nil nil nil nil nil nil
+     "|||" "///" "&&&" "===" "++" "--" "=>" "|>" "<|" "||>" "<||"
+     "|||>" "<|||" ">>" "<<" nil nil "::=" "|]" "[|" "{|" "|}"
+     "[<" ">]" ":?>" ":?" nil "/=" "[||]" "!!" "?:" "?." "::"
+     "+++" "??" "###" "##" ":::" "####" ".?" "?=" "=!=" "<|>"
+     "<:" ":<" ":>" ">:" "<>" "***" ";;" "/==" ".=" ".-" "__"
+     "=/=" "<-<" "<<<" ">>>" "<=<" "<<=" "<==" "<==>" "==>" "=>>"
+     ">=>" ">>=" ">>-" ">-" "<~>" "-<" "-<<" "=<<" "---" "<-|"
+     "<=|" "/\\" "\\/" "|=>" "|~>" "<~~" "<~" "~~" "~~>" "~>"
+     "<$>" "<$" "$>" "<+>" "<+" "+>" "<*>" "<*" "*>" "</>" "</" "/>"
+     "<->" "..<" "~=" "~-" "-~" "~@" "^=" "-|" "_|_" "|-" "||-"
+     "|=" "||=" "#{" "#[" "]#" "#(" "#?" "#_" "#_(" "#:" "#!" "#="
+     "&="))
+
+(defvar jetbrains-ligature-mode--old-prettify-alist)
+
+(defun jetbrains-ligature-mode--enable ()
+    "Enable JetBrains Mono ligatures in current buffer."
+    (setq-local jetbrains-ligature-mode--old-prettify-alist prettify-symbols-alist)
+       (setq-local prettify-symbols-alist (append (jetbrains-ligature-mode--make-alist jetbrains-ligature-mode--ligatures) jetbrains-ligature-mode--old-prettify-alist))
+       (prettify-symbols-mode t))
+
+(defun jetbrains-ligature-mode--disable ()
+    "Disable JetBrains Mono ligatures in current buffer."
+    (setq-local prettify-symbols-alist jetbrains-ligature-mode--old-prettify-alist)
     (prettify-symbols-mode -1))
 
-  (define-minor-mode fira-code-mode
-    "Fira Code ligatures minor mode"
-    :lighter "F"
+(define-minor-mode jetbrains-ligature-mode
+    "JetBrains Mono ligatures minor mode"
+    :lighter " JetBrains Mono"
     (setq-local prettify-symbols-unprettify-at-point 'right-edge)
-    (if fira-code-mode
-        (fira-code-mode--enable)
-      (fira-code-mode--disable)))
+    (if jetbrains-ligature-mode
+        (jetbrains-ligature-mode--enable)
+      (jetbrains-ligature-mode--disable)))
 
-  (defun fira-code-mode--setup ()
-    "Setup Fira Code Symbols"
-    (set-fontset-font t '(#Xe100 . #Xe16f) "Fira Code Symbol"))
+(defun jetbrains-ligature-mode--setup ()
+    "Setup JetBrains Mono Symbols"
+    (set-fontset-font t '(#X10001 . #X1009c) "JetBrains Mono"))
 
-  (provide 'fira-code-mode)
-
-  ;; ---------------------------------------------------------------------------
+(provide 'jetbrains-ligature-mode)

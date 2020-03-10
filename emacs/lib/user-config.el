@@ -1,6 +1,21 @@
 ;; this function is called at the very end of Spacemacs initialization after layers configuration.
 (defun dotspacemacs/user-config ()
 
+  ;; Org agenda files
+  (setq org-agenda-files '("~/sys/inbox.org"
+                           "~/sys/projects.org"))
+
+
+  (setq org-capture-templates '(("t" "Todo [inbox]" entry
+                                 (file+headline "~/sys/inbox.org" "Tasks")
+                                 "* TODO %i%?")
+                                ("T" "Tickler" entry
+                         (file+headline "~/sys/tickler.org" "Tickler")
+                                 "* %i%? \n %U")))
+
+  (setq org-refile-targets '(("~/sys/projects.org" :maxlevel . 3)
+                             ("~/sys/someday.org" :maxlevel . 1)))
+
   ;; Subfiles
   (load "~/r/dotfiles/emacs/lib/email.el")
 
@@ -35,7 +50,9 @@
   ;; Fonts
   ;; ---------------------------------------------------------------------------
 
-  (set-frame-font "Source Code Pro Semibold-10" t t)
+  ;; (set-frame-font "Source Code Pro Semibold-10" t t)
+  (set-frame-font "JetBrainsMono-15" t t)
+  ;; (set-face-attribute 'mode-line nil :font "JetBrainsMono-16")
 
   ;; Use variable width font faces in current buffer
   (defun my-buffer-face-mode-variable ()
@@ -84,5 +101,6 @@
 
   (setq-default evil-escape-key-sequence "qw")
   )
+
 
 

@@ -10,9 +10,8 @@
             (set (make-local-variable 'compile-command) "dune build @check")
             ))
 
-
 (defun my/tuareg-mode-hook ()
-  (git-gutter-mode)
+  (git-gutter+-mode)
 
   (bind-keys*
    ;; Navigate between Merlin errors with M-{j,k}
