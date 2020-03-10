@@ -1,0 +1,11 @@
+#!/bin/bash
+set -euo pipefail
+
+declare -A symbols=(
+    ["fun"]="λ"
+    ["lambda"]="0x07eb"
+)
+
+CHOSEN=$(printf "%s\n" "${!symbols[@]}" | dmenu)
+
+xdotool type ${symbols[$CHOSEN]}

@@ -1,0 +1,5 @@
+#!/bin/bash
+
+sudo mount -U 8761-2148 /mnt/usb
+sudo rsync --progress --recursive ~/sys/to-print /mnt/usb
+sudo umount /mnt/usb

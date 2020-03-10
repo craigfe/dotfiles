@@ -1,0 +1,5 @@
+#!/bin/bash
+
+REPO=$(git remote get-url origin | grep --color=never -oP ".*/[[:alnum:]]+/\K[[:alnum:]]+(?=.git)")
+
+echo "$@" | xargs --max-args=1 --replace git remote add {} "https://github.com/{}/$REPO.git"

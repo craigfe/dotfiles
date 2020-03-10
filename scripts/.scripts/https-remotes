@@ -1,0 +1,13 @@
+#!/bin/bash
+set -euo pipefail
+
+for REMOTE in $(git remote); do
+  URL="$(git remote get-url $REMOTE)"
+  if grep -q '^git@' <<< $URL; then
+    NEW_URL="$(echo $URL | cut -d@ -f2 | sed 's/:/\//; s/^/https:\/\//; /.git$/b; s/$/.git/')"
+    echo "converting $REMOTE: $URL -> $NEW_URL"
+    git remote set-url "$REMOTE" "$NEW_URL"
+  else
+    echo "$REMOTE already using HTTPS"
+  fi
+done

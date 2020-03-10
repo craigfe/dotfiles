@@ -1,4 +1,4 @@
 #!/bin/bash
 
-# 'import' tool taken from 'imageagick' package
+# 'import' tool taken from 'imagemagick' package
 import png:- | xclip -selection c -t image/png
