@@ -20,6 +20,12 @@ import XMonad.Util.EZConfig
 import XMonad.Util.Run
 import XMonad.Util.WorkspaceCompare
 
+reverseDir :: Direction2D -> Direction2D
+reverseDir L = R
+reverseDir R = L
+reverseDir U = D
+reverseDir D = U
+
 myWorkspaces = map show ([1 .. 9] ++ [0]) ++ projectsWorkspaces
 
 compareToCurrent :: X (WindowSpace -> Ordering)
@@ -63,16 +69,17 @@ myKeys = \c ->
       ("M-S-<Backspace>", spawn "systemctl suspend"),
       -- , ("M-<Space>", unicodePrompt "" xpConfig)
       ("<XF86MonBrightnessUp>", spawn "~/.scripts/backlight --inc 5"),
+      ("M-<Space>", spawn myUnicodePrompt),
       ("M-S-<Space>", setLayout $ XMonad.layoutHook c),
       ("M-<Tab>", sendMessage $ Toggle REFLECTX),
       ("M-S-<Tab>", moveToNextNonEmptyNoWrap),
       ("<Print>", spawn mySelectScreenshot),
       ("S-<Print>", spawn myScreenshot),
       -- Main keys
-      ("M--", incWindowSpacing 10),
-      ("M-S--", incWindowSpacing 2),
-      ("M-=", decWindowSpacing 10),
-      ("M-S-=", decWindowSpacing 2),
+      ("M--", incWindowSpacing 10 >> incGap 5),
+      ("M-S--", incWindowSpacing 2 >> incGap 1),
+      ("M-=", decWindowSpacing 10 >> decGap 5),
+      ("M-S-=", decWindowSpacing 2 >> decGap 1),
       ("M-q", kill),
       ("M-w", spawn myWebBrowser),
       ("M-S-w", spawn myPrivateWebBrowser),
@@ -80,14 +87,15 @@ myKeys = \c ->
       ("M-r", spawn "alacritty -e ranger"),
       ("M-t", withFocused $ windows . W.sink),
       ("M-M1-u", withFocused (sendMessage . UnMerge)),
-      ("M-y", (sendMessage Shrink) >> (sendMessage $ ExpandTowards L)),
-      ("M-u", sendMessage $ ExpandTowards D),
-      ("M-i", sendMessage $ ExpandTowards U),
-      ("M-o", (sendMessage Expand) >> (sendMessage $ ExpandTowards R)),
-      -- , ("<XF86Wakeup>-h", sendMessage $ ExpandTowards L)
-      -- , ("<XF86Wakeup>-j", sendMessage $ ExpandTowards D)
-      -- , ("<XF86Wakeup>-k", sendMessage $ ExpandTowards U)
-      -- , ("<XF86Wakeup>-l", sendMessage $ ExpandTowards R)
+
+      -- These bindings are reflected horizontally and vertically from what a
+      -- Vim-user would expect. A better solution would be to dynamically check
+      -- whether the toggle is active, but the `XMonad.Layout.Reflect` layout
+      -- does not make this easy.
+      ("M-y", (sendMessage Shrink) >> (sendMessage $ ExpandTowards $ reverseDir L)),
+      ("M-u", sendMessage $ ExpandTowards $ reverseDir D),
+      ("M-i", sendMessage $ ExpandTowards $ reverseDir U),
+      ("M-o", (sendMessage Expand) >> (sendMessage $ ExpandTowards $ reverseDir R)),
 
       ("M-[", onGroup W.focusUp'),
       ("M-]", onGroup W.focusDown'),
@@ -148,6 +156,7 @@ myKeys = \c ->
     setWSName () =
       runProcessWithInput "/home/craigfe/r/dotfiles/rofi/menu/print" [] ""
         >>= setCurrentWorkspaceName
+
     spotifyPause = spawn "dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause >> /dev/null"
     zipM mod keys actions f = zipWith (\key action -> (mod ++ key, f action)) keys actions
     zipM' mod keys actions f b = zipWith (\key action -> (mod ++ key, f action b)) keys actions

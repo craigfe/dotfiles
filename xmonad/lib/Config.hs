@@ -4,11 +4,11 @@ myDotfiles = "/home/craigfe/r/dotfiles"
 
 myAccentFile = myDotfiles ++ "/colours/out/theme"
 
-myBarInit = "/home/.config/polybar/start"
+myBarInit = "/home/craigfe/.config/polybar/start"
 
-myLauncher = myDotfiles ++ "/rofi/menu/run"
+myLauncher = "/home/craigfe/.config/rofi/menu/run"
 
-mySystemMenu = myDotfiles ++ "/rofi/menu/system"
+mySystemMenu = "/home/craigfe/.config/rofi/menu/system"
 
 myCalendar = "google-chrome --app=https://calendar.google.com"
 
@@ -33,3 +33,5 @@ myTerminal = "alacritty"
 myWebBrowser = "firefox-developer-edition"
 
 myPrivateWebBrowser = "firefox-developer-edition --private-window"
+
+myUnicodePrompt = "/home/craigfe/.scripts/unicode"
