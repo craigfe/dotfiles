@@ -1,22 +1,26 @@
 module Config where
 
-myDotfiles = "/home/craigfe/r/dotfiles"
+
+-- Tilde is not always expanded by XMonad.
+myHome = "/home/craigfe"
+
+myDotfiles = myHome ++ "/r/dotfiles"
 
 myAccentFile = myDotfiles ++ "/colours/out/theme"
 
-myBarInit = "/home/craigfe/.config/polybar/start"
+myBarInit = myHome ++ "/.config/polybar/start"
 
-myLauncher = "/home/craigfe/.config/rofi/menu/run"
+myLauncher = myHome ++ "/.config/rofi/menu/run"
 
-mySystemMenu = "/home/craigfe/.config/rofi/menu/system"
+mySystemMenu = myHome ++ "/.config/rofi/menu/system"
 
 myCalendar = "google-chrome --app=https://calendar.google.com"
 
-myCI = "alacritty --command '/home/craigfe/t/citty/run.sh'"
+myCI = "alacritty --command '" ++ myHome ++ "/t/citty/run.sh'"
 
 myEditor = "emacsclient --alternate-editor='emacs' --no-wait --create-frame"
 
-myLock = "/home/craigfe/.scripts/lock"
+myLock = myHome ++ "/.scripts/lock"
 
 myPdfViewer = "zathura"
 
@@ -34,4 +38,4 @@ myWebBrowser = "firefox-developer-edition"
 
 myPrivateWebBrowser = "firefox-developer-edition --private-window"
 
-myUnicodePrompt = "/home/craigfe/.scripts/unicode"
+myUnicodePrompt = myHome ++ "/.scripts/unicode"

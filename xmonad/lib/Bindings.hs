@@ -154,7 +154,7 @@ myKeys = \c ->
       ++ zipM "M-M1-" dirKeys dirs (sendMessage . pushGroup)
   where
     setWSName () =
-      runProcessWithInput "/home/craigfe/r/dotfiles/rofi/menu/print" [] ""
+      runProcessWithInput (myHome ++ "/.config/rofi/menu/print") [] ""
         >>= setCurrentWorkspaceName
 
     spotifyPause = spawn "dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause >> /dev/null"
