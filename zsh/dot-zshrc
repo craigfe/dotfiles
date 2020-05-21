@@ -1,4 +1,5 @@
 #!/bin/zsh
+
 export ZSH="/usr/share/oh-my-zsh"
 export ZSH_HOME="/usr/share/zsh"
 
@@ -28,7 +29,8 @@ source $HOME/.aliases
 if [[ -n $SSH_CONNECTION ]]; then
   export EDITOR='vim'
 else
-  export EDITOR="emacsclient --alternate-editor='emacs' --no-wait --create-frame"
+  export EDITOR='nvim'
+  # export EDITOR="emacsclient --alternate-editor='emacs' --no-wait --create-frame"
 fi
 
 # ssh

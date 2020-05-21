@@ -43,7 +43,7 @@ function opam_status {
             echo "$ZSH_THEME_OPAM_PROMPT_PREFIX$compiler_version$ZSH_THEME_OPAM_PROMPT_SUFFIX"
         else
             # There is no local opam switch in <git_home>/_opam, so get the currently active one
-            local compiler_version="$(opam switch --color=never | grep --color=never -- '->' | awk '{print $2}')"
+            local compiler_version="$(opam switch --color=never 2>/dev/null | grep --color=never -- '→' | awk '{print $2}')"
             echo "$ZSH_THEME_OPAM_PROMPT_GLOBAL$ZSH_THEME_OPAM_PROMPT_PREFIX$compiler_version$ZSH_THEME_OPAM_PROMPT_SUFFIX"
         fi
     fi
@@ -61,7 +61,7 @@ function precmd {
 	local RIGHT="$(opam_status) $(git_custom_status)"
 
 	# Calculate the number of spaces to print between LEFT and RIGHT (accounting for multiline left)
-	local SPACES=$(($COLUMNS - $(parsed_length $RIGHT) - ($(parsed_length $LEFT)) % $COLUMNS + 4))
+	local SPACES=$(($COLUMNS - $(parsed_length $RIGHT) - ($(parsed_length $LEFT)) % $COLUMNS + 0))
 
 	# Don't show right prompt if it must wrap to a new line
 	if [ $SPACES -gt 1 ]; then
