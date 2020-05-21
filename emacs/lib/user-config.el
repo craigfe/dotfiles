@@ -37,14 +37,43 @@
     (interactive)
     (mapc 'kill-buffer (delq (current-buffer) (buffer-list))))
 
-  ;; (define-key yas-minor-mode-map (kbd "TAB") yas-expand)
+  ;; (global-set-key (kbd "<tab>") 'hippie-expand)
 
+  ;; (add-to-list 'yas-snippet-dirs '("~/r/yasnippet-dune"))
+
+
+  ;; ---------------------------------------------------------------------------
+  ;; Layout
+  ;; ---------------------------------------------------------------------------
+
+  (with-eval-after-load 'magit
+    (setq magit-repository-directories
+          '(;; Directory containing project root directories
+            ("~/r/"      . 2)
+            ("~/t/"      . 2)
+            ;; Specific project root directory
+            ("~/sys/" . 1))))
+
+  ;; Piggy-back `magit''s repository tracking mechanism for `projectile-known-projects'.
+  ;; See https://emacs.stackexchange.com/a/32635.
+
+  (with-eval-after-load 'projectile
+    (when (require 'magit nil t)
+      (mapc #'projectile-add-known-project
+            (mapcar #'file-name-as-directory (magit-list-repos)))
+      ;; Optionally write to persistent `projectile-known-projects-file'
+      (projectile-save-known-projects)))
 
   ;; ---------------------------------------------------------------------------
   ;; Languages
   ;; ---------------------------------------------------------------------------
 
   (mapc 'load (file-expand-wildcards "~/r/dotfiles/emacs/lib/languages/*.el"))
+
+  ;; Capnp mode
+  (load "~/r/dotfiles/emacs/lib/modes/capnp-mode.el")
+  (require 'capnp-mode)
+  (add-to-list 'auto-mode-alist '("\\.capnp\\'" . capnp-mode))
 
   ;; ---------------------------------------------------------------------------
   ;; Fonts

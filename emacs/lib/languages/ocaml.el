@@ -12,6 +12,7 @@
 
 (defun my/tuareg-mode-hook ()
   (git-gutter+-mode)
+  (evil-matchit-mode)
 
   (bind-keys*
    ;; Navigate between Merlin errors with M-{j,k}
@@ -37,7 +38,7 @@
   (require 'ocamlformat)
 
   ;; Rebind <tab> to run OCamlformat
-  (define-key merlin-mode-map (kbd "<tab>") 'ocamlformat)
+  ;; (define-key merlin-mode-map (kbd "<tab>") 'ocamlformat)
 
   ;; Run ocamlformat before saving
   (add-hook 'before-save-hook 'ocamlformat-before-save)
