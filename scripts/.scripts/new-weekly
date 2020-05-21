@@ -1,0 +1,23 @@
+#!/bin/bash
+set -euo pipefail
+
+REPOSITORY=/home/craigfe/t/admin
+NAME=CraigFe
+CONTRIBUTIONS=/home/craigfe/r/github-automation/contributions_query.sh
+
+cd "$REPOSITORY"
+
+OLD_FILE=$(git ls-files | grep -i "$NAME" | tail -n 1)
+
+NEW_FILE=$(echo $OLD_FILE | awk -F '/' '{ $3++ ; printf "%s/%d/%d/%s", $1, $2, $3, $4 }')
+YEAR=$(echo $NEW_FILE | cut -d/ -f2)
+WEEK=$(echo $NEW_FILE | cut -d/ -f3)
+
+mkdir -p "$(dirname $NEW_FILE)"
+cp "$OLD_FILE" "$NEW_FILE"
+
+"$CONTRIBUTIONS" "$YEAR" "$WEEK" 2>/dev/null >> "$NEW_FILE"
+
+echo "Created $NEW_FILE"
+/home/craigfe/.scripts/em "$REPOSITORY/$NEW_FILE"
+
