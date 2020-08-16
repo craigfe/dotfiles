@@ -4,7 +4,7 @@ module Config where
 -- Tilde is not always expanded by XMonad.
 myHome = "/home/craigfe"
 
-myDotfiles = myHome ++ "/r/dotfiles"
+myDotfiles = myHome ++ "/t/dotfiles"
 
 myAccentFile = myDotfiles ++ "/colours/out/theme"
 
