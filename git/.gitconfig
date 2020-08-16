@@ -66,3 +66,5 @@
 	helper = store
 [advice]
 	detachedHead = false
+[init]
+	defaultBranch = main
