@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 set -euo pipefail
 
 battery_level=$(acpi -b | grep --color=never -oP "Battery 1: Discharging, \K[0-9]+(?=%)")

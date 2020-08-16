@@ -1,3 +1,5 @@
 #!/bin/bash
+set -euo pipefail
 
-git ls-files -mo | xargs -n 1 prettier --write
+(git ls-files --exclude-standard --others && git ls-files --modified) | xargs -n 1 prettier --write
+

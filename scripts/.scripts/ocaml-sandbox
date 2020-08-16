@@ -1,0 +1,13 @@
+#!/bin/bash
+set -euo pipefail
+
+command -v oskel >/dev/null 2>&1 || { echo >&2 "Error: missing dependency 'oskel'"; exit 1; }
+
+DIR=$(oskel -C /tmp --kind executable --non-interactive --yes |\
+          tail -n 1 |\
+          grep -oP "Created new project in \`\K(.*)(?=\')")
+
+ls "$DIR"
+
+emacsclient --no-wait --create-frame "$DIR"
+

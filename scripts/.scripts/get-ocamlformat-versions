@@ -5,7 +5,7 @@ echo
 for arg; do
   curl --silent "https://raw.githubusercontent.com/$arg/master/.ocamlformat" |\
     grep -oP 'version = \K[0-9.]+' |\
-    xargs printf '%s: %s\n' $arg
+    xargs printf '%s: %s\n' "$arg"
 done
 
 echo
