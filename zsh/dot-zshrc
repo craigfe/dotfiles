@@ -65,7 +65,7 @@ eval "$(jump shell)"
 . /home/craigfe/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true
 
 # AWS credentials
-. ~/.aws/get_credentials.sh
+# . ~/.aws/get_credentials.sh
 
 # Travis configuration
 # [ -f /home/craigfe/.travis/travis.sh ] && source /home/craigfe/.travis/travis.sh
@@ -81,10 +81,11 @@ export NVM_SOURCE="/usr/share/nvm"                     # The AUR package install
 [ -s "$NVM_SOURCE/nvm.sh" ] && . "$NVM_SOURCE/nvm.sh"  # Load NVM
 
 # Oskel configuration
-export PATH="$PATH:$HOME/t/skeleton/_build/install/default/bin"
+export PATH="$PATH:$HOME/t/oskel/_build/install/default/bin"
 export OSKEL_FULL_NAME="Craig Ferguson"
 export OSKEL_EMAIL="me@craigfe.io"
 export OSKEL_GITHUB_ORG="CraigFe"
+export OSKEL_OCAMLFORMAT_OPTIONS="parse-docstrings,break-infix=fit-or-vertical,module-item-spacing=compact"
 
 export PATH="$PATH:$HOME/t/dune-release/_build/install/default/bin"
 
