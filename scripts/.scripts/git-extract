@@ -1,0 +1,34 @@
+#!/bin/bash
+set -euxo pipefail
+
+if [ -z "${1+unset}" ]; then
+    cat <<EOF
+Usage: git-extract <tree-ish> [<tree-ish]
+
+$ git-extract t1
+
+Extract an interactively-selected patch from ancestor <t1> to the index.
+Initiates a rebase along the path from <t1>..HEAD.
+EOF
+    exit 1
+fi
+
+# TODO:
+# $ git-extract t1 t2
+# Apply the extracted patch to <t2> rather than the index.
+
+SOURCE="$1"
+
+git branch --quiet --force git-extract             # Safety point, because I'm a coward
+git stash push --quiet -m "git-extract autostash"
+
+# Resolve HEAD to a fixed commit
+if [ "$SOURCE" = "HEAD" ]; then
+    SOURCE=$(git rev-parse HEAD)
+fi
+
+git reset --patch "$SOURCE~"                                # Get a negative patch of the changes to be spliced
+git commit --no-gpg-sign --fixup="$SOURCE"                  # Prepare to extract the patch from the source commit
+GIT_SEQUENCE_EDITOR=: git rebase -i --autosquash "$SOURCE~" # Merge the extraction patch into the commit
+
+git stash pop --quiet
