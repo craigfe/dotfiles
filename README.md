@@ -4,7 +4,7 @@
 ![desktop-2](.assets/desktop02.png) 
 ![desktop-3](.assets/desktop03.png) 
 
-Configuration files for various programs. Managed by GNU [stow][https://www.gnu.org/software/stow/].
+Configuration files for various programs. Managed by GNU [stow](https://www.gnu.org/software/stow/).
 
 This repository currently contains configuration for the following programs:
 
@@ -14,8 +14,8 @@ This repository currently contains configuration for the following programs:
 | `bash` | Configuration for the `/bin/bash` shell, setting up aliases and environment variables. |
 | `compton` | Compositor for Xorg. Handles window transparency. |
 | `dunst` | Notification daemon with HTML-style formatting. |
-| `emacs` | My currently preferred text-editor for project-level work. I highly recommend [spacemacs](https://github.com/syl20bnr/spacemacs) if you're a vim user. |
-| `git` | Alises and custom command configuration. I like the idea of using git for [other stuff too](https://github.com/CraigFe/trace-rpc)! |
+| `emacs` | I use [spacemacs](https://github.com/syl20bnr/spacemacs) specifically. |
+| `git` | Alises and custom command configuration. I like the idea of using git for [other stuff too](https://github.com/CraigFe/trace-rpc). |
 | `i3` | Tiling window manager. I switched over to `xmonad` a while ago when my i3 config started getting ridiculous to maintain. |
 | `LaTeX` | Document preparation and typesetting. |
 | `mutt` | Text-based email client for the command line. |
