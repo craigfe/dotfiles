@@ -1,23 +1,25 @@
-colours/out
+/colours/out
 
-shortcuts/out
+/shortcuts/out
 
-i3/config
+/i3/config
 
-polybar/out
+/polybar/out
 
-ranger/shortcuts.conf
-ranger/bookmarks
-ranger/history
-ranger/tagged
+/ranger/shortcuts.conf
+/ranger/bookmarks
+/ranger/history
+/ranger/tagged
 
-settings/user.conf
+/settings/user.conf
 
-xmonad/xmonad-x86_64-linux
-xmonad/xmonad.errors
-xmonad/**/*.hi
-xmonad/**/*.o
-xmonad/xmonad.state
+/stack/.stack/snapshots
+
+/xmonad/.xmonad/xmonad-x86_64-linux
+/xmonad/.xmonad/xmonad.errors
+/xmonad/**/*.hi
+/xmonad/**/*.o
+/xmonad/xmonad.state
 
 vis/colors
 

@@ -13,4 +13,4 @@ cd $SRC_DIR
 stack build
 
 # Create a hard link at the requested destination, replacing any existing one.
-ln -f -T $(stack exec -- which $EXE_NAME) $1
+ln -f -T "$(stack exec -- which $EXE_NAME)" "$1"
