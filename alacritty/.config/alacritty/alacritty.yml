@@ -86,16 +86,16 @@ scrolling:
 font:
   # Normal (roman) font face
   normal:
-    family: Source Code Pro 
-    style: Semibold
+    family: JetBrainsMono
+    style: Medium
 
   bold:
-    family: Source Code Pro
+    family: JetBrainsMono
     style: Bold
 
   italic:
-    family: Source Code Pro
-    style: Semibold Italic
+    family: JetBrainsMono
+    style: Italic
 
 
   size: 12
