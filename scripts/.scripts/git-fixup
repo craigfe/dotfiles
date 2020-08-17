@@ -1,0 +1,22 @@
+#!/bin/bash
+set -euo pipefail
+
+OLDEST_TO_FIX=$(git log --pretty=format:'%H|%s' |\
+                   awk -F'|' '
+# Add `fixup!` title messages to an array
+match($0, /[a-z0-9]+\|fixup! (.*)/, result) { messages[result[1]] }
+
+# Print those that we find later
+$2 in messages { print $1 }' |\
+                   tail -n 1)
+
+[ ! -z "$OLDEST_TO_FIX" ] || { echo "No fixup commits to be applied"; exit 1; }
+
+TO_MODIFY=$(($(git rev-list HEAD ^"$OLDEST_TO_FIX" | wc -l) + 1))
+
+read -p "Rewrite $TO_MODIFY commmits [y/N]? " -n 1 -r
+echo
+
+[[ $REPLY =~ ^[Yy]$ ]] || { echo "Aborting"; exit 1; }
+
+GIT_SEQUENCE_EDITOR=: git rebase -i --autosquash "$OLDEST_TO_FIX"~

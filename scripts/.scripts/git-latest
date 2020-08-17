@@ -1,0 +1,8 @@
+#!/bin/bash
+set -euo pipefail
+
+git for-each-ref \
+    --format="%(refname:short)" \
+    --sort=-committerdate \
+    --count=${1:-10} \
+    refs/heads/

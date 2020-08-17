@@ -1,0 +1,12 @@
+#!/bin/sh
+set -eu
+
+PARENT=$(git rev-parse --show-toplevel)
+
+while :; do
+    TMP="$(git -C "$PARENT" rev-parse --show-superproject-working-tree)"
+    [ -n "$TMP" ] || break
+    PARENT="$TMP"
+done
+
+echo "$PARENT"

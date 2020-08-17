@@ -1,0 +1,12 @@
+#!/bin/bash
+
+require fzf
+
+branches=$(git for-each-ref --count=30 \
+               --sort=-committerdate \
+               --format="%(refname:short)" \
+               refs/heads/)
+
+branch=$(echo "$branches" | fzf-tmux -d $((2 + $(wc -l <<< "$branches"))))
+
+echo $branch
