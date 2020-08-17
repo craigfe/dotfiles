@@ -1,6 +1,8 @@
 #!/bin/bash
 set -euo pipefail
 
+LANG="en_GB.UTF8"
+
 declare -A symbols=(
     ["fun"]="λ"
     ["acute"]="\u301"
@@ -259,6 +261,10 @@ declare -A symbols=(
     ["endash"]="\u2013"
 )
 
-CHOSEN=$(printf "%s\n" "${!symbols[@]}" | rofi -dmenu -i -p "CODE:")
-
-echo -n -e "${symbols[$CHOSEN]}" | xsel --clipboard --input
+(for x in "${!symbols[@]}"; do echo -e "$x\t↦  ${symbols[$x]}"; done) |\
+    expand -t 25 |\
+    rofi -dmenu -i -p "CODE:" |\
+    tr -s ' ' |\
+    cut -d ' ' -f 3- |\
+    tr -d '\n' |\
+    xsel --clipboard --input
