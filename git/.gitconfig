@@ -1,7 +1,7 @@
 [user]
 	email = me@craigfe.io
 	name = Craig Ferguson
-	signingkey = A5A512AEE54B0C6E
+	signingkey = C51096074B5B153F06A291657B44D6C941A012C5
 
 [color]
 	ui = true
@@ -37,7 +37,7 @@
 	c = commit
 	cm = commit -m
 	cam = commit -a -m
-	cne = commit --amend --no-edit
+	cne = commit --amend --no-edit --allow-empty-message
 
 [core]
 	editor = nvim

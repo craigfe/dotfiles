@@ -95,6 +95,6 @@ zle -N zle-line-init
 zle -N zle-line-finish
 zle -N zle-keymap-select
 
-SYMBOL='%(!.∞.ᐅ)'
+SYMBOL='%(!.∞.❭)'
 PROMPT='$(vi_mode_prompt_info)${ret_status}$SYMBOL%b '
 RPROMPT=' ' # Prevent vi-mode indicator from showing up

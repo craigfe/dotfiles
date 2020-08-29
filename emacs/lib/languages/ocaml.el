@@ -44,10 +44,11 @@
   (add-hook 'before-save-hook 'ocamlformat-before-save)
 
   ;; Fira Code ligatures
-  (load "~/r/dotfiles/emacs/lib/ligatures.el")
+  (load "~/t/dotfiles/emacs/lib/ligatures.el")
   )
 
 (add-hook 'tuareg-mode-hook 'my/tuareg-mode-hook)
+(add-hook 'tuareg-mode-hook #'lsp-ocaml-enable)
 
 ;; Add support for `foo_intf.ml' ↔ `foo.ml' in tuareg-find-alternate-file
 (custom-set-variables

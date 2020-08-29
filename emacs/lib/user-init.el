@@ -6,7 +6,7 @@ executes.
 before packages are loaded. If you are unsure, you should try in setting them in
 `dotspacemacs/user-config' first."
 
-  (require 'opam-user-setup "~/r/dotfiles/emacs/lib/opam-user-setup.el")
+  (require 'opam-user-setup "~/t/dotfiles/emacs/lib/opam-user-setup.el")
 
   (setq exec-path-from-shell-check-startup-files nil)
   (setq evil-want-abbrev-expand-on-insert-exit nil)

@@ -2,6 +2,7 @@
 
 export ZSH="/usr/share/oh-my-zsh"
 export ZSH_HOME="/usr/share/zsh"
+export LANG=en_GB.UTF-8
 
 ZSH_THEME="craigfe"
 
@@ -70,6 +71,32 @@ eval "$(jump shell)"
 # Travis configuration
 # [ -f /home/craigfe/.travis/travis.sh ] && source /home/craigfe/.travis/travis.sh
 
+fh() {
+    print -z $(history |\
+                   fzf --no-sort --tac |\
+                   sed -E 's/ *[0-9]*\*? *//; s/\\/\\\\/g')
+}
+
+ch() {
+    local cols sep google_history open
+    cols=$(( COLUMNS / 3 ))
+    sep='{::}'
+
+    if [ "$(uname)" = "Darwin" ]; then
+        google_history="$HOME/Library/Application Support/Google/Chrome/Default/History"
+        open=open
+    else
+        google_history="$HOME/.config/google-chrome/Default/History"
+        open=xdg-open
+    fi
+    cp -f "$google_history" /tmp/h
+    sqlite3 -separator $sep /tmp/h \
+            "select substr(title, 1, $cols), url
+     from urls order by last_visit_time desc" |
+        awk -F $sep '{printf "%-'$cols's  \x1b[36m%s\x1b[m\n", $1, $2}' |
+        fzf --ansi --multi | sed 's#.*\(https*://\)#\1#' | xargs $open > /dev/null 2> /dev/null
+}
+
 # Nix configuration
 export NIX_PATH="nixpkgs=https://github.com/NixOS/nixpkgs/archive/release-19.09.tar.gz"
 export PATH="$PATH:$HOME/.nix-profile/bin"
@@ -85,7 +112,7 @@ export PATH="$PATH:$HOME/t/oskel/_build/install/default/bin"
 export OSKEL_FULL_NAME="Craig Ferguson"
 export OSKEL_EMAIL="me@craigfe.io"
 export OSKEL_GITHUB_ORG="CraigFe"
-export OSKEL_OCAMLFORMAT_OPTIONS="parse-docstrings,break-infix=fit-or-vertical,module-item-spacing=compact"
+export OSKEL_OCAMLFORMAT_OPTIONS="parse-docstrings=true,break-infix=fit-or-vertical,module-item-spacing=compact"
 
 export PATH="$PATH:$HOME/t/dune-release/_build/install/default/bin"
 

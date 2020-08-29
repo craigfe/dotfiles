@@ -1,23 +1,28 @@
 ;; this function is called at the very end of Spacemacs initialization after layers configuration.
 (defun dotspacemacs/user-config ()
 
+  (flyspell-mode-off)
+
   ;; Org agenda files
-  (setq org-agenda-files '("~/sys/inbox.org"
-                           "~/sys/projects.org"))
+  ;; (setq org-agenda-files '("~/sys/inbox.org"
+  ;;                          "~/sys/projects.org"))
 
 
-  (setq org-capture-templates '(("t" "Todo [inbox]" entry
-                                 (file+headline "~/sys/inbox.org" "Tasks")
-                                 "* TODO %i%?")
-                                ("T" "Tickler" entry
-                         (file+headline "~/sys/tickler.org" "Tickler")
-                                 "* %i%? \n %U")))
+  ;; (setq org-capture-templates '(("t" "Todo [inbox]" entry
+  ;;                                (file+headline "~/sys/inbox.org" "Tasks")
+  ;;                                "* TODO %i%?")
+  ;;                               ("T" "Tickler" entry
+  ;;                        (file+headline "~/sys/tickler.org" "Tickler")
+  ;;                                "* %i%? \n %U")))
 
-  (setq org-refile-targets '(("~/sys/projects.org" :maxlevel . 3)
-                             ("~/sys/someday.org" :maxlevel . 1)))
+  ;; (setq org-refile-targets '(("~/sys/projects.org" :maxlevel . 3)
+  ;;                            ("~/sys/someday.org" :maxlevel . 1)))
 
   ;; Subfiles
-  (load "~/r/dotfiles/emacs/lib/email.el")
+  ;; (load "~/t/dotfiles/emacs/lib/email.el")
+
+  (add-hook 'after-save-hook
+            'executable-make-buffer-file-executable-if-script-p)
 
   (setq inhibit-startup-screen t
         initial-buffer-choice nil)
@@ -68,10 +73,10 @@
   ;; Languages
   ;; ---------------------------------------------------------------------------
 
-  (mapc 'load (file-expand-wildcards "~/r/dotfiles/emacs/lib/languages/*.el"))
+  (mapc 'load (file-expand-wildcards "~/t/dotfiles/emacs/lib/languages/*.el"))
 
   ;; Capnp mode
-  (load "~/r/dotfiles/emacs/lib/modes/capnp-mode.el")
+  (load "~/t/dotfiles/emacs/lib/modes/capnp-mode.el")
   (require 'capnp-mode)
   (add-to-list 'auto-mode-alist '("\\.capnp\\'" . capnp-mode))
 

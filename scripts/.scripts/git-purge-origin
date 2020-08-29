@@ -1,0 +1,30 @@
+#!/bin/bash
+set -euo pipefail
+
+# Remove `origin` branches that don't exist locally
+
+git fetch origin
+
+TO_PURGE="$(git branch --remotes --list |\
+               awk '/origin/ { print $1 }' |\
+               cut -d/ -f2 |\
+               egrep -vf <(git branch --list | tr -d '*' | awk '{ print $1 }')\
+                     -e 'HEAD' -e 'gh-pages' - || [[ $? == 1 ]])"
+
+[[ ! -z "$TO_PURGE" ]] || { echo >&2 "No branches to purge at remote."; exit 0; }
+
+echo "Stale branches found:"
+echo
+echo "$TO_PURGE" | xargs -n 1 printf "- %s\n"
+echo
+
+COUNT="$(echo $TO_PURGE | wc -w)"
+
+read -p "Delete $COUNT branches from origin [y/N]? " -n 1 -r
+echo
+
+[[ $REPLY =~ ^[Yy]$ ]] || { echo "Aborting"; exit 1; }
+
+echo "$TO_PURGE" | xargs git push -d origin
+
+# xargs git push -d origin
