@@ -1,0 +1,107 @@
+#!/bin/bash
+#
+# After a release to the opam-repository, prepare a release to Tezos'
+# opam repository as well.
+
+set -euo pipefail
+
+OPAM_MAIN=~/t/opam-repository
+OPAM_TEZOS=~/t/tezos-opam-repository
+
+# List of packages in the Tezos ecosystem that we maintain
+PACKAGES=(
+    alcotest
+    alcotest-lwt
+    digestif
+    either
+    index
+    irmin
+    irmin-layers
+    irmin-mem
+    irmin-pack
+    ppx_irmin
+    ppx_repr
+    progress
+    repr
+    semaphore-compat
+)
+
+printf "Fetching from upstream in both repositories\n\n"
+git -C "$OPAM_MAIN" fetch -q upstream
+git -C "$OPAM_MAIN" checkout upstream/master
+git -C "$OPAM_TEZOS" fetch -q upstream
+git -C "$OPAM_TEZOS" checkout upstream/master
+
+latest_version_of_pkg () {
+    ls -1 "$OPAM_MAIN/packages/$1" | tail -n 1 | cut -d. -f 2-
+}
+
+get_package_versions () {
+    todo=false
+    for pkg in ${PACKAGES[@]}; do
+        # Get latest version in each repository
+        version_main=$(latest_version_of_pkg $pkg)
+        version_tezos=$((ls -1 "$OPAM_TEZOS/packages/$pkg" 2>/dev/null || true) | tail -n 1 | cut -d. -f 2-)
+
+        if [[ -z "$version_tezos" ]]; then
+            printf "Release %-29s %6s\n" "'$pkg'" "$version_main"
+            todo=true
+
+        elif [[ ! "$version_main" == "$version_tezos" ]]; then
+            printf "Upgrade %-20s %-6s → %6s\n" "'$pkg'" "$version_tezos" "$version_main"
+            todo=true
+        fi
+    done
+
+    [[ "$todo" == "true" ]] || (echo >&2 "No actions to perform." && return 1)
+}
+
+perform_modification () {
+    action=$(echo "$1" | cut -f1)
+    echo $action
+}
+
+TMPFILE=/tmp/tezos-downstream-actions
+printf ";; Changes to make; delete accordingly.\n\n" > $TMPFILE
+get_package_versions >> $TMPFILE
+
+
+$EDITOR $TMPFILE </dev/tty >/dev/tty
+sed -ir 's/;;.*$//; /^$/d; ' $TMPFILE
+
+main_pkg=$(cat $TMPFILE | fzf --prompt "Main action: " | grep -oP "'\K.*(?=\')")
+main_pkg_version=$(latest_version_of_pkg $main_pkg)
+
+cat $TMPFILE | sed -r 's/ +/ /g' | while read modification; do
+    action=$(echo "$modification" | cut -f1 -d' ')
+    pkg=$(echo "$modification" | cut -f2 -d' ' | sed -r "s/^'//; s/'$//")
+    new_version=$(echo "$modification" | cut -f3 -d' ' | sed -r "s/ +/ /g")
+    case $action in
+        "Release")
+            new_version=$(echo "$modification" | cut -f3 -d' ')
+
+            mkdir -p "$OPAM_TEZOS/packages/$pkg/$pkg.$new_version"
+            cp -r "$OPAM_MAIN/packages/$pkg/$pkg.$new_version" "$OPAM_TEZOS/packages/$pkg/$pkg.$new_version"
+        ;;
+
+        "Upgrade")
+            old_version=$(echo "$modification" | cut -f3 -d' ')
+            new_version=$(echo "$modification" | cut -f5 -d' ')
+
+            rm -irf "$OPAM_TEZOS/packages/$pkg/$pkg.$old_version"
+            cp -r "$OPAM_MAIN/packages/$pkg/$pkg.$new_version" "$OPAM_TEZOS/packages/$pkg/$pkg.$new_version"
+        ;;
+
+        *) echo >&2 "Malformed action: $action" && exit 1
+    esac
+done
+
+branch_name="release-$main_pkg-$main_pkg_version"
+git -C "$OPAM_TEZOS" add .
+git -C "$OPAM_TEZOS" branch -f $branch_name
+git -C "$OPAM_TEZOS" switch $branch_name
+
+( printf "Release '$main_pkg.$main_pkg_version' and associated packages\n\n" && cat "$TMPFILE" ) |\
+    git -C "$OPAM_TEZOS" commit --file=-
+
+
