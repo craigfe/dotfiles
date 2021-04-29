@@ -12,6 +12,7 @@ myStartupHook =
     <+> spawn Config.myBarInit
     <+> setDefaultCursor xC_left_ptr
     <+> setWMName "LG3D"
+
 -- <+> spawn "compton"
 -- <+> spawn "xsetroot -solid '#F5F6F7'"
 -- <+> spawn "xinput --set-prop 13 290 1"

@@ -56,11 +56,11 @@ main = do
   accentFile <- readFile Config.myAccentFile
   dbus <- DC.connectSession
   let accent = init accentFile
-  xmonad
-    $ Layouts.my2DNavigation
-    $ Projects.v
-    $ docks
-      (defaults accent)
-        { handleEventHook = docksEventHook,
-          logHook = Logging.myLogHook accent dbus
-        }
+  xmonad $
+    Layouts.my2DNavigation $
+      Projects.v $
+        docks
+          (defaults accent)
+            { handleEventHook = docksEventHook,
+              logHook = Logging.myLogHook accent dbus
+            }

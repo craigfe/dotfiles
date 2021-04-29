@@ -1,10 +1,10 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.33.0.
+-- This file has been generated from package.yaml by hpack version 0.34.2.
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 2f7352c9bbaf1ba0441b7cd5548b4f06758130f00db1af9ae145c79bc8ceded6
+-- hash: 2380591a72b6fb6c6e1045f640f7415ef386e74b9accba189b5356b3d93c1bd8
 
 name:           xmonad-craigfe
 version:        0.1.0.0
@@ -43,6 +43,8 @@ library
     , bytestring
     , containers
     , dbus
+    , filepath
+    , process
     , random
     , utf8-string
     , xmonad >=0.15

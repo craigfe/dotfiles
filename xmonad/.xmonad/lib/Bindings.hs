@@ -1,9 +1,17 @@
+{-# LANGUAGE LambdaCase #-}
+
 module Bindings where
 
 import Config
+import Control.Arrow
+import Data.Function
 import Data.Maybe
 import Projects
 import System.Exit
+import System.FilePath.Posix
+import System.IO
+import System.Process
+import Text.Printf
 import XMonad
 import XMonad.Actions.CycleWS
 import XMonad.Actions.Navigation2D
@@ -61,10 +69,44 @@ decGap n = sendMessage $ ModifyGaps $ map (\(d, s) -> (d, s - n))
 myModMask :: KeyMask
 myModMask = mod4Mask
 
+spawnInDir :: String -> X ()
+spawnInDir = spawn . printf "alacritty --working-directory %s"
+
+spawnTerminalFromEmacs :: X ()
+spawnTerminalFromEmacs = do
+  uninstallSignalHandlers
+  (retCode, currentDir, err) <-
+    liftIO (readProcessWithExitCode "/usr/bin/emacsclient" ["--eval", "(buffer-file-name (window-buffer (selected-window)))"] "")
+  installSignalHandlers
+
+  case retCode of
+    ExitFailure i ->
+      liftIO
+        ( hPutStrLn stderr $
+            printf "Spawning terminal failed: { code = %d; err = %s }" i err
+        )
+    ExitSuccess ->
+      do
+        takeDirectory (tail (init (init currentDir)))
+        & spawnInDir
+
+spawnTerminal :: X ()
+spawnTerminal = withFocused $ \window ->
+  do
+    runQuery className window >>= \case
+      "Alacritty" -> do
+        title <- runQuery title window
+        let program = title & dropWhile (/= ':') & drop 2
+        if program == "" then spawn "alacritty" else spawnInDir program
+
+      "Emacs" -> spawnTerminalFromEmacs
+
+      _ -> spawn "alacritty"
+
 myKeys = \c ->
   mkKeymap c $
     [ ("M-<Return>", spawn $ XMonad.terminal c),
-      ("M-S-<Return>", windows W.swapMaster),
+      ("M-S-<Return>", spawnTerminal),
       ("M-<Backspace>", spawn mySystemMenu),
       ("M-S-<Backspace>", spawn "systemctl suspend"),
       -- , ("M-<Space>", unicodePrompt "" xpConfig)
@@ -87,7 +129,6 @@ myKeys = \c ->
       ("M-r", spawn "alacritty -e ranger"),
       ("M-t", withFocused $ windows . W.sink),
       ("M-M1-u", withFocused (sendMessage . UnMerge)),
-
       -- These bindings are reflected horizontally and vertically from what a
       -- Vim-user would expect. A better solution would be to dynamically check
       -- whether the toggle is active, but the `XMonad.Layout.Reflect` layout
@@ -96,7 +137,6 @@ myKeys = \c ->
       ("M-u", sendMessage $ ExpandTowards $ reverseDir D),
       ("M-i", sendMessage $ ExpandTowards $ reverseDir U),
       ("M-o", (sendMessage Expand) >> (sendMessage $ ExpandTowards $ reverseDir R)),
-
       ("M-[", onGroup W.focusUp'),
       ("M-]", onGroup W.focusDown'),
       ("M-S-o", moveTo Next EmptyWS),

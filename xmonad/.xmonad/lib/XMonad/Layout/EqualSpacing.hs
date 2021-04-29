@@ -23,20 +23,18 @@ data EqualSpacingMsg = MoreSpacing Int | LessSpacing Int deriving (Typeable)
 
 instance Message EqualSpacingMsg
 
-data EqualSpacing a
-  = EqualSpacing
-      { gap :: Int,
-        add :: Int,
-        mult :: Rational,
-        min :: Int
-      }
+data EqualSpacing a = EqualSpacing
+  { gap :: Int,
+    add :: Int,
+    mult :: Rational,
+    min :: Int
+  }
   deriving (Read)
 
 instance Show (EqualSpacing a) where
   show (EqualSpacing g a _ m) = "EqualSpacing " ++ show g ++ " " ++ show a ++ " " ++ show m
 
 instance LayoutModifier EqualSpacing a where
-
   modifierDescription = show
 
   modifyLayout eqsp workspace screen =

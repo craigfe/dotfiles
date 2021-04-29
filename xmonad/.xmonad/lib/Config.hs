@@ -1,6 +1,5 @@
 module Config where
 
-
 -- Tilde is not always expanded by XMonad.
 myHome = "/home/craigfe"
 
@@ -34,8 +33,8 @@ mySink = "alsa_output.pci-0000_00_1f.3.analog-stereo"
 
 myTerminal = "alacritty"
 
-myWebBrowser = "firefox-developer-edition"
+myWebBrowser = "google-chrome-stable"
 
-myPrivateWebBrowser = "firefox-developer-edition --private-window"
+myPrivateWebBrowser = "google-chrome-stable --incognito"
 
 myUnicodePrompt = myHome ++ "/.scripts/unicode"

@@ -18,6 +18,8 @@ library:
   - random
   - utf8-string
   - X11
+  - process
+  - filepath
   - xmonad >= 0.15
   - xmonad-contrib >= 0.15
 
