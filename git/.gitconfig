@@ -34,6 +34,7 @@
 	st = status
 
 	# Commit
+	empty = commit --allow-empty-message -m ""
 	c = commit
 	cm = commit -m
 	cam = commit -a -m
@@ -45,6 +46,7 @@
 
 [rebase]
 	autoStash = true
+	autosquash = true
 
 [pull]
 	rebase = true
@@ -53,7 +55,10 @@
 	default = simple
 
 [commit]
-	gpgsign = true
+	gpgsign = false
+
+[submodule]
+	recurse = true
 
 [filter "lfs"]
 	clean = git-lfs clean -- %f

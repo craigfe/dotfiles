@@ -69,44 +69,16 @@ decGap n = sendMessage $ ModifyGaps $ map (\(d, s) -> (d, s - n))
 myModMask :: KeyMask
 myModMask = mod4Mask
 
-spawnInDir :: String -> X ()
-spawnInDir = spawn . printf "alacritty --working-directory %s"
+spawnLocal :: X ()
+spawnLocal = spawn $ printf "alacritty --command $SHELL -i -c 'tmux'"
 
-spawnTerminalFromEmacs :: X ()
-spawnTerminalFromEmacs = do
-  uninstallSignalHandlers
-  (retCode, currentDir, err) <-
-    liftIO (readProcessWithExitCode "/usr/bin/emacsclient" ["--eval", "(buffer-file-name (window-buffer (selected-window)))"] "")
-  installSignalHandlers
-
-  case retCode of
-    ExitFailure i ->
-      liftIO
-        ( hPutStrLn stderr $
-            printf "Spawning terminal failed: { code = %d; err = %s }" i err
-        )
-    ExitSuccess ->
-      do
-        takeDirectory (tail (init (init currentDir)))
-        & spawnInDir
-
-spawnTerminal :: X ()
-spawnTerminal = withFocused $ \window ->
-  do
-    runQuery className window >>= \case
-      "Alacritty" -> do
-        title <- runQuery title window
-        let program = title & dropWhile (/= ':') & drop 2
-        if program == "" then spawn "alacritty" else spawnInDir program
-
-      "Emacs" -> spawnTerminalFromEmacs
-
-      _ -> spawn "alacritty"
+spawnRemote :: X ()
+spawnRemote = spawn $ printf "alacritty --command $SHELL -i -c 'ssh %s'" myRemoteMachine
 
 myKeys = \c ->
   mkKeymap c $
-    [ ("M-<Return>", spawn $ XMonad.terminal c),
-      ("M-S-<Return>", spawnTerminal),
+    [ ("M-<Return>", spawnLocal),
+      ("M-S-<Return>", spawnRemote),
       ("M-<Backspace>", spawn mySystemMenu),
       ("M-S-<Backspace>", spawn "systemctl suspend"),
       -- , ("M-<Space>", unicodePrompt "" xpConfig)

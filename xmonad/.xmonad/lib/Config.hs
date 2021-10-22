@@ -38,3 +38,5 @@ myWebBrowser = "google-chrome-stable"
 myPrivateWebBrowser = "google-chrome-stable --incognito"
 
 myUnicodePrompt = myHome ++ "/.scripts/unicode"
+
+myRemoteMachine = "hanabi"
