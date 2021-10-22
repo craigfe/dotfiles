@@ -6,4 +6,4 @@
 FILE="$1"
 
 dune build @check
-ocamlmerlin single dump -what ppxed-source -filename "$FILE" < "$FILE" | jq -r '.value' | ocamlformat --name="$FILE" -
+ocamlmerlin single dump -what ppxed-source -filename "$FILE" < "$FILE" | jq -r '.value' #| ocamlformat --name="$FILE" -
