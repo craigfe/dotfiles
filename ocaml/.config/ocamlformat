@@ -1,0 +1,4 @@
+profile=conventional
+break-infix = fit-or-vertical
+parse-docstrings
+module-item-spacing = compact
