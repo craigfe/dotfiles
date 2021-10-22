@@ -20,7 +20,7 @@ lint-sh:
 
 .PHONY: lint-hs
 lint-hs:
-	ormolu --check-idempotency --mode check $(HS_FILES)
+	ormolu --check-idempotence --mode check $(HS_FILES)
 	hlint $(HS_FILES)
 
 .PHONY: lint
@@ -28,7 +28,7 @@ lint: lint-sh lint-hs
 
 .PHONY: format
 format:
-	ormolu --check-idempotency --mode inplace $(HS_FILES)
+	ormolu --check-idempotence --mode inplace $(HS_FILES)
 
 .PHONY: test
 test: shellcheck
