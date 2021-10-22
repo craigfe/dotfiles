@@ -1,0 +1,4 @@
+#!/bin/bash
+set -euo pipefail
+
+opam pin add -k path --yes $1 ~/t/$1

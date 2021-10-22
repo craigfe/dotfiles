@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+case "$1" in
+    "craigfe")    printf '"Craig Ferguson <me@craigfe.io>"' ;;
+    "icristescu") printf '"icristescu <domninac@gmail.com>"' ;;
+    "ngoguey")    printf '"ngoguey <ngoguey@student.42.fr>"' ;;
+    "samoht")     printf '"Thomas Gazagnaire <thomas@gazagnaire.org>"' ;;
+
+    *) echo >&2 "Unrecognised author: $1"; exit 1 ;;
+esac

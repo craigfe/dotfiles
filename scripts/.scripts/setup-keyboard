@@ -1,0 +1,5 @@
+#!/bin/bash
+
+setxkbmap -layout gb
+xmodmap ~/.Xmodmap
+xset r rate 190 60

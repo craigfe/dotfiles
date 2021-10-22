@@ -7,7 +7,9 @@ DIR=$(oskel --working-dir /tmp --kind executable --non-interactive --yes |\
           tail -n 1 |\
           grep -oP "Created new project in \`\K(.*)(?=\')")
 
-ls "$DIR"
+ls -d1 "$DIR"/*
 
-emacsclient --no-wait --create-frame "$DIR"
+if [[ "$#" -gt 0 && "$1" = "--open" ]]; then
+    emacsclient --no-wait --create-frame "$DIR"
+fi
 

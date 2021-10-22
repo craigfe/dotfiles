@@ -259,6 +259,7 @@ declare -A symbols=(
     ["..y"]="\u00FF"
     ["..Y"]="\u0178"
     ["endash"]="\u2013"
+    ["tm"]="™"
 )
 
 (for x in "${!symbols[@]}"; do echo -e "$x\t↦  ${symbols[$x]}"; done) |\

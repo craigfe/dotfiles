@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# For a given set of packages, get the list of all releases that have happened
+# within a given time window.
+
+# List of packages in the Tezos ecosystem that we maintain
+PACKAGES=(alcotest alcotest-lwt digestif either index irmin irmin-layers
+    irmin-mem irmin-pack ppx_irmin ppx_repr progress repr semaphore-compat)
+
+[[ $# -ne 2 ]] && { echo >&2 "Usage: $0 <since> <until>"; exit 1; }
+
+IFS="|"
+PROG="/Date: (.*)/ and \$date=\$1;  /packages\/(?:${PACKAGES[*]})\/(.*)\/opam/ and print \"- \$1 (\$date)\n\""
+
+git fetch --all -q
+git log --all --stat --diff-filter=A --since=$1 --until=$2 --format="Date: %cd" --date=short '*/opam' |\
+    perl -ne "$PROG" |\
+    sort
