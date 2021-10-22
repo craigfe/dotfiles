@@ -1,7 +1,16 @@
 ;; this function is called at the very end of Spacemacs initialization after layers configuration.
 (defun dotspacemacs/user-config ()
 
-  (flyspell-mode-off)
+  (setenv "ATSHOME" "/home/craigfe/t/ATS-Postiats-release")
+  (setenv "PATSHOME" "/home/craigfe/t/ATS-Postiats-release")
+
+  (load "/home/craigfe/t/ATS-Postiats-release/utils/emacs/ats2-mode.el")
+  (require 'flycheck)
+  (load "/home/craigfe/t/ATS-Postiats-release/utils/emacs/flycheck-ats2.el")
+  (with-eval-after-load 'flycheck
+    (flycheck-ats2-setup))
+
+  (setq projectile-indexing-method 'native)
 
   ;; Org agenda files
   ;; (setq org-agenda-files '("~/sys/inbox.org"
@@ -54,20 +63,21 @@
   (with-eval-after-load 'magit
     (setq magit-repository-directories
           '(;; Directory containing project root directories
-            ("~/r/"      . 2)
+            ;; ("~/r/"      . 2)
             ("~/t/"      . 2)
             ;; Specific project root directory
-            ("~/sys/" . 1))))
+            ;; ("~/sys/" . 1)))
+    )))
 
   ;; Piggy-back `magit''s repository tracking mechanism for `projectile-known-projects'.
   ;; See https://emacs.stackexchange.com/a/32635.
 
-  (with-eval-after-load 'projectile
-    (when (require 'magit nil t)
-      (mapc #'projectile-add-known-project
-            (mapcar #'file-name-as-directory (magit-list-repos)))
-      ;; Optionally write to persistent `projectile-known-projects-file'
-      (projectile-save-known-projects)))
+  ;; (with-eval-after-load 'projectile
+  ;;   (when (require 'magit nil t)
+  ;;     (mapc #'projectile-add-known-project
+  ;;           (mapcar #'file-name-as-directory (magit-list-repos)))
+  ;;     ;; Optionally write to persistent `projectile-known-projects-file'
+  ;;     (projectile-save-known-projects)))
 
   ;; ---------------------------------------------------------------------------
   ;; Languages
@@ -94,6 +104,8 @@
     (interactive)
     (setq buffer-face-mode-face "Futura LT")
     (buffer-face-mode))
+
+  (load "~/t/dotfiles/emacs/lib/ligatures.el")
 
   ;; Set default font faces for Info and ERC modes
   ;; (add-hook 'LaTeX-mode-hook 'my-buffer-face-mode-variable) ;; includes .cls files

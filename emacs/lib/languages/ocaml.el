@@ -10,9 +10,13 @@
             (set (make-local-variable 'compile-command) "dune build @check")
             ))
 
+(setq tuareg-support-metaocaml t)
+
 (defun my/tuareg-mode-hook ()
   (git-gutter+-mode)
   (evil-matchit-mode)
+
+  (setq utop-command "opam config exec -- dune utop . -- -emacs")
 
   (bind-keys*
    ;; Navigate between Merlin errors with M-{j,k}
@@ -37,18 +41,25 @@
   ;; ocamlformat
   (require 'ocamlformat)
 
+  (add-hook 'before-save-hook 'ocamlformat-before-save) ; Run OCamlformat before save
+
   ;; Rebind <tab> to run OCamlformat
   ;; (define-key merlin-mode-map (kbd "<tab>") 'ocamlformat)
 
-  ;; Run ocamlformat before saving
-  (add-hook 'before-save-hook 'ocamlformat-before-save)
+  (defun ocaml-sandbox ()
+    (interactive)
+    (find-file
+     (string-trim-right
+      (shell-command-to-string "OSKEL_OCAMLFORMAT_OPTIONS=\"\" ocaml-sandbox | grep .ml"))))
 
   ;; Fira Code ligatures
   (load "~/t/dotfiles/emacs/lib/ligatures.el")
   )
 
+(add-to-list 'load-path "/home/craigfe/.opam/ocaml.4.10.0/share/emacs/site-lisp")
 (add-hook 'tuareg-mode-hook 'my/tuareg-mode-hook)
-(add-hook 'tuareg-mode-hook #'lsp-ocaml-enable)
+
+;; (add-hook 'tuareg-mode-hook #'lsp-ocaml-enable)
 
 ;; Add support for `foo_intf.ml' ↔ `foo.ml' in tuareg-find-alternate-file
 (custom-set-variables
