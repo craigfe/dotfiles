@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+# 
+#  grep -- search the scripts directory
+
+set -euo pipefail
+
+rg "$@" -- "$SD_ROOT" "$HOME/.scripts"
+

@@ -5,8 +5,9 @@
 set -euo pipefail
 
 USER_NIX="/home/craigfe/t/dotfiles/nix/user.nix"
+USER_NIX_QUERY=$(nix-env -qaf $USER_NIX)
 
-diff --color=always --unified=0 \
+{ diff --color=always --unified=0 \
   --label current <(nix-env -q) \
-  --label user.nix <(nix-env -qaf $USER_NIX) \
-  | grep -v '@@'
+  --label "$(basename $USER_NIX)" <(echo "$USER_NIX_QUERY") || true; } \
+  | { grep -v '@@' || true; }

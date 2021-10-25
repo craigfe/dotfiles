@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+#
+#  sync -- re-sync the environment to the declarative `user.nix`
+
+set -euo pipefail
+
+diff=$(sd nix diff | sed -e 's/^/>  /')
+if [ -z "$diff" ]; then echo "Already in sync!" >&2; exit 0; fi
+
+echo -e "Will attempt the following diff:"
+echo
+echo "$diff"
+echo
+read -n1 -p "Proceed? [Y/n] " response
+
+case $response in
+	[Nn]* ) echo "Exiting"; exit 1 ;;
+	* ) echo ; nix-env -irf /home/craigfe/t/dotfiles/nix/user.nix ;;
+esac
+

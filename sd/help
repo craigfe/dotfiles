@@ -1,1 +1,3 @@
 #!/usr/bin/env bash
+#
+#  help -- list the help text for a given `sd` invocation
