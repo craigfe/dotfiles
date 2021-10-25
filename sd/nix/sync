@@ -15,6 +15,6 @@ read -n1 -p "Proceed? [Y/n] " response
 
 case $response in
 	[Nn]* ) echo "Exiting"; exit 1 ;;
-	* ) echo ; nix-env -irf /home/craigfe/t/dotfiles/nix/user.nix ;;
+	* ) echo ; nix-env -irf "$HOME/t/dotfiles/nix/user.nix" ;;
 esac
 

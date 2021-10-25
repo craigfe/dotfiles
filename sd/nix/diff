@@ -4,7 +4,7 @@
 
 set -euo pipefail
 
-USER_NIX="/home/craigfe/t/dotfiles/nix/user.nix"
+USER_NIX="$HOME/t/dotfiles/nix/user.nix"
 USER_NIX_QUERY=$(nix-env -qaf $USER_NIX)
 
 { diff --color=always --unified=0 \

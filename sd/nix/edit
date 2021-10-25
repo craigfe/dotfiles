@@ -2,4 +2,4 @@
 # 
 #  edit -- modify the declarative user environment specification
 
-$EDITOR /home/craigfe/t/dotfiles/nix/user.nix
+$EDITOR "$HOME/t/dotfiles/nix/user.nix"
