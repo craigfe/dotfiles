@@ -16,6 +16,7 @@ with import <nixpkgs> { };
   git-absorb
   git-lfs
   github-cli
+  gnugrep
   gnumake
   grep
   htop
