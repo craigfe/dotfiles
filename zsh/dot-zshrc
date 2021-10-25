@@ -3,6 +3,7 @@
 export ZSH="/usr/share/oh-my-zsh"
 export ZSH_HOME="/usr/share/zsh"
 export LANG=en_GB.UTF-8
+export SD_ROOT="$HOME/t/dotfiles/sd"
 
 ZSH_THEME="craigfe"
 

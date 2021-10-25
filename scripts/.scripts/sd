@@ -1,23 +1,40 @@
 #!/usr/bin/env bash
+#
+#  sd -- wrapper executable for the user's `s`cripts `d`irectory.
+#
+#  At a high-level, its goal is to dispatch `argv` to a file-system tree with
+#  executable files (scripts) at the leaves, for instance:
+#
+#  $ sd foo bar name ...    # runs `$dir/foo/bar/name ...`
+
 set -euo pipefail
 
-dir="$HOME/.scripts"
+[ -n "${SD_ROOT+1}" ] || { echo '$SD_ROOT not set' >&2; exit 1; }
+dir="$SD_ROOT"
+
+# Scripts get access to the root directory via an environment variable:
+export SD_ROOT="$dir"
 
 while [[ $# > 0 ]]; do
     command="$1"
+    command_path="$dir/$command"
     shift
-    if [[ -d "$dir/$command" ]]; then
-        dir="$dir/$command"
-    elif [[ -f "$dir/$command" ]]; then
-        if [[ -x "$dir/$command" ]]; then
-            "$dir/$command" "$@"
+    if [[ -d "$command_path" ]]; then
+        dir="$command_path"
+    elif [[ -f "$command_path" ]]; then
+        if [[ -x "$command_path" ]]; then
+            "$command_path" "$@"
             exit 0
         else
-            cat "$dir/$command"
-            exit 0
+            read -n1 -p "The '$command' script is not executable. Shall I make it so? [Y/n] " response
+            echo
+            case $response in
+                [Nn]* ) echo "Exiting"; exit 1 ;;
+                * ) chmod +x "$command_path"; "$command_path" "$@"; exit 0 ;;
+            esac
         fi
     else
-        echo "“$dir/command” not found!" >&2
+        echo "Not found: $command_path" >&2
         exit 1
     fi
 done
@@ -33,25 +50,14 @@ fi
 
 no_commands=1
 
-for file in $(find "$dir" -maxdepth 1 -mindepth 1 -exec test -x {} \; -print); do
+# Get the maximum length of any file-name in this directory (for printing later): 
+padding=$(ls -1 "$dir" | awk '{ print length }' | sort -nr | head -n 1)
+
+for file in $(find "$dir" -maxdepth 1 -mindepth 1 -exec test {} \; -print | sort); do
     command=$(basename "$file")
-    helpfile="$file.help"
-
-    if [[ -f "$helpfile" ]]; then
-        help=$(head -n1 "$helpfile")
-    elif [[ -d "$file" ]]; then
-        help="$command commands"
-    else
-        help=$(sed -nE -e '/^#!/d' -e '/^#/{s/^# *//; p; q;}' "$file")
-    fi
-
-    # this should really be a two-pass thing to calculate
-    # the longest filename instead of hardcoding the spacing...
-    # but oh well whatever
-    if [[ -d "$file" ]]; then
-        command="$command ..."
-    fi
-    printf '%-10s -- %s\n' "$command" "$help"
+    help=$(grep -oP "$command -- \K.*$" $file || echo "(couldn't read help text)")
+    
+    printf "%-${padding}s  --  %s\n" "$command" "$help"
     no_commands=0
 done
 

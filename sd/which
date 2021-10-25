@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+#
+#  which -- locate an executable in the scripts directory
+
+set -euo pipefail
+
+script=$(echo "$@" | tr ' ' /)
+echo "$SD_ROOT/$script"

@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+#
+#  edit -- modify a script in a text editor
+
+set -euo pipefail
+
+$EDITOR "$(sd which "$@")"

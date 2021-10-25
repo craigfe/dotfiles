@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+#
+#  new -- create a new script with the given path
+
+set -euo pipefail
+
+script=$(sd which "$@")
+name=$(basename "$script")
+
+mkdir -p "$(dirname "$script")"
+
+cat > "$script" <<EOF
+#!/usr/bin/env bash
+# 
+#  $name -- {{ TODO: help text }}
+
+set -euo pipefail
+EOF
+
+chmod +x "$script"
+sd edit "$@"
