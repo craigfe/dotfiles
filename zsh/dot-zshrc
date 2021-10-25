@@ -98,10 +98,8 @@ ch() {
         fzf --ansi --multi | sed 's#.*\(https*://\)#\1#' | xargs $open > /dev/null 2> /dev/null
 }
 
-# Nix configuration
-export NIX_PATH="nixpkgs=https://github.com/NixOS/nixpkgs/archive/release-19.09.tar.gz"
-export PATH="$PATH:$HOME/.nix-profile/bin"
-export NIX_REMOTE=daemon
+# Set up Nix package manager
+[ -e /home/craigfe/.nix-profile/etc/profile.d/nix.sh ] && . /home/craigfe/.nix-profile/etc/profile.d/nix.sh
 
 # Set up Node Version Manager
 export NVM_DIR="$HOME/.nvm"                            # You can change this if you want.
