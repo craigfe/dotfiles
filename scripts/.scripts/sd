@@ -39,25 +39,31 @@ while [[ $# > 0 ]]; do
     fi
 done
 
+dir_real="$(realpath $dir)"
+
 if [[ -e "$dir.help" ]]; then
     cat "$dir.help"
     echo
 else
-    command=$(basename "$dir")
-    echo "$command commands"
+    root_real=$(realpath "$SD_ROOT")
+    script_command="sd$(echo ${dir_real#"${root_real}"} | tr '/' ' ') ..." # Strip $dir_real prefix & replace '/' with ' '
+    echo "'$script_command' commands:"
     echo
 fi
 
 no_commands=1
 
-# Get the maximum length of any file-name in this directory (for printing later): 
-padding=$(ls -1 "$dir" | awk '{ print length }' | sort -nr | head -n 1)
+# Get the maximum length of any file-name in this directory (for printing later):
+longest_script_path_length="$(find "$dir" -type f | awk '{ print length }' | sort -nr | head -n 1)"
+dir_real="$(realpath $dir)"
+script_dir_path_length="$(echo $dir_real | awk '{ print length }')"
+padding=$(( $longest_script_path_length - $script_dir_path_length - 1 )) # -1 for the file separator
 
-for file in $(find "$dir" -maxdepth 1 -mindepth 1 -exec test {} \; -print | sort); do
-    command=$(basename "$file")
-    help=$(grep -oP "$command -- \K.*$" $file || echo "(couldn't read help text)")
-    
-    printf "%-${padding}s  --  %s\n" "$command" "$help"
+for file in $(find "$dir" -mindepth 1 -type f | sort); do
+    script_basename="$(basename $file)"
+    script_command="$(echo ${file#"${dir_real}/"} | tr '/' ' ')" # Strip $dir_real prefix & replace '/' with ' '
+    help=$(grep --max-count=1 -oP "$script_basename -- \K.*$" $file || echo "(couldn't read help text)")
+    printf "%-${padding}s  --  %s\n" "$script_command" "$help"
     no_commands=0
 done
 
