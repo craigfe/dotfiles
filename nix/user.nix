@@ -1,12 +1,39 @@
-with import <nixpkgs> {}; [
-  nix
+with import <nixpkgs> { }; [
+  (hiPrio gcc_multi)
+  bat
   binutils-unwrapped
   bubblewrap
+  clang
+  cloc
   curl
-  (hiPrio gcc_multi)
+  diff-so-fancy
+  docker
+  docker-compose
+  fzf
   git
+  git-absorb
+  git-lfs
+  github-cli
   gnumake
+  htop
+  jq
+  lnav
+  mons
+  moreutils # provides `vipe`, `vidir` etc.
   neovim
-  opam
+  nix
+  nixfmt
+  polybar
+  ranger
+  ripgrep
+  rsync
+  rustup
+  stack
+  stow
+  strace
+  tectonic
+  tmux
+  unclutter
+  wget
   zsh
 ]
