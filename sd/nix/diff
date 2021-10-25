@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+# 
+#  diff -- show a diff between the user's environment and the declarative specification
+
+set -euo pipefail
+
+USER_NIX="/home/craigfe/t/dotfiles/nix/user.nix"
+
+diff --color=always --unified=0 \
+  --label current <(nix-env -q) \
+  --label user.nix <(nix-env -qaf $USER_NIX) \
+  | grep -v '@@'
