@@ -1,4 +1,4 @@
-Xft.dpi: 110
+!! Xft.dpi: 110
 
 URxvt*internalBorder: 10
 URxvt.intensityStyles:	false

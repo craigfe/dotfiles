@@ -10,8 +10,6 @@
   (with-eval-after-load 'flycheck
     (flycheck-ats2-setup))
 
-  (setq projectile-indexing-method 'native)
-
   ;; Org agenda files
   ;; (setq org-agenda-files '("~/sys/inbox.org"
   ;;                          "~/sys/projects.org"))

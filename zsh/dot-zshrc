@@ -1,5 +1,7 @@
 #!/bin/zsh
 
+# zmodload zsh/zprof
+
 export ZSH="/usr/share/oh-my-zsh"
 export ZSH_HOME="/usr/share/zsh"
 export LANG=en_GB.UTF-8
@@ -99,12 +101,14 @@ ch() {
 }
 
 # Set up Nix package manager
-[ -e /home/craigfe/.nix-profile/etc/profile.d/nix.sh ] && . /home/craigfe/.nix-profile/etc/profile.d/nix.sh
+[ -e "$HOME/.nix-profile/etc/profile.d/nix.sh" ] && . "$HOME/.nix-profile/etc/profile.d/nix.sh"
+unset NIX_REMOTE # TODO: work out what keeps setting this
 
 # Set up Node Version Manager
 export NVM_DIR="$HOME/.nvm"                            # You can change this if you want.
 export NVM_SOURCE="/usr/share/nvm"                     # The AUR package installs it to here.
 [ -s "$NVM_SOURCE/nvm.sh" ] && . "$NVM_SOURCE/nvm.sh"  # Load NVM
+source /usr/share/nvm/init-nvm.sh
 
 # Oskel configuration
 export PATH="$PATH:$HOME/t/oskel/_build/install/default/bin"
@@ -113,5 +117,18 @@ export OSKEL_EMAIL="me@craigfe.io"
 export OSKEL_GITHUB_ORG="CraigFe"
 export OSKEL_OCAMLFORMAT_OPTIONS="parse-docstrings=true,break-infix=fit-or-vertical,module-item-spacing=compact"
 
-export PATH="$PATH:$HOME/t/dune-release/_build/install/default/bin"
+export PATH="$HOME/.pyenv/shims:$PATH:$HOME/t/dune-release/_build/install/default/bin"
 
+## History command configuration
+setopt extended_history       # record timestamp of command in HISTFILE
+setopt hist_expire_dups_first # delete duplicates first when HISTFILE size exceeds HISTSIZE
+setopt hist_ignore_dups       # ignore duplicated commands history list
+setopt hist_ignore_space      # ignore commands that start with space
+setopt hist_verify            # show command with history expansion to user before running it
+setopt share_history          # share command history data
+
+PATH="/home/craigfe/perl5/bin${PATH:+:${PATH}}"; export PATH;
+PERL5LIB="/home/craigfe/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"; export PERL5LIB;
+PERL_LOCAL_LIB_ROOT="/home/craigfe/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"; export PERL_LOCAL_LIB_ROOT;
+PERL_MB_OPT="--install_base \"/home/craigfe/perl5\""; export PERL_MB_OPT;
+PERL_MM_OPT="INSTALL_BASE=/home/craigfe/perl5"; export PERL_MM_OPT;

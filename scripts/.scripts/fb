@@ -8,5 +8,4 @@ branches=$(git for-each-ref --count=30 \
                refs/heads/)
 
 branch=$(echo "$branches" | fzf-tmux -d $((2 + $(wc -l <<< "$branches"))))
-
-echo $branch
+git switch "$branch"

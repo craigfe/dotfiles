@@ -1,9 +1,9 @@
 with import <nixpkgs> { };
 [
-  (hiPrio clang)
-  (hiPrio gcc_multi)
+  # (hiPrio clang)
+  # (hiPrio gcc_multi)
   bat
-  binutils-unwrapped
+  # binutils-unwrapped
   cacert # required on MacOS (otherwise NIX_SSL_CERT_FILE will be unset)
   cloc
   curl
@@ -16,9 +16,10 @@ with import <nixpkgs> { };
   git-absorb
   git-lfs
   github-cli
+  gmp
   gnugrep
   gnumake
-  grep
+  # grep
   htop
   hub
   jq

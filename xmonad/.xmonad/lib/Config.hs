@@ -19,7 +19,7 @@ myCI = "alacritty --command '" ++ myHome ++ "/t/citty/run.sh'"
 
 myEditor = "emacsclient --alternate-editor='emacs' --no-wait --create-frame"
 
-myLock = myHome ++ "/.scripts/lock"
+myLock = "i3lock --color=000000"
 
 myPdfViewer = "zathura"
 

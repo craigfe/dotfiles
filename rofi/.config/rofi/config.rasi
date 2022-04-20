@@ -1,0 +1,4 @@
+configuration {
+	matching: "fuzzy";
+	fullscreen: true;
+}

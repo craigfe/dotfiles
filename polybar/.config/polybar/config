@@ -58,8 +58,9 @@
 	tray-position = right
 	tray-padding = 4
 	
-	modules-left = i3 xmonad
-; TOP DRY NET HOT SYC WCH
+	modules-left = xmonad
+  ;; i3
+;; TOP DRY NET HOT SYC WCH
 ;;	modules-right = inbox redshift backlight wlan volume cpu memory battery date
 	modules-center = warnings
 	modules-right = redshift backlight wlan volume cpu memory filesystem battery date
@@ -85,34 +86,34 @@
    type = internal/xkeyboard
    blacklist-0 = num lock
 
-[module/i3]
-	type = internal/i3
-	format = <label-state> <label-mode>
-	index-sort = true
-	wrapping-scroll = false
-	strip-wsnumbers = false
-	pin-workspaces = true
-	enable-scroll = false
-	label-mode-padding = 2
-	label-mode-foreground = ${colors.foreground}
-	label-mode-background = ${colors.primary}
-	label-focused = %name%
-	label-focused-foreground= ${colors.background}
-	label-focused-background = ${colors.primary}
-	label-focused-underline = ${colors.primary}
-;;	label-focused-background = #00ffffff
-;;	label-focused-underline = #00ffffff
-	label-focused-padding = 2
-	label-unfocused = %name%
-	label-unfocused-padding = 2
-	label-unfocused-background = ${colors.background}
-	label-urgent = %name%
-	label-urgent-foreground= ${colors.alert}
-	label-urgent-background = ${colors.background-alt}
-	label-urgent-padding = 8
-	label-visible = %name%
-	label-visible-background = ${colors.background-alt}
-	label-visible-padding = ${self.label-focused-padding}
+; [module/i3]
+; 	type = internal/i3
+; 	format = <label-state> <label-mode>
+; 	index-sort = true
+; 	wrapping-scroll = false
+; 	strip-wsnumbers = false
+; 	pin-workspaces = true
+; 	enable-scroll = false
+; 	label-mode-padding = 2
+; 	label-mode-foreground = ${colors.foreground}
+; 	label-mode-background = ${colors.primary}
+; 	label-focused = %name%
+; 	label-focused-foreground= ${colors.background}
+; 	label-focused-background = ${colors.primary}
+; 	label-focused-underline = ${colors.primary}
+; ;;	label-focused-background = #00ffffff
+; ;;	label-focused-underline = #00ffffff
+; 	label-focused-padding = 2
+; 	label-unfocused = %name%
+; 	label-unfocused-padding = 2
+; 	label-unfocused-background = ${colors.background}
+; 	label-urgent = %name%
+; 	label-urgent-foreground= ${colors.alert}
+; 	label-urgent-background = ${colors.background-alt}
+; 	label-urgent-padding = 8
+; 	label-visible = %name%
+; 	label-visible-background = ${colors.background-alt}
+; 	label-visible-padding = ${self.label-focused-padding}
 	
 [module/search]
 	type = custom/script
@@ -179,7 +180,7 @@
 
 [module/wlan]
 	type = internal/network
-	interface = wlp2s0
+	interface = wlan0
 	interval = 3.0
 	format-connected = <label-connected>
 	format-connected-prefix = " "

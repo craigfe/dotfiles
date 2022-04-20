@@ -39,7 +39,8 @@ function opam_status {
     git_toplevel="$(git rev-parse --show-toplevel 2>/dev/null)"
     if is_ocaml_project "$git_toplevel"; then
         if [ -d "$git_toplevel/_opam" ]; then
-            local compiler_version="$(cat "$git_toplevel/_opam/.opam-switch/config/ocaml.config" | grep --color=never -oP 'compiler: "\K.*(?=")')"
+            local version_file="$git_toplevel/_opam/.opam-switch/config/ocaml.config"
+            local compiler_version="$(grep --color=never -oP 'compiler: "\K.*(?=")' "$version_file" 2>/dev/null)"
             echo "$ZSH_THEME_OPAM_PROMPT_PREFIX$compiler_version$ZSH_THEME_OPAM_PROMPT_SUFFIX"
         else
             # There is no local opam switch in <git_home>/_opam, so get the currently active one

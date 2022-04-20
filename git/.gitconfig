@@ -73,3 +73,8 @@
 	detachedHead = false
 [init]
 	defaultBranch = main
+
+[rerere]
+	enabled = true
+[merge]
+	conflictStyle = diff3
