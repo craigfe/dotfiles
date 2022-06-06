@@ -1,0 +1,62 @@
+#!/usr/bin/env python3
+import argparse
+import subprocess
+import json
+import requests
+import sys
+import os
+
+slack_member_id = "U03D34QSSTB"
+webhook_url_env = "SLACK_WEBHOOK_SECINFRA_PR_REVIEW_REQUEST"
+
+arg_parser = argparse.ArgumentParser(
+    description="Send a Slack message requesting a PR review"
+)
+arg_parser.add_argument(
+    "--dry-run",
+    action="store_true",
+    help="print the Slack message content, but don't send it",
+)
+args = arg_parser.parse_args()
+
+webhook_url = os.getenv(webhook_url_env)
+
+if webhook_url == None:
+    print("Required environment variable not set:", webhook_url_env)
+    exit(1)
+
+
+pr_details_process = subprocess.run(
+    "gh pr list --author '@me' --json 'title,url,headRepository,headRepositoryOwner,number,additions,deletions'",
+    shell=True,
+    capture_output=True,
+)
+
+all_pr_details = json.loads(pr_details_process.stdout)
+
+if len(all_pr_details) == 0:
+    print("Error: no suitable PRs found", file=sys.stderr)
+    exit(1)
+
+pr_details = all_pr_details[0]
+data = {}
+data["pr_link"] = pr_details["url"]
+data["pr_title"] = pr_details["title"]
+data["pr_stat"] = f"+{pr_details['additions']} / -{pr_details['deletions']}"
+data["pr_author"] = slack_member_id
+
+request_body = json.dumps(data, indent=2)
+print("Requesting PR review", request_body, sep="\n\n")
+
+if args.dry_run:
+    print("Not sending the Slack message since --dry-run was set.")
+    exit(0)
+
+answer = input("Continue? [y/N]").lower()
+
+if answer in ["y", "yes"]:
+    requests.post(webhook_url, data=request_body)
+
+else:
+    print("Exiting")
+    exit(1)
