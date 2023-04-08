@@ -1,8 +1,36 @@
 #!/bin/zsh
 
-export ZSH="/usr/share/oh-my-zsh"
+if [ "$TMUX" = "" ]; then
+	if ! tmux info &>/dev/null; then
+		# No tmux server started yet – drop straight into a shell
+		tmux new-session
+	else
+		while true; do
+			# Kill any existing 'choose-' sessions left over from
+			# other iterations of this loop
+			tmux list-sessions -F '#{session_name}' | \
+				grep '^choose' | \
+				xargs -n 1 tmux kill-session
+
+			rand_suffix="$(openssl rand -hex 3)"
+			choose_session="choose-${rand_suffix}"
+
+			tmux new-session -s "${choose_session}" \; choose-tree \
+				-F "(#{t:window_activity})" \
+				-f "#{==:0,#{m:choose-*,#{session_name}}}" \
+				-t "${choose_session}" -s -O time -r
+
+			tmux kill-session -t "${choose_session}"
+		done
+	fi
+fi
+
 export ZSH_HOME="/usr/share/zsh"
 export LANG=en_GB.UTF-8
+export TERM=xterm-256color # Gets Tmux to behave sensibly with ZSH and truecolor
+
+defaults write InitialKeyRepeat -int 8
+defaults write KeyRepeat -int 1
 
 ZSH_THEME="craigfe"
 
