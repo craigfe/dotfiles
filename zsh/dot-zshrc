@@ -6,16 +6,12 @@ if [ "$TMUX" = "" ]; then
 		tmux new-session
 	else
 		while true; do
-			# Kill any existing 'choose-' sessions left over from
-			# other iterations of this loop
-			tmux list-sessions -F '#{session_name}' | \
-				grep '^choose' | \
-				xargs -n 1 tmux kill-session
-
 			rand_suffix="$(openssl rand -hex 3)"
 			choose_session="choose-${rand_suffix}"
 
-			tmux new-session -s "${choose_session}" \; choose-tree \
+			tmux new-session -s "${choose_session}" \; \
+				set-option destroy-unattached on \; \
+				choose-tree \
 				-F "(#{t:window_activity})" \
 				-f "#{==:0,#{m:choose-*,#{session_name}}}" \
 				-t "${choose_session}" -s -O time -r
