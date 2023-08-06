@@ -42,9 +42,11 @@
 [core]
 	editor = nvim
 	pager = diff-so-fancy | less --tabs=4 -RFX
+	excludesfile = ~/.gitignore
 
 [rebase]
 	autoStash = true
+	updateRefs = true
 
 [pull]
 	rebase = true
