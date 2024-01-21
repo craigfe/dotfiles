@@ -1,0 +1,45 @@
+#!/usr/bin/env janet
+(use sh)
+
+(def- peg ~(* "[" (opt (* :d+ ":")) (number :d+) "] " (<- (some 1))))
+(def- pegx ~(* (choice (/ "x" :delete) (/ "-" :keep)) " " ,peg))
+
+(defn- default-state [s]
+  (def m (peg/match peg s))
+  (if (nil? m)
+    (error (string/format "Could not parse line: %M" s)))
+  (match (m 1)
+    "🚀 Monzo Tab" "x"
+    "www.google.com" "x"
+    _ "-"))
+
+(defn main [&]
+  (def buf (buffer/new 0))
+  ($ chrome-cli list tabs > ,buf)
+  # Write `p ` in front of each of the lines in `buf`
+  (def lines 
+    (->> buf
+         (string/split "\n")
+         (filter (fn [line] (not (empty? line))))
+         (map (fn [line] (string (default-state line) " " line)))))
+  (array/insert lines 0
+                "# vim: syntax=yaml:"
+                "# Choose which tabs to keep:"
+                "# -: keep this tab"
+                "# x: close this tab")
+  # Write the lines to a temporary file
+  (def filename (string "/tmp/chrome-cli-tabs"))
+  (def tmpfile (file/open filename :w))
+  (file/write tmpfile (string/join lines "\n"))
+  (file/close tmpfile)
+  ($ nvim ,"+:5" ,filename)
+  (def to-delete 
+    (->>
+      (slurp filename)
+      (string/split "\n")
+      (map |(peg/match pegx $))
+      (filter |(not (nil? $)))
+      (filter (fn [match-] (= :delete (match- 0))))
+      (map (fn [[_ id _]] id))))
+  (loop [id :in to-delete]
+    ($ chrome-cli close -t ,id)))
