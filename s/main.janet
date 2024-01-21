@@ -124,9 +124,14 @@
       x (error (string/format "unexpected response: %s" x)))))
 
 (defn logs [name]
-  (def name (string/replace "s." "service." name))
-  (def url (string/format "https://slog.tools.s101.nonprod-ffs.io/_dashboards/app/discover#/discover?_a=(interval:auto,query:(language:kuery,query:'service:%%22%s%%22'))&_g=()" name))
-  (printf "📜 opening logs for %s in S101" (bold-green name))
+  (def query 
+    (cond
+      (string/has-prefix? "s." name) (string/format "service:\"%s\"" (string/replace "s." "service." name))
+      (string/has-prefix? "service." name) name
+      name))
+  (def escaped-query (string/replace "\"" "%22" query))
+  (def url (string/format "https://slog.tools.s101.nonprod-ffs.io/_dashboards/app/discover#/discover?_a=(interval:auto,query:(language:kuery,query:'%s'))&_g=()" escaped-query))
+  (printf "📜 opening logs for %s in S101" (bold-green query))
   (def peg '(* "Id: " (<- :d+) "\n" (any 1)))
   (def chrome-cli-output ($< chrome-cli open ,url))
   (def window-id (peg/match peg chrome-cli-output))
@@ -134,11 +139,22 @@
   (refresh-asap (window-id 0))
   (ev/cancel spinner :success))
 
+(defn fmt [name]
+  (print "TODO"))
+
+(defn ship [&opt name]
+  ($ shipper deploy --s101 ,name)
+  ($ shipper deploy --prod ,name))
+
+# --- Main ---
+
 (cmd/defgroup command
-  start (cmd/fn "run a service locally" [args (escape :string)] (start ;args))
   feat  (cmd/fn "create a feature branch" [args (escape ["NAME" :string])] (feature ;args))
-  pr    (cmd/fn "create a pull request" [args (escape ["NAME" :string])] (pr ;args))
+  fmt   (cmd/fn "format a Slack message requesting a PR review" [args (escape ["NAME" :string])] (fmt ;args))
   logs  (cmd/fn "open the logs for a service" [args (escape ["NAME" :string])] (logs ;args))
+  pr    (cmd/fn "create a pull request" [args (escape ["NAME" :string])] (pr ;args))
+  ship  (cmd/fn "deploy a service" [args (escape ["NAME" :string])] (ship ;args))
+  start (cmd/fn "run a service locally" [args (escape :string)] (start ;args))
 )
 
 (cmd/run command (cmd/args))
