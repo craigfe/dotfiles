@@ -4,8 +4,6 @@ import subprocess
 import json
 import sys
 
-slack_member_id = "U03D34QSSTB"
-
 arg_parser = argparse.ArgumentParser(
     description="Format a Slack message requesting a PR review"
 )
