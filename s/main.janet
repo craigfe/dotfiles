@@ -97,7 +97,7 @@
   (if ($? git rev-parse --verify ,branch-name > [stdout void] > [stderr void])
     (error-and-exit "branch already exists: %s" (string/quote branch-name)))
   (fetch-if-necessary)
-  ($ git checkout -b ,branch-name --quiet)
+  ($ git checkout -b ,branch-name origin/master --quiet)
   (print (bold-cyan "switched to feature branch: ") (bold-green branch-name)))
 
 (defn- pr [name]

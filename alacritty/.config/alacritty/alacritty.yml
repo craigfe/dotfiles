@@ -91,10 +91,12 @@ font:
     style: Regular
 
   bold:
+    # family: Comic Code Ligatures
     family: JetBrains Mono
     style: Bold
 
   italic:
+    # family: Comic Code Ligatures
     family: JetBrains Mono
     style: Italic
 
@@ -1423,6 +1425,34 @@ schemes:
       magenta: '0xff00ff'
       cyan:    '0x00ffff'
       white:   '0xffffff'
+
+  monzo: &monzo
+    primary:
+      background: '0x112231'
+      foreground: '0xF2F8F3'
+
+    normal:
+      black:   '0x2C3A43'
+      red:     '0xED5E11'
+      green:   '0xA3DC1A'
+      yellow:  '0xFE6B1B'
+      blue:    '0x2EAFC0'
+      magenta: '0xF365BF'
+      cyan:    '0x8CE6D1'
+      white:   '0xF2F8F3'
+
+    # Bright colors
+    bright:
+      black:   '0xAEB5A7'
+      red:     '0xFF4F40'
+      green:   '0x99AF73'
+      yellow:  '0xffff00'
+      blue:    '0x8CE6D1'
+      magenta: '0xF365BF'
+      cyan:    '0x8CE6D1'
+      white:   '0xF2F8F3'
+
+
 
 # Visual Bell
 #

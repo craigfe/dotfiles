@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+email="$(£ -e s101 "rpc-request nonprodusergeneratorproto.NewUserRequest country_code:$1" | jq -r '.user.email')"
+droid clear-data
+droid login "$email"
