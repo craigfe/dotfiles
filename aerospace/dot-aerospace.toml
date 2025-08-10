@@ -83,7 +83,7 @@ automatically-unhide-macos-hidden-apps = true
     # All possible modifiers: cmd, alt, ctrl, shift
     # All possible commands: https://nikitabobko.github.io/AeroSpace/commands
 
-    cmd-enter = 'exec-and-forget open --new -a Alacritty'
+    cmd-shift-enter = 'exec-and-forget open --new -a ghostty'
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#focus
     cmd-h = 'focus left'
