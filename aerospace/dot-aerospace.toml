@@ -49,6 +49,11 @@ exec-on-workspace-change = [
 if.app-name-regex-substring = 'Handy'
 run = 'layout floating'
 
+[[on-window-detected]]
+if.app-id = 'com.mitchellh.ghostty'
+if.window-title-regex-substring = 'tmux-rename'
+run = 'layout floating'
+
 # Possible values: (qwerty|dvorak|colemak)
 # See https://nikitabobko.github.io/AeroSpace/guide#key-mapping
 [key-mapping]

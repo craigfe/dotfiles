@@ -1,0 +1,5 @@
+#!/bin/bash
+PATH="/opt/homebrew/bin:$PATH"
+"$HOME/.scripts/tmux-rename-sessions" 2>&1
+echo
+read -p "Press Enter to close"

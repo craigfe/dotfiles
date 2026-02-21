@@ -1,0 +1,53 @@
+#!/usr/bin/env python3
+"""Open choose-tree with aligned columns showing path and relative time."""
+
+import os
+import subprocess
+import time
+
+ENV = {**os.environ, "PATH": f"/opt/homebrew/bin:{os.environ.get('PATH', '')}"}
+FMT = "#{session_name}\t#{session_last_attached}\t#{pane_current_path}\t#{session_attached}"
+
+
+def tmux(*args: str) -> str:
+    r = subprocess.run(["tmux", *args], capture_output=True, text=True, env=ENV)
+    return r.stdout.strip()
+
+
+def relative_time(epoch: int, now: float) -> str:
+    diff = int(now - epoch)
+    if diff < 60:
+        return "just now"
+    if diff < 3600:
+        return f"{diff // 60}m ago"
+    if diff < 86400:
+        return f"{diff // 3600}h ago"
+    return f"{diff // 86400}d ago"
+
+
+def main():
+    now = time.time()
+    sessions = []
+    for line in tmux("list-sessions", "-F", FMT).splitlines():
+        name, epoch, path, attached = line.split("\t")
+        rel = "attached" if int(attached) > 0 else relative_time(int(epoch), now)
+        sessions.append((name, os.path.basename(path), rel))
+
+    max_name = max(len(s[0]) for s in sessions)
+    max_path = max(len(s[1]) for s in sessions)
+
+    # Build a single tmux command: set @tree_label on each session, then open
+    # choose-tree. Left-pad to compensate for the variable-width "name: "
+    # prefix that the tree widget adds automatically.
+    args = []
+    for name, path, rel in sessions:
+        pad = " " * (max_name - len(name))
+        label = f"{pad}{path:<{max_path}}  ({rel})"
+        args += ["set", "-t", name, "@tree_label", label, ";"]
+
+    args += ["choose-tree", "-Zs", "-O", "time", "-F", "#{@tree_label}"]
+    tmux(*args)
+
+
+if __name__ == "__main__":
+    main()
