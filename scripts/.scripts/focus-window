@@ -1,0 +1,14 @@
+#!/bin/bash
+set -euo pipefail
+
+selection=$(
+    aerospace list-windows --all --format '%{window-id}|%{app-name}|%{window-title}|%{workspace}' \
+        | awk -F'|' '{ printf "%s|%s — %s [%s]\n", $1, $2, ($3 == "" ? "(untitled)" : $3), $4 }' \
+        | choose -z -p 'Focus window' -n 15 -f 'JetBrains Mono' -s 20 \
+        || true
+)
+
+[ -z "$selection" ] && exit 0
+
+window_id=$(echo "$selection" | cut -d'|' -f1)
+aerospace focus --window-id "$window_id"

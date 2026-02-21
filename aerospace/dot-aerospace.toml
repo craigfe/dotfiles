@@ -92,6 +92,7 @@ run = 'layout floating'
     # All possible modifiers: cmd, alt, ctrl, shift
     # All possible commands: https://nikitabobko.github.io/AeroSpace/commands
 
+    cmd-p = 'exec-and-forget ~/.scripts/focus-window'
     cmd-shift-enter = 'exec-and-forget open --new -a ghostty'
     cmd-enter = 'fullscreen'
 
