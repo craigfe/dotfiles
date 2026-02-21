@@ -1,0 +1,71 @@
+#!/bin/bash
+set -euo pipefail
+
+# Rename all numeric tmux sessions using Claude Haiku to generate
+# descriptive names based on terminal context. Sessions with manually-set
+# (non-numeric) names are left alone.
+
+CLAIMED_NAMES_FILE=$(mktemp)
+trap 'rm -f "$CLAIMED_NAMES_FILE"' EXIT
+
+# Pre-populate with existing non-numeric session names
+tmux list-sessions -F '#{session_name}' | grep -v '^[0-9]*$' >> "$CLAIMED_NAMES_FILE" 2>/dev/null || true
+
+claim_unique_name() {
+    local base="$1"
+    local name="$base"
+    local i=2
+
+    while grep -qxF "$name" "$CLAIMED_NAMES_FILE" 2>/dev/null; do
+        name="${base}-${i}"
+        i=$((i + 1))
+    done
+
+    echo "$name" >> "$CLAIMED_NAMES_FILE"
+    echo "$name"
+}
+
+rename_session() {
+    local session="$1"
+
+    local pane_info
+    pane_info=$(tmux list-panes -t "$session" -F '#{pane_current_command} #{pane_current_path}' 2>/dev/null | head -1)
+
+    local pane_content
+    pane_content=$(tmux capture-pane -t "$session" -p 2>/dev/null | tail -20)
+
+    local name
+    name=$(claude --model haiku --print --max-turns 1 -p "$(cat <<EOF
+Based on this terminal context, suggest a short name for this tmux session.
+
+Current command and path: $pane_info
+
+Last 20 lines of terminal:
+$pane_content
+
+Rules:
+- Reply with ONLY the session name, nothing else
+- 1-2 words, lowercase, hyphens instead of spaces
+- Use the project/repo name if visible (e.g. "dotfiles", "wearedev")
+- Use the task if clear (e.g. "self-review", "coding-challenge")
+- Use the directory basename as fallback
+- Max 20 characters
+EOF
+)" 2>/dev/null)
+
+    name=$(echo "$name" | tr -d '[:space:]' | head -c 20)
+
+    if [ -n "$name" ]; then
+        name=$(claim_unique_name "$name")
+        tmux rename-session -t "$session" "$name" 2>/dev/null || true
+    fi
+}
+
+sessions=$(tmux list-sessions -F '#{session_name}')
+
+# Run sequentially to avoid races on the claimed-names file
+for session in $sessions; do
+    if [[ "$session" =~ ^[0-9]+$ ]]; then
+        rename_session "$session"
+    fi
+done
