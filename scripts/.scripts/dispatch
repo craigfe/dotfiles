@@ -1,0 +1,84 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Parse flags
+dry_run=false
+if [[ "${1:-}" == "--dry-run" ]]; then
+    dry_run=true
+    shift
+fi
+
+idempotency_key="$USER--$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
+
+augmented_prompt=$(cat <<EOF
+The user wants to perform the following task: $*
+
+Perform this task, then create a GitHub pull request with an appropriate title and description.
+
+Generally, pull requests should have the following format:
+- title should use conventional commits style, e.g. \`feat(s.add-money-home): use simplified money format for remaining top-up limit\`
+- description should be very concise, i.e. one or two sentences summarizing the change.
+EOF
+)
+
+# Escape quotes and backticks in the augmented prompt
+escaped_prompt="${augmented_prompt//\"/\\\"}"
+escaped_prompt="${escaped_prompt//\`/\\\`}"
+
+# Log the prompt being dispatched
+echo "=== Dispatching job with prompt ==="
+echo "$*"
+echo "===================================="
+echo
+
+# Build the RPC command
+rpc_cmd="£ -e prod \"rpc-request remotecodeagentproto.CreateJobRequest idempotency_key:\\\"$idempotency_key\\\" prompt:\\\"$escaped_prompt\\\"\""
+
+# If dry-run, show the command and exit
+if [[ "$dry_run" == true ]]; then
+    echo "DRY RUN - Would execute:"
+    echo ""
+    echo "$rpc_cmd"
+    exit 0
+fi
+
+# Create the job and capture response
+echo "Creating job..."
+response=$(eval "$rpc_cmd")
+
+# Extract job ID
+job_id=$(echo "$response" | jq -r '.job.id')
+
+if [[ -z "$job_id" ]] || [[ "$job_id" == "null" ]]; then
+    echo "Error: Failed to create job"
+    echo "$response"
+    exit 1
+fi
+
+echo "Job created: $job_id"
+echo ""
+
+# Poll for status
+echo "Polling job status..."
+previous_status=""
+while true; do
+    status_response=$(£ -e prod "rpc-request remotecodeagentproto.ReadJobRequest job_id:$job_id")
+    status=$(echo "$status_response" | jq -r '.job.status')
+
+    # Only print if status changed
+    if [[ "$status" != "$previous_status" ]]; then
+        echo "  Status: $status ($(date '+%H:%M:%S'))"
+        previous_status="$status"
+    fi
+
+    # Check for terminal states
+    if [[ "$status" == "completed" ]] || [[ "$status" == "failed" ]] || [[ "$status" == "cancelled" ]]; then
+        echo ""
+        echo "=== Final job state ==="
+        echo "$status_response" | jq '.'
+        break
+    fi
+
+    sleep 5
+done
+

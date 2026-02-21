@@ -1,0 +1,76 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Parse flags
+dry_run_flag=""
+if [[ "${1:-}" == "--dry-run" ]]; then
+    dry_run_flag="--dry-run"
+    shift
+fi
+
+# Parse input: "file.go:line:col: appbuild check is always {true|false} for both iOS and Android"
+input="$*"
+
+# Validate and extract components using regex
+if [[ ! "$input" =~ ^([^:]+):([0-9]+):([0-9]+):.*appbuild\ check\ is\ always\ (true|false) ]]; then
+    echo "Error: Invalid input format" >&2
+    echo "Expected: 'file:line:col: appbuild check is always {true|false} for both iOS and Android'" >&2
+    echo "" >&2
+    echo "Example: appbuild-fix 'service.api.help/handler/home_read.go:388:5: appbuild check is always true for both iOS and Android'" >&2
+    exit 1
+fi
+
+file="${BASH_REMATCH[1]}"
+line="${BASH_REMATCH[2]}"
+column="${BASH_REMATCH[3]}"
+check_result="${BASH_REMATCH[4]}"  # "true" or "false"
+
+# Construct prompt based on check_result
+if [[ "$check_result" == "true" ]]; then
+    # Always true case: check is redundant
+    prompt="Fix appbuild check in $file at line $line:$column
+
+The appbuild check at this location is always true for both iOS and Android, making it redundant.
+
+Context:
+- An appbuild check that's always true means all currently supported app versions satisfy the condition
+- The check should be simplified by removing the conditional logic
+- The code that was previously gated should always execute now
+
+Fix approach:
+1. Read $file and examine the appbuild check at line $line
+2. Understand what the check is gating (feature enablement, error handling, etc.)
+3. Simplify the code by:
+   - Removing the redundant appbuild check
+   - Keeping the code that should always execute
+   - If there's an else branch with error handling for old app versions, remove it
+4. Ensure the fix maintains the intended behavior (the feature should always be enabled)
+5. Run any relevant tests using 'go test' to verify the change"
+else
+    # Always false case: code path is dead
+    prompt="Fix appbuild check in $file at line $line:$column
+
+The appbuild check at this location is always false for both iOS and Android, making the code path dead.
+
+Context:
+- An appbuild check that's always false means no currently supported app version satisfies the condition
+- The code gated by this check is unreachable and should be removed
+- This typically happens when minimum supported app versions are raised via force upgrade
+
+Fix approach:
+1. Read $file and examine the appbuild check at line $line
+2. Understand the context and what code is unreachable
+3. Remove the dead code by:
+   - Deleting the if block and its contents (if the check is always false)
+   - If there's an else branch, promote it to the main code path
+   - Remove any related helper functions or variables that are now unused
+4. Ensure the fix maintains the intended behavior
+5. Run any relevant tests using 'go test' to verify the change"
+fi
+
+# Call dispatch with the constructed prompt
+if [[ -n "$dry_run_flag" ]]; then
+    exec dispatch --dry-run "$prompt"
+else
+    exec dispatch "$prompt"
+fi

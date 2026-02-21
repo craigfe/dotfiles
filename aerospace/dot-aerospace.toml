@@ -40,6 +40,15 @@ on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
 # Also see: https://nikitabobko.github.io/AeroSpace/goodies#disable-hide-app
 automatically-unhide-macos-hidden-apps = true
 
+exec-on-workspace-change = [
+    '/bin/bash', '-c',
+    '/Users/craigferguson/.scripts/pip-move.sh',
+]
+
+[[on-window-detected]]
+if.app-name-regex-substring = 'Handy'
+run = 'layout floating'
+
 # Possible values: (qwerty|dvorak|colemak)
 # See https://nikitabobko.github.io/AeroSpace/guide#key-mapping
 [key-mapping]
@@ -54,12 +63,12 @@ automatically-unhide-macos-hidden-apps = true
 #                 See:
 #                 https://nikitabobko.github.io/AeroSpace/guide#assign-workspaces-to-monitors
 [gaps]
-    inner.horizontal = 0
-    inner.vertical =   0
-    outer.left =       0
-    outer.bottom =     0
-    outer.top =        0
-    outer.right =      0
+    inner.horizontal = 8
+    inner.vertical =   8
+    outer.left =       8
+    outer.bottom =     8
+    outer.top =        8
+    outer.right =      8
 
 # 'main' binding mode declaration
 # See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
@@ -84,6 +93,7 @@ automatically-unhide-macos-hidden-apps = true
     # All possible commands: https://nikitabobko.github.io/AeroSpace/commands
 
     cmd-shift-enter = 'exec-and-forget open --new -a ghostty'
+    cmd-enter = 'fullscreen'
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#focus
     cmd-h = 'focus left'
@@ -123,7 +133,7 @@ automatically-unhide-macos-hidden-apps = true
     cmd-shift-tab = 'move-workspace-to-monitor --wrap-around next'
 
     # See: https://nikitabobko.github.io/AeroSpace/commands#mode
-    cmd-shift-r   = 'mode resize'
+    cmd-shift-semicolon = 'mode resize'
     cmd-semicolon = 'mode service'
 
 # 'service' binding mode declaration.
@@ -152,6 +162,7 @@ automatically-unhide-macos-hidden-apps = true
 [mode.resize.binding]
     esc = ['reload-config', 'mode main']
     tab = 'move-workspace-to-monitor --wrap-around next'
+    enter = ['balance-sizes', 'mode main']
 
     h = 'resize smart -150'
     j = 'resize smart +150'
@@ -168,3 +179,4 @@ automatically-unhide-macos-hidden-apps = true
     cmd-j = 'focus down'
     cmd-k = 'focus up'
     cmd-l = 'focus right'
+

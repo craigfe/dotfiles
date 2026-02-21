@@ -1,9 +1,8 @@
 #!/bin/bash
 
-unalias sl
-
 alias c='clear'
 alias cat='bat --style=grid,numbers'
+alias cl='claude'
 alias cls='clear'
 alias claer='clear'
 alias cbi='xsel -ib' # Clipboard in (copy) using xsel
@@ -31,6 +30,7 @@ alias wad='cd ~/src/github.com/monzo/wearedev'
 alias wthr='curl -4 http://wttr.in/'
 alias v='nvim'
 alias vim='nvim'
+alias w='worktree switch wearedev -c'
 
 alias sp='dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause >> /dev/null'
 alias snext='dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Next >> /dev/null'

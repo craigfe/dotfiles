@@ -1,0 +1,64 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Check if prompt was provided
+if [[ $# -eq 0 ]]; then
+    echo "Usage: remote-dispatch <prompt>"
+    echo ""
+    echo "Dispatches a task to the remote Claude Code agent."
+    echo "The agent will work on the task and create a PR."
+    echo ""
+    echo "Example:"
+    echo "  remote-dispatch 'Add logging to service.accounts'"
+    exit 1
+fi
+
+idempotency_key="$USER--$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
+
+augmented_prompt=$(cat <<EOF
+The user wants to perform the following task: $*
+
+Perform this task, then create a GitHub pull request with an appropriate title and description.
+
+Generally, pull requests should have the following format:
+- title should use conventional commits style, e.g. \`feat(s.add-money-home): use simplified money format for remaining top-up limit\`
+- description should be very concise, i.e. one or two sentences summarizing the change.
+EOF
+)
+
+# Escape quotes and backticks in the augmented prompt
+escaped_prompt="${augmented_prompt//\"/\\\"}"
+escaped_prompt="${escaped_prompt//\`/\\\`}"
+
+# Log the prompt being dispatched
+echo "=== Dispatching Remote Job ==="
+echo "Prompt: $*"
+echo "Idempotency key: $idempotency_key"
+echo "==============================="
+echo
+
+# Execute the RPC command and capture response
+echo "Creating job..."
+response=$(£ -e prod "rpc-request remotecodeagentproto.CreateJobRequest idempotency_key:\"$idempotency_key\" prompt:\"$escaped_prompt\"")
+
+# Extract job ID
+job_id=$(echo "$response" | jq -r '.job.id')
+
+if [[ -z "$job_id" ]] || [[ "$job_id" == "null" ]]; then
+    echo "❌ Error: Failed to create job"
+    echo "$response"
+    exit 1
+fi
+
+echo ""
+echo "✅ Job dispatched successfully!"
+echo ""
+echo "Job ID: $job_id"
+echo "Status: in_progress"
+echo ""
+echo "Monitor progress with:"
+echo "  /check-jobs"
+echo "  /check-jobs $job_id"
+echo ""
+echo "Wait for completion with:"
+echo "  /wait-for-jobs $job_id"

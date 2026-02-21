@@ -51,7 +51,6 @@
 [rebase]
 	autoStash = true
 	autoSquash = true
-	updateRefs = true
 
 [pull]
 	rebase = true
@@ -88,6 +87,9 @@
 	allowedSignersFile = /Users/craigferguson/.config/git/allowed_signers
 [tag]
 	gpgsign = true
+
 [maintenance]
+	auto = false
 	repo = /Users/craigferguson/src/github.com/monzo/wearedev
-	repo = /Users/craigferguson/src/github.com/monzo/terraform
+	strategy = incremental
+

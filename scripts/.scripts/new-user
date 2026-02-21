@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-email="$(£ -e s101 "rpc-request nonprodusergeneratorproto.NewUserRequest country_code:$1" | jq -r '.user.email')"
-droid clear-data
+droid logout
+response="$(£ -e s101 "rpc-request nonprodusergeneratorproto.NewUserRequest country_code:$1")"
+email="$(echo "$response" | jq -r '.user.email')"
+user_id="$(echo "$response" | jq -r '.user.user_id')"
+echo "User ID: $user_id"
 droid login "$email"
