@@ -1,47 +1,22 @@
-#!/bin/bash
-set -euo pipefail
+#!/usr/bin/env python3
+"""Rename numeric tmux sessions using Claude Haiku to generate descriptive
+names based on terminal context. Sessions with non-numeric names are left alone."""
 
-# Rename all numeric tmux sessions using Claude Haiku to generate
-# descriptive names based on terminal context. Sessions with manually-set
-# (non-numeric) names are left alone.
+import os
+import subprocess
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
-CLAIMED_NAMES_FILE=$(mktemp)
-trap 'rm -f "$CLAIMED_NAMES_FILE"' EXIT
+# Strip CLAUDECODE so the CLI runs in non-interactive mode even when
+# this script is invoked from within a Claude Code session.
+_env = {k: v for k, v in os.environ.items() if k != "CLAUDECODE"}
 
-# Pre-populate with existing non-numeric session names
-tmux list-sessions -F '#{session_name}' | grep -v '^[0-9]*$' >> "$CLAIMED_NAMES_FILE" 2>/dev/null || true
-
-claim_unique_name() {
-    local base="$1"
-    local name="$base"
-    local i=2
-
-    while grep -qxF "$name" "$CLAIMED_NAMES_FILE" 2>/dev/null; do
-        name="${base}-${i}"
-        i=$((i + 1))
-    done
-
-    echo "$name" >> "$CLAIMED_NAMES_FILE"
-    echo "$name"
-}
-
-rename_session() {
-    local session="$1"
-
-    local pane_info
-    pane_info=$(tmux list-panes -t "$session" -F '#{pane_current_command} #{pane_current_path}' 2>/dev/null | head -1)
-
-    local pane_content
-    pane_content=$(tmux capture-pane -t "$session" -p 2>/dev/null | tail -20)
-
-    local name
-    name=$(claude --model haiku --print --max-turns 1 -p "$(cat <<EOF
+PROMPT = """\
 Based on this terminal context, suggest a short name for this tmux session.
 
-Current command and path: $pane_info
+Current command and path: {pane_info}
 
 Last 20 lines of terminal:
-$pane_content
+{pane_content}
 
 Rules:
 - Reply with ONLY the session name, nothing else
@@ -49,23 +24,76 @@ Rules:
 - Use the project/repo name if visible (e.g. "dotfiles", "wearedev")
 - Use the task if clear (e.g. "self-review", "coding-challenge")
 - Use the directory basename as fallback
-- Max 20 characters
-EOF
-)" 2>/dev/null)
+- Max 20 characters"""
 
-    name=$(echo "$name" | tr -d '[:space:]' | head -c 20)
 
-    if [ -n "$name" ]; then
-        name=$(claim_unique_name "$name")
-        tmux rename-session -t "$session" "$name" 2>/dev/null || true
-    fi
-}
+def tmux(*args: str) -> str:
+    result = subprocess.run(
+        ["tmux", *args], capture_output=True, text=True, timeout=5
+    )
+    return result.stdout.strip()
 
-sessions=$(tmux list-sessions -F '#{session_name}')
 
-# Run sequentially to avoid races on the claimed-names file
-for session in $sessions; do
-    if [[ "$session" =~ ^[0-9]+$ ]]; then
-        rename_session "$session"
-    fi
-done
+def ask_haiku(prompt: str) -> str:
+    """Call claude CLI with prompt via stdin to avoid shell escaping issues."""
+    result = subprocess.run(
+        ["claude", "--model", "haiku", "--print", "--max-turns", "1"],
+        input=prompt, capture_output=True, text=True, timeout=30, env=_env,
+    )
+    return result.stdout.strip().lower().replace(" ", "-")[:20]
+
+
+def suggest_name(session: str) -> tuple[str, str | None]:
+    """Returns (session_id, suggested_name) or (session_id, None) on failure."""
+    try:
+        pane_info = tmux(
+            "list-panes", "-t", session,
+            "-F", "#{pane_current_command} #{pane_current_path}",
+        ).split("\n")[0]
+
+        pane_content = "\n".join(
+            tmux("capture-pane", "-t", session, "-p").split("\n")[-20:]
+        )
+
+        prompt = PROMPT.format(pane_info=pane_info, pane_content=pane_content)
+        name = ask_haiku(prompt)
+        name = name.strip("\"'`.,! ")
+        return (session, name) if name else (session, None)
+    except Exception:
+        return (session, None)
+
+
+def main():
+    sessions = tmux("list-sessions", "-F", "#{session_name}").split("\n")
+    numeric = [s for s in sessions if s.isdigit()]
+
+    if not numeric:
+        return
+
+    claimed = {s for s in sessions if not s.isdigit()}
+
+    def unique_name(base: str) -> str:
+        name = base
+        i = 2
+        while name in claimed:
+            name = f"{base}-{i}"
+            i += 1
+        claimed.add(name)
+        return name
+
+    # Run haiku calls concurrently (stdin piping avoids shell escaping issues)
+    with ThreadPoolExecutor(max_workers=6) as pool:
+        futures = {pool.submit(suggest_name, s): s for s in numeric}
+
+        for future in as_completed(futures):
+            session, name = future.result()
+            if name:
+                name = unique_name(name)
+                try:
+                    tmux("rename-session", "-t", session, name)
+                except Exception:
+                    pass
+
+
+if __name__ == "__main__":
+    main()
