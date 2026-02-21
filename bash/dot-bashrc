@@ -1,6 +1,0 @@
-#!/bin/bash
-
-shopt -s autocd # Allow cd-ing into a directory by typing the directory name
-
-# Use vim mode
-set -o vi

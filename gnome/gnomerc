@@ -1,4 +1,0 @@
-#!/bin/bash
-# The initialisation script for GNOME
-
-xrdb ~/.Xresources

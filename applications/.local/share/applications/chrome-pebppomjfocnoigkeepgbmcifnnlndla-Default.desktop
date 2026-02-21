@@ -1,9 +1,0 @@
-#!/usr/bin/env xdg-open
-[Desktop Entry]
-Version=1.0
-Terminal=false
-Type=Application
-Name=diagrams.net Desktop
-Exec=/opt/google/chrome/google-chrome --profile-directory=Default --app-id=pebppomjfocnoigkeepgbmcifnnlndla
-Icon=chrome-pebppomjfocnoigkeepgbmcifnnlndla-Default
-StartupWMClass=crx_pebppomjfocnoigkeepgbmcifnnlndla

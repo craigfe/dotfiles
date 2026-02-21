@@ -1,5 +1,0 @@
-#!/bin/bash
-
-rofi -dmenu -p "" -i |\
-	awk '{print toupper($0)}' |\
-	tr -d '\n'

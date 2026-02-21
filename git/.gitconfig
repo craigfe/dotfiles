@@ -3,10 +3,6 @@
 	email = craigferguson@monzo.com
 	signingKey = ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQC8lDtIQYAY9sskLou7Cz0KXaajmGcOn0HNd+z0nvYBL+7nhmI3RW4oK37Ca+LEFnzh7WX7tWLtroClxtB+pMrU8uPP8OTjsUWBeE9jhvjiFbffKVS/PDmXMolVgM87HFTrzuVD0FidBtl7uDMXzwuvz9sg+rJH8XS/QFlaYXu8GFZKZTofqo12fd0jVt/jDpSd0yJhMqcJhKEPp+a0K+BbacAYNGOyo50tIl90mV9kkgMNsoPc/vc+12Zp8dkB7po01WE3HPWUahhMktUHUZYN22VOPlfquzs5yY0ArSDre9mzroNKQ3Y6ISfJWt9e6CoWrO/P8DTnfrMmJSqJGyU6yQW+0UI1MQUgcu+UgYaBwRct/h4tHqqZiO86s+DGDlMmfPBRYNlWO7gTQhlkJM18v6gKwvInmxBqrmlTItLj+ozPe+1CXvFHBIYs1tNmwsR+BH9ceOUARMQxGIPUosEeaJ8ZyrEJ5pm/7Q2GYVMbd4PBSqHx6UpADpoiGl7rFwaiO+JSLULmsUStSz5v2sbVEgOxtQMqI7yX4Q2kdLneVRa/1hKb70aN+o0zOOHaxN/6pcM6zvOVgVIgQcXzNVs01gFZewTmueMoKVC8wf/JgAbBRhvOR8ppiwg1aOvPKn9XaN8bjJA8+CO/akdnN24hxvGvg7uU9Q17OrtJbEi33Q== cardno:17 667 442
 
-[url "ssh://git@github.com/monzo/"]
-	insteadOf = https://github.com/monzo/
-
-
 [color]
 	ui = true
 
@@ -14,7 +10,7 @@
 	# General
 	pl = pull
 	ps = push
-	pf = push --force
+	pf = push --force-with-lease
 	co = checkout
 	df = diff
 	dfc = diff --cached
@@ -56,7 +52,6 @@
 	rebase = true
 
 [push]
-	default = simple
 	autosetupremote = true
 
 [commit]
@@ -70,7 +65,7 @@
 [grep]
 	lineNumber = true
 [credential]
-	helper = store
+	helper = osxkeychain
 [advice]
 	detachedHead = false
 [init]

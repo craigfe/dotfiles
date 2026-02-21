@@ -1,5 +1,0 @@
-#!/bin/bash
-
-exec -a dropdown_terminal \
-	urxvt --font xft:Hack:style=Regular:pixelsize=17 \
-	-name terminal

@@ -8,27 +8,26 @@
 #  		while true; do
 # 			rand_suffix="$(openssl rand -hex 3)"
 # 	 		choose_session="choose-${rand_suffix}"
-# 
+#
 #  			tmux new-session -s "${choose_session}" \; \
 #  				set-option destroy-unattached on \; \
 #  				choose-tree \
 #  				-F "(#{t:window_activity})#{?session_attached, (attached),}" \
 #  				-f "#{==:0,#{m:choose-*,#{session_name}}}" \
 #  				-t "${choose_session}" -s -O time -r
-#  
+#
 #  			tmux kill-session -t "${choose_session}"
 #  		done
 #  	fi
 # fi
 
+# Source secrets (API keys etc.) from a file not tracked in git
+[ -f ~/.secrets/env.sh ] && source ~/.secrets/env.sh
+
 export MONZO_AUTH_ENABLE_VPNLESS=true
 export BRING_YOUR_OWN_GPG_AGENT=1
-export ZSH_HOME="/usr/share/zsh"
 export LANG=en_GB.UTF-8
-export TERM=xterm-256color # Gets Tmux to behave sensibly with ZSH and truecolor
-
-defaults write InitialKeyRepeat -int 8
-defaults write KeyRepeat -int 1
+[[ -z "$TMUX" ]] && export TERM=xterm-256color
 
 # Configure history
 HISTFILE="$HOME/.zsh_history"
@@ -41,7 +40,6 @@ setopt SHARE_HISTORY             # Share history between all sessions.
 setopt HIST_EXPIRE_DUPS_FIRST    # Expire duplicate entries first when trimming history.
 setopt HIST_VERIFY               # Don't execute immediately upon history expansion.
 setopt AUTO_PUSHD
-setopt SHARE_HISTORY
 setopt APPEND_HISTORY
 
 export PATH="$HOME/.local/bin:$HOME/.scripts:$PATH:/opt/homebrew/bin:$HOME/.yarn/bin"
@@ -68,13 +66,10 @@ source $HOME/.aliases
 
 # Preferred editor for local and remote sessions
 if [[ -n $SSH_CONNECTION ]]; then
-  export EDITOR='vim'
+  export EDITOR='nvim'
 else
   export EDITOR='nvim'
 fi
-
-# ssh
-export SSH_KEY_PATH="~/.ssh/rsa_id"
 
 PROMPT_EOL_MARK=" •"
 
@@ -93,9 +88,6 @@ bindkey -s '^g' 'projectgoto\n'
 
 # Jump (https://github.com/gsamokovarov/jump)
 eval "$(jump shell)"
-
-# OPAM configuration
-. /home/craigfe/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true
 
 fh() {
     print -z $(history |\
@@ -122,16 +114,6 @@ ch() {
         awk -F $sep '{printf "%-'$cols's  \x1b[36m%s\x1b[m\n", $1, $2}' |
         fzf --ansi --multi | sed 's#.*\(https*://\)#\1#' | xargs $open > /dev/null 2> /dev/null
 }
-
-# Nix configuration
-export NIX_PATH="nixpkgs=https://github.com/NixOS/nixpkgs/archive/release-19.09.tar.gz"
-export PATH="$PATH:$HOME/.nix-profile/bin"
-export NIX_REMOTE=daemon
-
-# Set up Node Version Manager
-export NVM_DIR="$HOME/.nvm"
-[ -s "$(brew --prefix)/opt/nvm/nvm.sh" ] && . "$(brew --prefix)/opt/nvm/nvm.sh" # This loads nvm
-[ -s "$(brew --prefix)/opt/nvm/etc/bash_completion.d/nvm" ] && . "$(brew --prefix)/opt/nvm/etc/bash_completion.d/nvm" # This loads nvm bash_completion
 
 # BRING_YOUR_OWN_GPG_AGENT=1
 [ -f $HOME/src/github.com/monzo/starter-pack/zshrc ] && source $HOME/src/github.com/monzo/starter-pack/zshrc
@@ -163,18 +145,10 @@ adblogin() {
 
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
 export PATH="$PATH:$HOME/.rvm/bin"
-export PYENV_ROOT=$(brew --prefix)/var/pyenv
-export PATH=$PYENV_ROOT/shims:$PYENV_ROOT/bin:$PATH
-if command -v pyenv 1>/dev/null 2>&1; then eval "$(pyenv init -)"; fi
-source /Users/craigferguson/src/github.com/monzo/analytics/dbt/misc/shell/source.sh
 
 export PATH="$PATH:/opt/homebrew/Cellar/janet/1.27.0/bin"
 export EXPECT_DIFF_COMMAND="delta --file-style=omit --hunk-header-style=omit --line-numbers"
 export EXPECT_COLOR="always"
-eval "$(rbenv init -)"
-
-autoload -U compinit
-compinit
 
 _monzo_cli_completions() {
   # Capture the current words and cursor position
@@ -191,4 +165,43 @@ _monzo_cli_completions() {
 }
 
 compdef _monzo_cli_completions ££
-source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+# Activate Mise
+eval "$(mise activate zsh)"
+
+worktree() {
+	# This shell function is provided by Monzo's Worktree tool.
+	# It wraps the 'worktree' command to change the shell's working
+	# directory.
+	#
+	# github.com/monzo/wearedev/tools/worktree
+
+	if [[ "$1" == "path" ]] && ! [ -x "$(command -v worktree)" ]; then
+		# Worktree should be installed by Monzo Developer Tools but I
+		# imagine it's possible to depend on 'worktree path wearedev'
+		# before it's installed. This path is hard coded to the path
+		# set by the engineering onboarding scripts, and attempts to
+		# use the project argument, or "wearedev" if none is given.
+		echo "$GOPATH/src/github.com/monzo/${2:-wearedev}"
+		return $?
+	fi
+
+    case "$1" in
+        path|shell)
+            # These commands never require the tmp file so don't bother creating it.
+            # Especially a concern for the path command as it's used so frequently.
+            command worktree "$@"
+            return $?;;
+    esac
+
+    local tempfile=$(mktemp "${TMPDIR:-/tmp/}worktree.XXXXXX")
+    command worktree "$@" --tmp-output="$tempfile"
+    local exit_code=$?
+
+    if [[ $exit_code -eq 0 && -e $tempfile ]]; then
+        local worktree_path=$(command head -1 "$tempfile")
+        cd "$worktree_path"
+    fi
+
+    return $exit_code
+}

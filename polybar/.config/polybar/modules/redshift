@@ -1,9 +1,0 @@
-#!/bin/sh
-
-if [ "$(pgrep -x redshift)" ]; then
-	temp=$(redshift -p 2>/dev/null | grep -oP 'temp\D+\K[0-9]+')
-	temp_colour=$("$HOME/.scripts/kelvin_colour.py" "$temp")
-	echo " %{F${temp_colour}} ${temp} K"
-else
-	echo "%{F#bd2c40} "
-fi

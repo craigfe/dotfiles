@@ -1,8 +1,1 @@
-keybind = shift+enter=text:\n
-background-opacity = 1
-theme = Ayu
-command = /opt/homebrew/bin/tmux
-confirm-close-surface = false
-
-window-decoration = none
-macos-titlebar-style = hidden
+/Users/craigferguson/src/github.com/craigfe/dotfiles/ghostty/.config/ghostty/config
