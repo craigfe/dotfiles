@@ -1,0 +1,33 @@
+{
+  "env": {
+    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
+  },
+  "includeCoAuthoredBy": false,
+  "permissions": {
+    "allow": [
+      "Bash(*)",
+      "WebSearch",
+      "WebFetch",
+      "Skill",
+      "Read",
+      "mcp__monzo__*",
+      "mcp__linear-server__*",
+      "mcp__circleci__*",
+      "mcp__ide__*"
+    ],
+    "deny": [],
+    "defaultMode": "acceptEdits"
+  },
+  "model": "opus",
+  "statusLine": {
+    "type": "command",
+    "command": "bash /Users/craigferguson/.claude/statusline-command.sh"
+  },
+  "enabledPlugins": {
+    "agent-sdk-dev@claude-code-plugins": false,
+    "remote-execution@agent-plugins": true,
+    "audio-notifications@monzo-wearedev": false,
+    "craigfe@monzo-wearedev": true
+  },
+  "alwaysThinkingEnabled": true
+}
