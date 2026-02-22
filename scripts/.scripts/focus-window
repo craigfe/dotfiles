@@ -1,13 +1,14 @@
 #!/bin/bash
 set -euo pipefail
 
-raw=$(aerospace list-windows --all --format '%{window-id}|%{app-name}|%{window-title}|%{workspace}')
+raw=$(aerospace list-windows --all --format '%{workspace}|%{window-id}|%{app-name}|%{window-title}')
 [ -z "$raw" ] && exit 0
 
-display=$(echo "$raw" | awk -F'|' '{ printf "%s — %s [%s]\n", $2, ($3 == "" ? "(untitled)" : $3), $4 }')
+raw=$(echo "$raw" | sort -t'|' -k1,1)
+display=$(echo "$raw" | awk -F'|' '{ printf "[%s] %s — %s\n", $1, $3, ($4 == "" ? "(untitled)" : $4) }')
 
 index=$(echo "$display" | choose -i -z -p 'Focus window' -n 15 -f 'JetBrains Mono' -s 20 || true)
 [ -z "$index" ] && exit 0
 
-window_id=$(echo "$raw" | sed -n "$((index + 1))p" | cut -d'|' -f1)
+window_id=$(echo "$raw" | sed -n "$((index + 1))p" | cut -d'|' -f2)
 aerospace focus --window-id "$window_id"
