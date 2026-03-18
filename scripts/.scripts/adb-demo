@@ -1,0 +1,38 @@
+#!/bin/sh
+CMD=$1
+
+if [[ $ADB == "" ]]; then
+  ADB=adb
+fi
+
+if [[ $CMD != "on" && $CMD != "off" ]]; then
+  echo "Usage: $0 [on|off] [hhmm]" >&2
+  exit
+fi
+
+HHMM="${2:-0941}"
+
+$ADB root 2>/dev/null
+$ADB wait-for-device
+$ADB shell settings put global sysui_demo_allowed 1
+
+if [ $CMD == "on" ]; then
+  $ADB shell am broadcast -a com.android.systemui.demo -e command enter || exit
+  if [[ "$HHMM" != "" ]]; then
+    $ADB shell am broadcast -a com.android.systemui.demo -e command clock -e hhmm ${HHMM}
+  fi
+  $ADB shell am broadcast -a com.android.systemui.demo -e command battery -e plugged false
+  $ADB shell am broadcast -a com.android.systemui.demo -e command battery -e level 100
+  $ADB shell am broadcast -a com.android.systemui.demo -e command network -e wifi show -e level 4
+  $ADB shell am broadcast -a com.android.systemui.demo -e command network -e mobile show -e datatype none -e level 4 -e fully true
+  $ADB shell am broadcast -a com.android.systemui.demo -e command notifications -e visible false
+  # On Android 16+, the demo mode notifications command has no registered receiver.
+  # Work around this by snoozing all notifications to clear the status bar icons.
+  $ADB shell 'cmd notification list > /data/local/tmp/demo_snoozed_notifs'
+  $ADB shell 'while IFS= read -r key; do cmd notification snooze --for 3600000 "$key"; done < /data/local/tmp/demo_snoozed_notifs'
+elif [ $CMD == "off" ]; then
+  $ADB shell am broadcast -a com.android.systemui.demo -e command exit
+  # Unsnooze notifications that were snoozed during "on"
+  $ADB shell 'while IFS= read -r key; do cmd notification unsnooze "$key" >/dev/null 2>&1; done < /data/local/tmp/demo_snoozed_notifs' 2>/dev/null
+  $ADB shell rm -f /data/local/tmp/demo_snoozed_notifs
+fi
