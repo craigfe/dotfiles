@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Wrapper around `bq query` that:
+#   1. Forces CSV output (pipe-friendly, easy to convert to TSV)
+#   2. Saves the SQL to /tmp/bq-<TS>.sql
+#   3. Tees the CSV results to /tmp/bq-<TS>.csv
+#   4. Prints the saved paths to stderr so callers can find them
+#
+# Pass the query as the first positional arg, or pipe it via stdin.
+
+TS=$(date +%Y%m%d-%H%M%S)
+SQL_FILE="/tmp/bq-$TS.sql"
+OUT_FILE="/tmp/bq-$TS.csv"
+
+# Separate the SQL (first non-flag positional) from any other flags.
+query=""
+flags=()
+for arg in "$@"; do
+  if [[ -z "$query" && "$arg" != -* ]]; then
+    query="$arg"
+  else
+    flags+=("$arg")
+  fi
+done
+
+# Fall back to stdin if no positional query was given.
+if [[ -z "$query" ]]; then
+  if [[ -t 0 ]]; then
+    echo "bigquery: no query provided (pass as arg or via stdin)" >&2
+    exit 1
+  fi
+  query=$(cat)
+fi
+
+printf '%s\n' "$query" > "$SQL_FILE"
+
+# Run bq with CSV output, tee to file. ${flags[@]:-} avoids unbound-var error when empty.
+printf '%s' "$query" \
+  | bq query --use_legacy_sql=false --format=csv ${flags[@]+"${flags[@]}"} \
+  | tee "$OUT_FILE"
+
+echo "[bigquery] saved: $SQL_FILE, $OUT_FILE" >&2
